@@ -59,35 +59,37 @@
         <div class="card col-6 mx-auto" style="width: 20rem; margin: 20px;">
             <div class="card-body">
                 <h4 class="card-title">Registration form:</h4>
-                <form th:action="@{registered.html}" th:object="${user}"  th:method="post" method="post" action="registered.html">
+                <form th:action="@{register}" th:object="${userDto}"  th:method="post" method="post" action="register">
+                    <p class="text-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}"></p>
                     <div class="form-group">
                         <label th:for="name" for="Name">Name</label>
                         <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Enter name">
                         <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                     </div>
                     <div class="form-group">
-                        <label for="Surname">Surname</label>
+                        <label th:for="surname" for="Surname">Surname</label>
                         <input type="text" class="form-control" th:field="*{surname}" id="surname" placeholder="Enter surname">
                         <p class="text-danger" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></p>
                     </div>
                     <div class="form-group">
-                        <label for="Username">Username</label>
+                        <label th:for="username" for="Username">Username</label>
                         <input type="text" class="form-control" th:field="*{username}" id="username" placeholder="Enter username">
                         <p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
                     </div>
                     <div class="form-group">
-                        <label for="Email">Email address</label>
+                        <label th:for="email" for="Email">Email address</label>
                         <input type="email" class="form-control" th:field="*{email}" id="email" aria-describedby="emailHelp" placeholder="Enter email">
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                         <p class="text-danger"th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                        <p class="text-danger" th:text="${alreadyRegisteredMessage}"></p>
                     </div>
                     <div class="form-group">
-                        <label for="Password">Password</label>
+                        <label th:for="password" for="Password">Password</label>
                         <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Password">
                         <p class="text-danger"th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
                     </div>
                     <div class="form-group">
-                        <label for="matchingPassword">Confirm Password</label>
+                        <label th:for="matchingPassword" for="matchingPassword">Confirm Password</label>
                         <input type="password" class="form-control" th:field="*{matchingPassword}" id="matchingPassword" placeholder="Password">
                         <p class="text-danger"th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}"></p>
                     </div>
