@@ -1,12 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"/>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
 </head>
 <script src="https://use.fontawesome.com/c0c323679c.js"></script>
 
@@ -14,74 +8,40 @@
 <body>
 
 <!--Navbar-->
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a class="navbar-brand" th:href="@{index.html}"href="index.html">KemoCom</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" th:href="@{index.html}" href="index.html">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="#">About us</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Services</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Prices</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Contact us</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item d-flex flex-row">
-                <i class="d-flex align-self-center fa fa-user-o " aria-hidden="true" style="color: white;"></i>
-
-                <a class="nav-link mr-3" th:href="@{login.html}" href="login.html">Log In</a>
-            </li>
-            <li class="nav-item d-flex flex-row">
-                <i class="d-flex align-self-center fa fa-sign-in " aria-hidden="true" style="color: white;" ></i>
-                <a class="nav-link" th:href="@{register.html}" href="register.html">Register</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<nav th:replace="fragments/header :: nav"></nav>
 <!--End of Navbar-->
 
-<!--Form-->
 <div class="container">
     <div class="row">
         <div class="card col-6 mx-auto" style="width: 20rem; margin: 20px;">
             <div class="card-body">
                 <h4 class="card-title">Registration form:</h4>
-                <form th:action="@{register}" th:object="${userDto}"  th:method="post" method="post" action="register">
-                    <p class="text-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}"></p>
+                <!--Form-->
+                <form th:action="@{/submit-registration}" th:object="${userDto}"  th:method="post" method="post" action="register">
+                    <ul class="global-errors" th:if="${#fields.hasErrors('global')}">
+                        <li class="text-danger" th:each="err : ${#fields.errors('global')}" th:text="${err}">Input is incorrect</li>
+                    </ul>
                     <div class="form-group">
-                        <label th:for="name" for="Name">Name</label>
+                        <label for="Name">Name</label>
                         <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Enter name">
                         <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                     </div>
                     <div class="form-group">
-                        <label th:for="surname" for="Surname">Surname</label>
+                        <label for="Surname">Surname</label>
                         <input type="text" class="form-control" th:field="*{surname}" id="surname" placeholder="Enter surname">
                         <p class="text-danger" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></p>
                     </div>
                     <div class="form-group">
-                        <label th:for="username" for="Username">Username</label>
+                        <label for="Username">Username</label>
                         <input type="text" class="form-control" th:field="*{username}" id="username" placeholder="Enter username">
                         <p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
                     </div>
                     <div class="form-group">
-                        <label th:for="email" for="Email">Email address</label>
-                        <input type="email" class="form-control" th:field="*{email}" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                        <label for="Email">Email address</label>
+                        <input th:type="email" type="email" class="form-control" th:field="*{email}" id="email" aria-describedby="emailHelp" placeholder="Enter email">
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                        <p class="text-danger"th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
-                        <p class="text-danger" th:text="${alreadyRegisteredMessage}"></p>
+                        <!--<span class="text-danger"  th:text="${alreadyRegisteredMessage}"></span>-->
+                        <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                     </div>
                     <div class="form-group">
                         <label th:for="password" for="Password">Password</label>
@@ -101,28 +61,7 @@
 </div>
 <!--End of Form-->
 
-<footer class="bg-dark">
-    <div class="container">
-        <div class="row">
-            <div class="col text-center" style="color: darkgrey;">
-                <p>&copy Copyright Kemal Žigović 2017</p>
-            </div>
-        </div>
-    </div>
-</footer>
-
-
-
-
-
-
-
-
-
-
-
-
-
+<footer th:replace="fragments/footer :: footer"></footer>
 
 
 <!-- Optional JavaScript -->

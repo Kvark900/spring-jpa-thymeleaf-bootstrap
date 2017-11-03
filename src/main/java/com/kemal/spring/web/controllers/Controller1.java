@@ -32,26 +32,33 @@ public class Controller1 {
         this.emailService = emailService;
     }
 
-    @GetMapping(value = {"/", "/index"})
-    public ModelAndView index (ModelAndView modelAndView){
-        modelAndView.setViewName("index");
-        return modelAndView;
+    @GetMapping(value = {"/", "/index.html"})
+    public ModelAndView index (){
+        return new ModelAndView("index");
     }
 
-    @GetMapping(value = "/login")
+    @GetMapping(value = "/login.html")
     public String login (){
         return "login";
     }
 
-    @GetMapping(value = "/register")
+    // Login form with error
+    @GetMapping ("/login-error.html")
+    public String loginError(Model model) {
+        model.addAttribute("loginError", true);
+        return "login";
+    }
+
+
+    @GetMapping(value = "/register.html")
     public String showRegistrationForm(WebRequest request, Model model) {
         UserDto userDto = new UserDto();
         model.addAttribute("userDto", userDto);
         return "register";
     }
 
-    @PostMapping(value = "/register")
-    public ModelAndView saveUser(ModelAndView modelAndView, @Valid @ModelAttribute ("userDto") UserDto userDto,
+    @PostMapping(value = "/submit-registration")
+    public ModelAndView saveUser(ModelAndView modelAndView, @ModelAttribute("userDto") @Valid final UserDto userDto,
                                  BindingResult bindingResult, HttpServletRequest request, Errors errors){
 
         User userExists = userService.findByEmail(userDto.getEmail());
@@ -59,14 +66,14 @@ public class Controller1 {
         System.out.println(userExists);
 
         if (userExists != null) {
-            modelAndView.addObject("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
             modelAndView.setViewName("register");
-            bindingResult.reject("email");
+            bindingResult.rejectValue("email", "alreadyRegisteredMessage","Oops!  There is already a user registered with the email provided.");
         }
 
-        if (bindingResult.hasErrors()) {
+        else if (bindingResult.hasErrors()) {
             modelAndView.setViewName("register");
-        } else { // new user so we create user and send confirmation e-mail
+        }
+        else { // new user so we create user and send confirmation e-mail
 
             User user = userService.createNewAccount(userDto);
             // Disable user until they click on confirmation link in email
@@ -92,7 +99,5 @@ public class Controller1 {
 
         return modelAndView;
     }
-
-
 
 }

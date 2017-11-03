@@ -1,62 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"/>
+<head th:replace="fragments/head :: head">
 </head>
 <script src="https://use.fontawesome.com/c0c323679c.js"></script>
 
 
-<body>
+<body >
 
-<!-- Navigation bar -->
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-	<a class="navbar-brand" th:href="@{index.html}" href="index.html">KemoCom</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
+<nav th:replace="fragments/header :: nav"></nav>
 
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" th:href="@{index.html}" href="index.html">Home <span class="sr-only">(current)</span></a>
-			</li>
-			<li class="nav-item ">
-				<a class="nav-link" href="#">About us</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Services</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Prices</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Contact us</a>
-			</li>
-		</ul>
-		<ul class="navbar-nav ml-auto">
-			<li class="nav-item d-flex flex-row">
-				<i class="d-flex align-self-center fa fa-user-o " aria-hidden="true" style="color: white;"></i>
-
-				<a class="nav-link mr-3" th:href="@{login.html}" href="login.html">Log In</a>
-			</li>
-			<li class="nav-item d-flex flex-row">
-				<i class="d-flex align-self-center fa fa-sign-in " aria-hidden="true" style="color: white;" ></i>
-				<a class="nav-link" th:href="@{register.html}" href="register.html">Register</a>
-			</li>
-		</ul>
-
-	</div>
-</nav>
-
-<!-- Jubotron -->
 <div class="container">
+	<!-- Jubotron -->
 	<div class="jumbotron mx-auto mt-2" style="width: 65%; height: 400px;">
-		<h4 class="display-5">Hello, world!</h4>
+		<h4 class="display-5" th:text="#{greeting}">Hello, world!</h4>
 			<p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
 			<hr class="my-4">
 			<p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
@@ -64,21 +20,14 @@
 				<a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
 			</p>
 	</div>
+
+	<aside></aside>
+
 </div>
 
-<aside></aside>
-
-
 <!-- Footer -->
-<footer class="bg-dark">
-	<div class="container">
-		<div class="row">
-			<div class="col text-center" style="color: darkgrey;">
-				<p>&copy Copyright Kemal Žigović 2017</p>
-			</div>
-		</div>
-	</div>
-</footer>
+<footer th:replace="fragments/footer :: footer"></footer>
+
 
 
 <!-- Optional JavaScript -->
