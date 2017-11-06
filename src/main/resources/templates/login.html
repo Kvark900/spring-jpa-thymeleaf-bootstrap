@@ -12,14 +12,14 @@
             <div class="card-body">
                 <h4 class="card-title">Log in:</h4>
                 <p th:if="${loginError}"  class="alert alert-danger" role="alert">Wrong user or password</p>
-                <form th:action="@{/perform_login}" method="post">
+                <form th:action="@{/perform-login}" method="post">
                     <div class="form-group">
-                        <label for="Username">Username</label>
-                        <input type="text" class="form-control" id="Username" name="username" th:name="username" aria-describedby="emailHelp" placeholder="Enter email">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" th:id="email" name="email" th:name="email" aria-describedby="emailHelp" placeholder="Enter email">
                     </div>
                     <div class="form-group">
                         <label for="Password">Password</label>
-                        <input type="password" class="form-control" name="password" th:name="password" id="Password" placeholder="Password">
+                        <input type="password" class="form-control" name="password" th:name="password" th:id="password" placeholder="Password">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

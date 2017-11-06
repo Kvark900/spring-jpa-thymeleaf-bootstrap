@@ -42,6 +42,7 @@ public class Controller1 {
         return "login";
     }
 
+
     // Login form with error
     @GetMapping ("/login-error.html")
     public String loginError(Model model) {
