@@ -8,8 +8,6 @@ Technology stack:
 * Spring Boot
 * Spring MVC
 * Spring Data JPA
-* JPA
-* Hibernate 5.2
 * Spring Security
 * Lombok
 * Thymeleaf
