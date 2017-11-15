@@ -8,6 +8,7 @@ Technology stack:
 * Spring Boot
 * Spring MVC
 * Spring Data JPA
+* MySQL
 * Spring Security
 * Lombok
 * Thymeleaf
