@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+</head>
+<body>
+
+<nav th:replace="fragments/header :: nav"></nav>
+
+<div id="admin-section">
+    <div class="admin-inner">
+        <div class="container">
+            <div class="d-flex flex-row" >
+                <div id="admin-sidebar" >
+                    <aside class="navbar admin-nav  navbar-dark">
+                        <nav class="nav  flex-column">
+                            <a class="nav-link active" th:href="@{/adminPage/users}">Users</a>
+                            <a class="nav-link" th:href="@{/adminPage/roles}">Roles</a>
+                            <a class="nav-link" href="#!">Topics</a>
+                            <a class="nav-link" href="#!">Courses</a>
+                            <a class="nav-link" href="#!">Topics</a>
+                        </nav>
+                    </aside>
+                </div>
+                <div id="admin-content">
+                    <table class="table table-striped admin-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td><a th:href="@{#}"><span
+                                    th:text="${user.id}">1</span></a></td>
+                            <td th:text="${user.name}">Role Name</td>
+                            <td th:text="${user.surname}">Role Name</td>
+                            <td th:text="${user.username}">Role Name</td>
+                            <td th:text="${user.email}">Role Name</td>
+                            <td><a style="text-decoration: none;" th:href="@{/adminPage/users/{id}(id=${user.id})}"
+                                   class="edit-btn">
+                                <i class="fa fa-edit"></i>Edit
+                            </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

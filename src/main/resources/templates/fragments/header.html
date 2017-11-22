@@ -6,8 +6,8 @@
 <head th:replace="fragments/head :: head">
 </head>
 <body>
-    <nav th:fragment="nav" class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <a class="navbar-brand" th:href="@{index.html}" href="index.html">Kvark900</a>
+    <nav th:fragment="nav" id="navbar-home" class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" th:href="@{/index}" href="index">Kvark900</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{index.html}" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" th:href="@{/index}">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="#">About us</a>
@@ -31,26 +31,33 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav ml-auto" th:if="${#authorization.expression('isAuthenticated()')}">
+            <ul class="navbar-nav ml-auto" sec:authorize="${isAuthenticated()}">
                 <li class="nav-item"  >
                     <span class="navbar-text" sec:authentication="name"></span>
                 </li>
-                <li><a class="nav-link"  href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
-
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/adminPage}">
+                        Admin Page
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="javascript: document.logoutForm.submit()" role="menuitem">
+                        Logout
+                    </a>
                 <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
                     <input hidden type="submit" value="Sign Out"/>
                 </form>
                 </li>
             </ul>
 
-            <ul class="navbar-nav ml-auto" th:unless="${#authorization.expression('isAuthenticated()')}">
+            <ul class="navbar-nav ml-auto" sec:authorize="${!isAuthenticated()}">
                     <li class="nav-item d-flex flex-row"  >
-                        <i class="d-flex align-self-center fa fa-user-o " aria-hidden="true" style="color: white;"></i>
-                        <a class="nav-link mr-3" th:href="@{login.html}" href="login.html">Log In</a>
+                        <i class="align-self-center fa fa-user-o " aria-hidden="true" style="color: white;"></i>
+                        <a class="nav-link mr-3" th:href="@{login}" href="login">Log In</a>
                     </li>
                     <li class="nav-item d-flex flex-row">
-                        <i class="d-flex align-self-center fa fa-sign-in " aria-hidden="true" style="color: white;" ></i>
-                        <a class="nav-link" th:href="@{register.html}" href="register.html">Register</a>
+                        <i class="align-self-center fa fa-sign-in " aria-hidden="true" style="color: white;" ></i>
+                        <a class="nav-link" th:href="@{register}" href="register">Register</a>
                     </li>
             </ul>
         </div>

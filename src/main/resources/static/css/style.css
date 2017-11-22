@@ -4,11 +4,106 @@ html {
 }
 body {
 	margin-bottom: 60px; /* Margin bottom by footer height */
+    background: #ffffff;
+}
+
+#home-section {
+	background: url("../images/keyboard.jpeg") no-repeat;
+	min-height: 700px;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
+#home-section .dark-overlay {
+	background-color: rgba(0, 0, 0, 0.7);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	min-height: 700px; }
+
+#home-section .home-inner {
+	padding-top: 150px;
+}
+
+#navbar-home{
+	border-bottom:#008ed6 3px solid;
+	opacity:0.8;
 }
 .global-errors{
 	list-style-type: none;
 	padding: 0px;
 }
+
+#login-form{
+    margin-top: 150px;
+}
+
+#registration-form{
+    margin-top: 150px;
+}
+
+#home-section {
+    background: url("../images/keyboard.jpeg") no-repeat;
+    min-height: 700px;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+
+/*Admin page*/
+#admin-section {
+    /*background: url("../images/code1.jpeg") no-repeat;*/
+    min-height: 100%;
+    /*margin-bottom:;*/
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+#admin-sidebar{
+    margin-top: 70px;
+    /*min-height:95vh;*/
+	border-radius: 3%;
+}
+
+.admin-nav{
+	background: #333;
+	border-radius: 3%;
+}
+
+#admin-content {
+    padding-top: 100px;
+    color: #333;
+	width: 85%;
+}
+.nav-link{
+	color: #848482;
+}
+.nav-link:hover{
+	color: #D3D3D3;!important;
+}
+
+#admin-content .dark-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%; }
+
+.admin-table{
+	max-width: 85%;
+}
+.edit-btn{
+	color: darkslategrey;
+}
+#admin-sidebar{
+	width: 20%;
+	margin-right: 20px;
+
+}
+
+
 
 footer {
 	position: absolute;
@@ -16,4 +111,5 @@ footer {
 	width: 100%;
 	height: 60px; /* fixed height of the footer  */
 	line-height: 60px; /* Vertically center the text there */
+    color: darkgrey;
 }

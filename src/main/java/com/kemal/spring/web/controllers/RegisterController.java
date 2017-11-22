@@ -5,57 +5,28 @@ import com.kemal.spring.service.EmailService;
 import com.kemal.spring.service.UserService;
 import com.kemal.spring.web.dto.UserDto;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
- * Created by Keno&Kemo on 30.09.2017..
+ * Created by Keno&Kemo on 17.11.2017..
  */
-
 @Controller
-public class Controller1 {
-
+@RequestMapping("")
+public class RegisterController {
     private UserService userService;
     private EmailService emailService;
 
-    public Controller1(UserService userService, EmailService emailService) {
+    public RegisterController(UserService userService, EmailService emailService) {
         this.userService = userService;
         this.emailService = emailService;
-    }
-
-    @GetMapping(value = {"/", "/index.html"})
-    public ModelAndView index (){
-        return new ModelAndView("index");
-    }
-
-    @GetMapping(value = "/login.html")
-    public String login (){
-        return "login";
-    }
-
-
-    // Login form with error
-    @GetMapping ("/login-error.html")
-    public String loginError(Model model) {
-        model.addAttribute("loginError", true);
-        return "login";
-    }
-
-
-    @GetMapping(value = "/register.html")
-    public String showRegistrationForm(WebRequest request, Model model) {
-        UserDto userDto = new UserDto();
-        model.addAttribute("userDto", userDto);
-        return "register";
     }
 
     @PostMapping(value = "/submit-registration")
@@ -67,12 +38,12 @@ public class Controller1 {
         System.out.println(userExists);
 
         if (userExists != null) {
-            modelAndView.setViewName("register");
+            modelAndView.setViewName("website/register");
             bindingResult.rejectValue("email", "alreadyRegisteredMessage","Oops!  There is already a user registered with the email provided.");
         }
 
         else if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("register");
+            modelAndView.setViewName("website/register");
         }
         else { // new user so we create user and send confirmation e-mail
 
@@ -80,7 +51,6 @@ public class Controller1 {
             // Disable user until they click on confirmation link in email
 
             user.setEnabled(false);
-
 
             userService.saveUser(user);
 
@@ -95,7 +65,7 @@ public class Controller1 {
             emailService.sendEmail(registrationEmail);*/
 
             modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + userDto.getEmail());
-            modelAndView.setViewName("registered");
+            modelAndView.setViewName("website/registered");
         }
 
         return modelAndView;

@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by Keno&Kemo on 18.10.2017..
@@ -29,8 +29,16 @@ public class UserService implements UserDetailsService {
         this.roleRepository = roleRepository;
     }
 
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
+    }
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User findById(Long id){
+        return userRepository.findById(id);
     }
 
     public User createNewAccount(UserDto userDto){
@@ -40,7 +48,7 @@ public class UserService implements UserDetailsService {
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-        user.setRoles(new HashSet<>(Arrays.asList(roleRepository.findByName("ROLE_USER"))));
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
         return user;
 
     }
@@ -58,4 +66,7 @@ public class UserService implements UserDetailsService {
 
         return new UserDetailsImpl(user);
     }
+
+
+
 }

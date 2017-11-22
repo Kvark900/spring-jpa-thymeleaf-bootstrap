@@ -1,8 +1,8 @@
 package com.kemal.spring.domain;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -34,12 +34,12 @@ public  class  User {
             joinColumns = {@JoinColumn(name="user_id")},
             inverseJoinColumns = {@JoinColumn(name="role_id")}
     )
-    private Set<Role> roles = new HashSet<>();
+    private List<Role> roles = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String name, String surname, String username, String email, String password, boolean enabled, Set<Role> roles) {
+    public User(String name, String surname, String username, String email, String password, boolean enabled, List<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.username = username;
@@ -97,11 +97,11 @@ public  class  User {
         this.enabled = enabled;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 

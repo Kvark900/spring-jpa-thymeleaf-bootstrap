@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+</head>
+<body>
+
+<nav th:replace="fragments/header :: nav"></nav>
+
+<div id="admin-section">
+    <div class="admin-inner">
+        <div class="container">
+            <div class="d-flex flex-row" >
+                <div id="admin-sidebar" >
+                    <aside class="navbar admin-nav navbar-dark">
+                        <nav class="nav  flex-column">
+                            <a class="nav-link active" th:href="@{/adminPage/users}">Users</a>
+                            <a class="nav-link" th:href="@{/adminPage/roles}">Roles</a>
+                            <a class="nav-link" href="#!">Topics</a>
+                            <a class="nav-link" href="#!">Courses</a>
+                            <a class="nav-link" href="#!">Topics</a>
+                        </nav>
+                    </aside>
+                </div>
+                <div id="admin-content" >
+                    <form th:action="@{#}"  th:object="${oldUser}" th:method="post" method="post">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" >
+                        </div>
+                        <div class="form-group">
+                            <label for="surname">Surname</label>
+                            <input type="text" class="form-control" th:field="*{surname}" >
+                        </div>
+                        <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" th:field="*{username}" >
+                    </div>
+                        <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" th:field="*{email}" >
+                    </div>
+                              <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

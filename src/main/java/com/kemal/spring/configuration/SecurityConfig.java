@@ -33,22 +33,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.
                 authorizeRequests()
-                    .antMatchers("/css/**","/index.html","/", "/register.html","/submit-registration").permitAll()
+                    .antMatchers("/css/**","/images/**", "/index","/", "/register","/submit-registration").permitAll()
+                    .antMatchers("/adminPage/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
-                    .loginPage("/login.html")
+                    .loginPage("/login")
                     .permitAll()
                     .loginProcessingUrl("/perform-login")
                     .usernameParameter("email")
                     .passwordParameter("password")
-                    .defaultSuccessUrl("/index.html",true)
+                    .defaultSuccessUrl("/index",true)
                     .failureUrl("/login-error.html")
                 .and()
                     .logout()
                     .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login.html")
+                    .logoutSuccessUrl("/login")
                     .permitAll();
+
 
     }
 
