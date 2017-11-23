@@ -21,22 +21,10 @@
                     </aside>
                 </div>
                 <div id="admin-content" >
-                    <form class="admin-form" th:action="@{#}"  th:object="${oldUser}" th:method="post" method="post">
+                    <form class="admin-form" th:action="@{#}"  th:object="${oldRole}" th:method="post" method="post">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" th:field="*{name}" >
-                        </div>
-                        <div class="form-group">
-                            <label for="surname">Surname</label>
-                            <input type="text" class="form-control" th:field="*{surname}" >
-                        </div>
-                        <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" th:field="*{username}" >
-                        </div>
-                            <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" th:field="*{email}" >
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

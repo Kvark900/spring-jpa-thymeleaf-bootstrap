@@ -26,4 +26,8 @@ public class RoleService {
     public List<Role> getAllRoles (){
         return roleRepository.findAll();
     }
+
+    public Role findById(Long id) {
+        return roleRepository.findById(id);
+    }
 }

@@ -72,7 +72,7 @@ body {
 }
 
 #admin-content {
-    padding-top: 100px;
+    padding-top: 75px;
     color: #333;
 	width: 85%;
 }
@@ -101,6 +101,10 @@ body {
 	width: 20%;
 	margin-right: 20px;
 
+}
+
+.admin-form{
+	width: 70%;
 }
 
 

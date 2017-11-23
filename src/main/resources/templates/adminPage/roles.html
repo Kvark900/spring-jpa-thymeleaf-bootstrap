@@ -18,7 +18,6 @@
                             <a class="nav-link" th:href="@{/adminPage/roles}">Roles</a>
                             <a class="nav-link" href="#!">Topics</a>
                             <a class="nav-link" href="#!">Courses</a>
-                            <a class="nav-link" href="#!">Topics</a>
                         </nav>
                     </aside>
                 </div>
@@ -36,7 +35,7 @@
                             <td><a th:href="@{#}"><span
                                     th:text="${role.id}">1</span></a></td>
                             <td th:text="${role.name}">Role Name</td>
-                            <td><a style="text-decoration: none;" th:href="@{#}"
+                            <td><a style="text-decoration: none;" th:href="@{/adminPage/roles/{id}(id=${role.id})}"
                                    class="edit-btn">
                                 <i class="fa fa-edit"></i>Edit
                             </a>
