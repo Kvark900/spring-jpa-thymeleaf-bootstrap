@@ -21,7 +21,7 @@
                     </aside>
                 </div>
                 <div id="admin-content" >
-                    <form class="admin-form" th:action="@{#}"  th:object="${oldUser}" th:method="post" method="post">
+                    <form class="admin-form" th:action="@{#}"  th:object="${newUser}" th:method="post" method="post">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" th:field="*{name}" >
@@ -31,24 +31,13 @@
                             <input type="text" class="form-control" th:field="*{surname}" >
                         </div>
                         <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" th:field="*{username}" >
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" th:field="*{username}" >
                         </div>
-                            <div class="form-group">
+                        <div class="form-group">
                             <label for="email">Email</label>
                             <input type="text" class="form-control" th:field="*{email}" >
                         </div>
-
-                        <div class="form-group">
-                            <label>Roles</label>
-                            <div>
-                                <p th:each="role,rowStat : ${rolesList}">
-                                    <input type="checkbox" th:field="*{roles[__${rowStat.index}__].id}" th:value="${role.id}" />
-                                    <label th:text="${role.name}">Role</label>
-                                </p>
-                            </div>
-                        </div>
-
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
 

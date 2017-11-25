@@ -23,31 +23,33 @@
                 <div id="admin-content">
                     <table class="table table-striped admin-table">
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Surname</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th></th>
-                        </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th></th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="user : ${users}">
-                            <td><a th:href="@{#}"><span
-                                    th:text="${user.id}">1</span></a></td>
-                            <td th:text="${user.name}">Role Name</td>
-                            <td th:text="${user.surname}">Role Name</td>
-                            <td th:text="${user.username}">Role Name</td>
-                            <td th:text="${user.email}">Role Name</td>
-                            <td><a style="text-decoration: none;" th:href="@{/adminPage/users/{id}(id=${user.id})}"
-                                   class="edit-btn">
-                                <i class="fa fa-edit"></i>Edit
-                            </a>
-                            </td>
-                        </tr>
+                            <tr th:each="user : ${users}">
+                                <td><a th:href="@{#}"><span
+                                        th:text="${user.id}">1</span></a></td>
+                                <td th:text="${user.name}">Role Name</td>
+                                <td th:text="${user.surname}">Role Name</td>
+                                <td th:text="${user.username}">Role Name</td>
+                                <td th:text="${user.email}">Role Name</td>
+                                <td><a style="text-decoration: none;" th:href="@{/adminPage/users/{id}(id=${user.id})}"
+                                       class="edit-btn">
+                                    <i class="fa fa-edit"></i>Edit
+                                    </a>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
+                    <a href="#" th:href="@{/adminPage/users/newUser}"><button type="button" class="btn btn-primary">Add New User</button>
+                    </a>
                 </div>
             </div>
         </div>
