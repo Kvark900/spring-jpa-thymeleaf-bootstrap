@@ -92,7 +92,6 @@ public class UsersController {
 
         boolean emailAlreadyExists = false;
         boolean usernameAlreadyExists = false;
-
         boolean hasErrors = false;
 
         List <User> allUsers = userService.findAll();
@@ -128,31 +127,25 @@ public class UsersController {
         }
 
         if(emailAlreadyExists){
-            model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
-
             bindingResult.rejectValue("email", "emailAlreadyExists",
                     "Oops!  There is already a user registered with the email provided.");
             hasErrors = true;
         }
 
         if (usernameAlreadyExists){
-            model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
-
             bindingResult.rejectValue("username", "usernameAlreadyExists",
                     "Oops!  There is already a user registered with the username provided.");
             hasErrors = true;
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("userUpdateDto", userUpdateDto);
-            model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
-
             hasErrors = true;
         }
 
         if(hasErrors){
             model.addAttribute("userUpdateDto", userUpdateDto);
             model.addAttribute("rolesList", allRoles);
+            model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
             return redirectToPageWithErrors;
         }
 
