@@ -42,7 +42,7 @@ public class RegisterController {
             bindingResult.rejectValue("email", "alreadyRegisteredMessage","Oops!  There is already a user registered with the email provided.");
         }
 
-        else if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             modelAndView.setViewName("website/register");
         }
         else { // new user so we create user and send confirmation e-mail

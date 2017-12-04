@@ -21,8 +21,14 @@
                     </aside>
                 </div>
                 <div id="admin-content">
-                    <table class="table table-striped admin-table">
-                        <thead>
+                    <div th:if="${userHasBeenSaved}" class="alert alert-success" role="alert">
+                        <strong>Well done!</strong> User has been saved!!!
+                    </div>
+                    <div th:if="${userHasBeenUpdated}" class="alert alert-success" role="alert">
+                        <strong>Well done!</strong> User has been updated!!!
+                    </div>
+                    <table class="table table-striped table-striped admin-table">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>

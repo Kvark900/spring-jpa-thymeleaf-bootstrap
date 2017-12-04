@@ -22,21 +22,46 @@
                 </div>
                 <div id="admin-content" >
                     <form class="admin-form" th:action="@{#}"  th:object="${newUser}" th:method="post" method="post">
+                        <ul class="global-errors" th:if="${#fields.hasErrors('global')}">
+                            <li class="text-danger" th:each="err : ${#fields.errors('global')}"
+                                th:text="${err}">Input is incorrect</li>
+                        </ul>
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" th:field="*{name}" >
+                            <label for="Name">Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Enter name">
+                            <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                         </div>
                         <div class="form-group">
-                            <label for="surname">Surname</label>
-                            <input type="text" class="form-control" th:field="*{surname}" >
+                            <label for="Surname">Surname</label>
+                            <input type="text" class="form-control" th:field="*{surname}" id="surname"
+                                   placeholder="Enter surname">
+                            <p class="text-danger" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></p>
                         </div>
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" th:field="*{username}" >
+                            <label for="Username">Username</label>
+                            <input type="text" class="form-control" th:field="*{username}" id="username" placeholder="Enter username">
+                            <p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" th:field="*{email}" >
+                            <label for="Email">Email address</label>
+                            <input th:type="email" type="email" class="form-control" th:field="*{email}"
+                                   id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                            <!--<span class="text-danger"  th:text="${alreadyRegisteredMessage}"></span>-->
+                            <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="password" for="Password">Password</label>
+                            <input type="password" class="form-control" th:field="*{password}"
+                                   id="password" placeholder="Password">
+                            <p class="text-danger"th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="matchingPassword" for="matchingPassword">Confirm Password</label>
+                            <input type="password" class="form-control" th:field="*{matchingPassword}"
+                                   id="matchingPassword" placeholder="Password">
+                            <p class="text-danger"th:if="${#fields.hasErrors('matchingPassword')}"
+                               th:errors="*{matchingPassword}"></p>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

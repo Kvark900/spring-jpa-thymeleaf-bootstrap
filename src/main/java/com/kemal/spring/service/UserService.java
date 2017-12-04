@@ -4,6 +4,7 @@ import com.kemal.spring.domain.RoleRepository;
 import com.kemal.spring.domain.User;
 import com.kemal.spring.domain.UserRepository;
 import com.kemal.spring.web.dto.UserDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,28 +20,37 @@ import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
+
     private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private RoleRepository roleRepository;
+    private ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.roleRepository = roleRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public List<User> getAllUsers(){
+    //find methods
+    public List<User> findAll(){
         return userRepository.findAll();
     }
-
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
     public User findById(Long id){
         return userRepository.findById(id);
     }
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
     public User createNewAccount(UserDto userDto){
         User user = new User();
         user.setName(userDto.getName());
@@ -51,10 +61,6 @@ public class UserService implements UserDetailsService {
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
         return user;
 
-    }
-
-    public void saveUser(User user) {
-        userRepository.save(user);
     }
 
     @Override

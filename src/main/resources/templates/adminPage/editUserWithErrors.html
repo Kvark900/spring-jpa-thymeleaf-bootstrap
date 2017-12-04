@@ -21,8 +21,8 @@
                     </aside>
                 </div>
                 <div id="admin-content" >
-                    <form class="admin-form" th:action="@{/adminPage/users/{id}(id=${userUpdateDto.id})}"
-                          th:object="${userUpdateDto}" th th:method="post" method="post">
+                    <form class="admin-form" th:action="@{/adminPage/users/{id}(id=${oldUserDto.id})}"
+                          th:object="${editedUser}" th th:method="post" method="post">
                         <ul class="global-errors" th:if="${#fields.hasErrors('global')}">
                             <li class="text-danger" th:each="err : ${#fields.errors('global')}" th:text="${err}">
                                 Input is incorrect</li>

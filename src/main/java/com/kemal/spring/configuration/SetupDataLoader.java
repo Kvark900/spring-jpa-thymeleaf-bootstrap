@@ -2,15 +2,16 @@ package com.kemal.spring.configuration;
 
 import com.kemal.spring.domain.Role;
 import com.kemal.spring.domain.User;
-import com.kemal.spring.domain.UserRepository;
 import com.kemal.spring.service.RoleService;
+import com.kemal.spring.service.UserService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Keno&Kemo on 04.11.2017..
@@ -20,14 +21,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     private boolean alreadySetup = false;
 
-    private UserRepository userRepository;
+    private UserService userService;
 
     private RoleService roleService;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public SetupDataLoader(UserRepository userRepository, RoleService roleService, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
+    public SetupDataLoader(UserService userService, RoleService roleService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userService = userService;
         this.roleService = roleService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -45,8 +46,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("ROLE_USER");
 
         final Role adminRole = roleService.findByName("ROLE_ADMIN");
-        
-        final User user = new User();
+        List<Role> adminRoles = new ArrayList<>();
+        adminRoles.add(adminRole);
+
+        /*final User user = new User();
         user.setName("Admin");
         user.setSurname("Admin");
         user.setUsername("admin");
@@ -54,8 +57,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         user.setEmail("test@test.com");
         user.setRoles(Arrays.asList(adminRole));
         user.setEnabled(true);
-        userRepository.save(user);
+        userService.saveUser(user);*/
 
+        createUserIfNotFound("test@test.com", adminRoles);
         alreadySetup = true;
     }
 
@@ -68,6 +72,24 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
         return role;
     }
+
+    @Transactional
+    private final void createUserIfNotFound(final String email, List<Role> userRoles) {
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            user = new User();
+            user.setName("Admin");
+            user.setSurname("Admin");
+            user.setUsername("admin");
+            user.setPassword(bCryptPasswordEncoder.encode("test"));
+            user.setEmail("test@test.com");
+            user.setRoles(userRoles);
+            user.setEnabled(true);
+            userService.saveUser(user);
+        }
+    }
+
+
 
 
 
