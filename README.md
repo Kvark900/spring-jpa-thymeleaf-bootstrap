@@ -1,7 +1,13 @@
 # spring-jpa-thymleaf-bootstrap
 Project in progress:
 
--User login and registration web app
+-User login and registration web app with admin page
+
+-Admin details: 
+
+email: test@test.com;
+
+password: test;
 
 Technology stack:
 
