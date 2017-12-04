@@ -88,8 +88,12 @@ public class UsersController {
                              BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
         User persistedUser = userService.findById(id);
-        boolean hasErrors = false;
         String redirectToPageWithErrors = "adminPage/editUser";
+
+        boolean emailAlreadyExists = false;
+        boolean usernameAlreadyExists = false;
+
+        boolean hasErrors = false;
 
         List <User> allUsers = userService.findAll();
 
@@ -109,9 +113,6 @@ public class UsersController {
             }
         }
 
-        boolean emailAlreadyExists = false;
-        boolean usernameAlreadyExists = false;
-
         for(User user : allUsers){
             //Check if email is edited and if it is taken
             if(!userUpdateDto.getEmail().equals(persistedUser.getEmail())
@@ -127,37 +128,31 @@ public class UsersController {
         }
 
         if(emailAlreadyExists){
-            model.addAttribute("userUpdateDto", userUpdateDto);
             model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
-            model.addAttribute("rolesList", allRoles);
 
             bindingResult.rejectValue("email", "emailAlreadyExists",
                     "Oops!  There is already a user registered with the email provided.");
             hasErrors = true;
-//            return redirectToPageWithErrors;
         }
 
         if (usernameAlreadyExists){
-            model.addAttribute("userUpdateDto", userUpdateDto);
             model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
-            model.addAttribute("rolesList", allRoles);
 
             bindingResult.rejectValue("username", "usernameAlreadyExists",
                     "Oops!  There is already a user registered with the username provided.");
             hasErrors = true;
-//            return redirectToPageWithErrors;
         }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("userUpdateDto", userUpdateDto);
             model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
-            model.addAttribute("rolesList", allRoles);
 
             hasErrors = true;
-//            return redirectToPageWithErrors;
         }
 
         if(hasErrors){
+            model.addAttribute("userUpdateDto", userUpdateDto);
+            model.addAttribute("rolesList", allRoles);
             return redirectToPageWithErrors;
         }
 
