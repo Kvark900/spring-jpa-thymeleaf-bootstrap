@@ -2,6 +2,7 @@ html {
 	position: relative;
 	min-height: 100%;
 }
+
 body {
 	margin-bottom: 60px; /* Margin bottom by footer height */
     background: #ffffff;
@@ -79,6 +80,7 @@ body {
 .nav-link{
 	color: #848482;
 }
+
 .nav-link:hover{
 	color: #D3D3D3;!important;
 }
@@ -94,13 +96,14 @@ body {
 .admin-table{
 	max-width: 85%;
 }
+
 .edit-btn{
 	color: darkslategrey;
 }
+
 #admin-sidebar{
 	width: 20%;
 	margin-right: 20px;
-
 }
 
 .admin-form{

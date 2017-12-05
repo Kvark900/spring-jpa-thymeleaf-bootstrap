@@ -10,16 +10,8 @@
     <div class="admin-inner">
         <div class="container">
             <div class="d-flex flex-row" >
-                <div id="admin-sidebar" >
-                    <aside class="navbar admin-nav navbar-dark">
-                        <nav class="nav  flex-column">
-                            <a class="nav-link active" th:href="@{/adminPage/users}">Users</a>
-                            <a class="nav-link" th:href="@{/adminPage/roles}">Roles</a>
-                            <a class="nav-link" href="#!">Topics</a>
-                            <a class="nav-link" href="#!">Courses</a>
-                        </nav>
-                    </aside>
-                </div>
+                <div th:replace="fragments/adminSidebar :: admin-sidebar"></div>
+
                 <div id="admin-content" >
                     <form class="admin-form" th:action="@{#}"  th:object="${newUser}" th:method="post" method="post">
                         <ul class="global-errors" th:if="${#fields.hasErrors('global')}">
