@@ -38,7 +38,4 @@ public class UserDto {
     private String matchingPassword;
 
     private List<Role> roles = new ArrayList<>();
-
-
-
 }

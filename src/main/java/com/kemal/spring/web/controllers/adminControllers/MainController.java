@@ -10,16 +10,10 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/adminPage")
-
 public class MainController {
-
 
     @GetMapping ("" )
     public ModelAndView adminPage(){
-        ModelAndView modelAndView = new ModelAndView("adminPage/adminPage");
-        return modelAndView;
+        return new ModelAndView("adminPage/adminPage");
     }
-
-
-
 }

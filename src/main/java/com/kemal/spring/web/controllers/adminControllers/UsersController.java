@@ -17,10 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Keno&Kemo on 20.11.2017..
@@ -47,7 +44,6 @@ public class UsersController {
     @GetMapping("/users")
     public ModelAndView showUsers(){
         ModelAndView modelAndView = new ModelAndView("adminPage/users");
-
         modelAndView.addObject("users", userUpdateDtoService.findAll());
         return modelAndView;
     }
@@ -56,26 +52,10 @@ public class UsersController {
     public ModelAndView getEditUserForm(@PathVariable Long id){
 
         UserUpdateDto userUpdateDto = userUpdateDtoService.findById(id);
-
         ModelAndView modelAndView = new ModelAndView("adminPage/editUser");
 
-        Map<Long, Role> assignedRoleMap = new HashMap<>();
-        List<Role> roles = userUpdateDto.getRoles();
-        for (Role role : roles) {
-            assignedRoleMap.put(role.getId(), role);
-        }
-
-        List<Role> userRoles = new ArrayList<>();
         List<Role> allRoles = roleService.getAllRoles();
-        for (Role role : allRoles) {
-            if(assignedRoleMap.containsKey(role.getId())){
-                userRoles.add(role);
-            } else {
-                userRoles.add(null);
-            }
-        }
-
-        userUpdateDto.setRoles(userRoles);
+        userUpdateDto.setRoles(userService.getAssignedRolesList(userUpdateDto));
 
         modelAndView.addObject("userUpdateDto", userUpdateDto);
         modelAndView.addObject("rolesList", allRoles);
@@ -88,29 +68,14 @@ public class UsersController {
                              BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
         User persistedUser = userService.findById(id);
-        String redirectToPageWithErrors = "adminPage/editUser";
+        String formWithErrors = "adminPage/editUser";
 
         boolean emailAlreadyExists = false;
         boolean usernameAlreadyExists = false;
         boolean hasErrors = false;
 
         List <User> allUsers = userService.findAll();
-
-        Map<Long, Role> assignedRoleMap = new HashMap<>();
-        List<Role> roles = userUpdateDto.getRoles();
-        for (Role role : roles) {
-            assignedRoleMap.put(role.getId(), role);
-        }
-
-        List<Role> userRoles = new ArrayList<>();
         List<Role> allRoles = roleService.getAllRoles();
-        for (Role role : allRoles) {
-            if(assignedRoleMap.containsKey(role.getId())){
-                userRoles.add(role);
-            } else {
-                userRoles.add(null);
-            }
-        }
 
         for(User user : allUsers){
             //Check if email is edited and if it is taken
@@ -118,7 +83,6 @@ public class UsersController {
                     && userUpdateDto.getEmail().equals(user.getEmail())){
                 emailAlreadyExists = true;
             }
-
             //Check if username is edited and if it is taken
             if(!userUpdateDto.getUsername().equals(persistedUser.getUsername())
                     && userUpdateDto.getUsername().equals(user.getUsername())){
@@ -145,8 +109,9 @@ public class UsersController {
         if(hasErrors){
             model.addAttribute("userUpdateDto", userUpdateDto);
             model.addAttribute("rolesList", allRoles);
-            model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
-            return redirectToPageWithErrors;
+            model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto",
+                    bindingResult);
+            return formWithErrors;
         }
 
         else {
@@ -154,6 +119,7 @@ public class UsersController {
             persistedUser.setSurname(userUpdateDto.getSurname());
             persistedUser.setUsername(userUpdateDto.getUsername());
             persistedUser.setEmail(userUpdateDto.getEmail());
+            persistedUser.setRoles(userService.getAssignedRolesList(userUpdateDto));
 
             userService.saveUser(persistedUser);
 

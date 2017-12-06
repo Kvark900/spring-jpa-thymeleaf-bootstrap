@@ -34,6 +34,6 @@ public class RolesController {
         ModelAndView modelAndView = new ModelAndView("adminPage/editRole");
         modelAndView.addObject("oldRole", oldRole);
         return modelAndView;
-
     }
+
 }

@@ -12,5 +12,4 @@ public class SpringThymleafJpaApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }

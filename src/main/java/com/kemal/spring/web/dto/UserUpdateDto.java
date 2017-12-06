@@ -30,7 +30,4 @@ public class UserUpdateDto {
     private String email;
 
     private List<Role> roles = new ArrayList<>();
-
-
-
 }
