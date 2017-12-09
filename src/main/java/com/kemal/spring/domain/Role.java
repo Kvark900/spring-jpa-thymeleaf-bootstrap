@@ -1,5 +1,7 @@
 package com.kemal.spring.domain;
 
+import com.kemal.spring.customAnnotations.ValidRoleName;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,8 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @ValidRoleName
+    @Column(unique = true)
     private String name;
 
     @ManyToMany (mappedBy = "roles")

@@ -33,7 +33,9 @@ public class UsersController {
     private UserUpdateDtoService userUpdateDtoService;
     private UserDtoService userDtoService;
 
-    public UsersController(UserService userService, RoleService roleService, ModelMapper modelMapper, UserUpdateDtoService userUpdateDtoService, UserDtoService userDtoService) {
+    public UsersController(UserService userService, RoleService roleService,
+                           ModelMapper modelMapper, UserUpdateDtoService userUpdateDtoService,
+                           UserDtoService userDtoService) {
         this.userService = userService;
         this.roleService = roleService;
         this.modelMapper = modelMapper;
@@ -42,14 +44,14 @@ public class UsersController {
     }
 
     @GetMapping("/users")
-    public ModelAndView showUsers(){
+    public ModelAndView showUsers() {
         ModelAndView modelAndView = new ModelAndView("adminPage/users");
         modelAndView.addObject("users", userUpdateDtoService.findAll());
         return modelAndView;
     }
 
     @GetMapping("/users/{id}")
-    public ModelAndView getEditUserForm(@PathVariable Long id){
+    public ModelAndView getEditUserForm(@PathVariable Long id) {
 
         UserUpdateDto userUpdateDto = userUpdateDtoService.findById(id);
         ModelAndView modelAndView = new ModelAndView("adminPage/editUser");
@@ -64,8 +66,8 @@ public class UsersController {
 
     @PostMapping("/users/{id}")
     public String updateUser(Model model, @PathVariable Long id,
-                             @ModelAttribute("oldUser")@Valid final UserUpdateDto userUpdateDto,
-                             BindingResult bindingResult, RedirectAttributes redirectAttributes){
+                             @ModelAttribute("oldUser") @Valid final UserUpdateDto userUpdateDto,
+                             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         User persistedUser = userService.findById(id);
         String formWithErrors = "adminPage/editUser";
@@ -74,29 +76,29 @@ public class UsersController {
         boolean usernameAlreadyExists = false;
         boolean hasErrors = false;
 
-        List <User> allUsers = userService.findAll();
+        List<User> allUsers = userService.findAll();
         List<Role> allRoles = roleService.getAllRoles();
 
-        for(User user : allUsers){
-            //Check if email is edited and if it is taken
-            if(!userUpdateDto.getEmail().equals(persistedUser.getEmail())
-                    && userUpdateDto.getEmail().equals(user.getEmail())){
+        for (User user : allUsers) {
+            //Check if the email is edited and if it is taken
+            if (!userUpdateDto.getEmail().equals(persistedUser.getEmail())
+                    && userUpdateDto.getEmail().equals(user.getEmail())) {
                 emailAlreadyExists = true;
             }
-            //Check if username is edited and if it is taken
-            if(!userUpdateDto.getUsername().equals(persistedUser.getUsername())
-                    && userUpdateDto.getUsername().equals(user.getUsername())){
+            //Check if the username is edited and if it is taken
+            if (!userUpdateDto.getUsername().equals(persistedUser.getUsername())
+                    && userUpdateDto.getUsername().equals(user.getUsername())) {
                 usernameAlreadyExists = true;
             }
         }
 
-        if(emailAlreadyExists){
+        if (emailAlreadyExists) {
             bindingResult.rejectValue("email", "emailAlreadyExists",
                     "Oops!  There is already a user registered with the email provided.");
             hasErrors = true;
         }
 
-        if (usernameAlreadyExists){
+        if (usernameAlreadyExists) {
             bindingResult.rejectValue("username", "usernameAlreadyExists",
                     "Oops!  There is already a user registered with the username provided.");
             hasErrors = true;
@@ -106,15 +108,13 @@ public class UsersController {
             hasErrors = true;
         }
 
-        if(hasErrors){
+        if (hasErrors) {
             model.addAttribute("userUpdateDto", userUpdateDto);
             model.addAttribute("rolesList", allRoles);
             model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto",
                     bindingResult);
             return formWithErrors;
-        }
-
-        else {
+        } else {
             persistedUser.setName(userUpdateDto.getName());
             persistedUser.setSurname(userUpdateDto.getSurname());
             persistedUser.setUsername(userUpdateDto.getUsername());
@@ -125,40 +125,44 @@ public class UsersController {
 
             redirectAttributes.addFlashAttribute("userHasBeenUpdated", true);
             return "redirect:/adminPage/users";
-
         }
     }
 
     @GetMapping("/users/newUser")
-    public ModelAndView getAddNewUserForm(){
+    public String getAddNewUserForm(Model model) {
         UserDto newUser = new UserDto();
-        ModelAndView modelAndView = new ModelAndView("adminPage/newUser");
-        modelAndView.addObject("newUser", newUser);
-        return modelAndView;
+        model.addAttribute("newUser", newUser);
+        return "adminPage/newUser";
     }
 
     @PostMapping("/users/newUser")
-    public ModelAndView saveUser(ModelAndView modelAndView, @ModelAttribute("newUser")
-                                @Valid final UserDto newUser, BindingResult bindingResult,
-                                 RedirectAttributes redirectAttributes) {
+    public String saveNewUser(Model model, @ModelAttribute("newUser") @Valid final UserDto newUser,
+                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        UserDto mailExists = userDtoService.findByEmail(newUser.getEmail());
-        UserDto usernameExists = userDtoService.findByUsername(newUser.getUsername());
+        UserDto emailAlreadyExists = userDtoService.findByEmail(newUser.getEmail());
+        UserDto usernameAlreadyExists = userDtoService.findByUsername(newUser.getUsername());
+        boolean hasErrors = false;
+        String formWithErrors = "adminPage/newUser";
 
-        if (mailExists != null) {
-            modelAndView.setViewName("adminPage/newUser");
-            bindingResult.rejectValue("email", "mailExists",
+
+        if (emailAlreadyExists != null) {
+            bindingResult.rejectValue("email", "emailAlreadyExists",
                     "Oops!  There is already a user registered with the email provided.");
+            hasErrors = true;
         }
 
-        if (usernameExists != null){
-            modelAndView.setViewName("adminPage/newUser");
-            bindingResult.rejectValue("username", "usernameExists",
+        if (usernameAlreadyExists != null) {
+            bindingResult.rejectValue("username", "usernameAlreadyExists",
                     "Oops!  There is already a user registered with the username provided.");
+            hasErrors = true;
         }
 
         if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("adminPage/newUser");
+            hasErrors = true;
+        }
+
+        if (hasErrors) {
+            return formWithErrors;
         }
 
         else {
@@ -167,9 +171,8 @@ public class UsersController {
 
             userService.saveUser(user);
             redirectAttributes.addFlashAttribute("userHasBeenSaved", true);
-            modelAndView.setViewName("redirect:/adminPage/users");
+            return "redirect:/adminPage/users";
         }
 
-        return modelAndView;
     }
 }

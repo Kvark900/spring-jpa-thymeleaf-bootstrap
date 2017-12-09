@@ -13,13 +13,15 @@
                 <div th:replace="fragments/adminSidebar :: admin-sidebar"></div>
 
                 <div id="admin-content" >
-                    <form class="admin-form" th:action="@{/adminPage/roles/{id}(id=${role.id})}"
-                          th:object="${role}" th:method="post" method="post">
+                    <form class="admin-form" th:action="@{/adminPage/roles/newRole}"  th:object="${newUser}" th:method="post" method="post">
+                        <ul class="global-errors" th:if="${#fields.hasErrors('global')}">
+                            <li class="text-danger" th:each="err : ${#fields.errors('global')}"
+                                th:text="${err}">Input is incorrect</li>
+                        </ul>
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" th:field="*{name}" >
+                            <label for="Name">Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Enter name">
                             <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

@@ -27,7 +27,8 @@ public class UserService implements UserDetailsService {
     private RoleService roleService;
     private ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository, RoleService roleService, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder,
+                       RoleRepository roleRepository, RoleService roleService, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.roleService = roleService;
@@ -35,15 +36,18 @@ public class UserService implements UserDetailsService {
     }
 
     //find methods
-    public List<User> findAll(){
+    public List<User> findAll() {
         return userRepository.findAll();
     }
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-    public User findById(Long id){
+
+    public User findById(Long id) {
         return userRepository.findById(id);
     }
+
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -52,7 +56,8 @@ public class UserService implements UserDetailsService {
     public void saveUser(User user) {
         userRepository.save(user);
     }
-    public User createNewAccount(UserDto userDto){
+
+    public User createNewAccount(UserDto userDto) {
         User user = new User();
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
@@ -64,7 +69,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public List<Role> getAssignedRolesList(UserUpdateDto userUpdateDto){
+    public List<Role> getAssignedRolesList(UserUpdateDto userUpdateDto) {
         Map<Long, Role> assignedRoleMap = new HashMap<>();
         List<Role> roles = userUpdateDto.getRoles();
         for (Role role : roles) {
@@ -74,7 +79,7 @@ public class UserService implements UserDetailsService {
         List<Role> userRoles = new ArrayList<>();
         List<Role> allRoles = roleService.getAllRoles();
         for (Role role : allRoles) {
-            if(assignedRoleMap.containsKey(role.getId())){
+            if (assignedRoleMap.containsKey(role.getId())) {
                 userRoles.add(role);
             } else {
                 userRoles.add(null);
@@ -86,13 +91,10 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByEmail(username);
-        if (user==null){
+        if (user == null) {
             throw new UsernameNotFoundException(username);
         }
 
         return new UserDetailsImpl(user);
     }
-
-
-
 }

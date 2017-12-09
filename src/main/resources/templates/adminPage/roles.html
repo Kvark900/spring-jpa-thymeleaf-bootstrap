@@ -14,6 +14,12 @@
                 <div th:replace="fragments/adminSidebar :: admin-sidebar"></div>
 
                 <div id="admin-content">
+                    <div th:if="${roleHasBeenSaved}" class="alert alert-success" role="alert">
+                        <strong>Well done!</strong> Role has been saved!!!
+                    </div>
+                    <div th:if="${roleHasBeenUpdated}" class="alert alert-success" role="alert">
+                        <strong>Well done!</strong> Role has been updated!!!
+                    </div>
                     <table class="table table-striped admin-table">
                         <thead>
                         <tr>
@@ -35,6 +41,8 @@
                         </tr>
                         </tbody>
                     </table>
+                    <a href="#" th:href="@{/adminPage/roles/newRole}"><button type="button" class="btn btn-primary">Add New Role</button>
+                    </a>
                 </div>
             </div>
         </div>

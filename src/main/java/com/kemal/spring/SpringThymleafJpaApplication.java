@@ -9,4 +9,6 @@ public class SpringThymleafJpaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringThymleafJpaApplication.class, args);
 	}
+
+
 }

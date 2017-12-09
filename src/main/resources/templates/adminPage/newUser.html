@@ -13,7 +13,7 @@
                 <div th:replace="fragments/adminSidebar :: admin-sidebar"></div>
 
                 <div id="admin-content" >
-                    <form class="admin-form" th:action="@{#}"  th:object="${newUser}" th:method="post" method="post">
+                    <form class="admin-form" th:action="@{/adminPage/users/newUser}"  th:object="${newUser}" th:method="post" method="post">
                         <ul class="global-errors" th:if="${#fields.hasErrors('global')}">
                             <li class="text-danger" th:each="err : ${#fields.errors('global')}"
                                 th:text="${err}">Input is incorrect</li>
@@ -57,7 +57,6 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
-
                 </div>
             </div>
         </div>

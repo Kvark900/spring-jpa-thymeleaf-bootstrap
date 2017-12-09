@@ -57,7 +57,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         user.setEmail("test@test.com");
         user.setRoles(Arrays.asList(adminRole));
         user.setEnabled(true);
-        userService.saveUser(user);*/
+        userService.saveNewUser(user);*/
 
         createUserIfNotFound("test@test.com", adminRoles);
         alreadySetup = true;
@@ -88,9 +88,5 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             userService.saveUser(user);
         }
     }
-
-
-
-
 
 }

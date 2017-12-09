@@ -30,6 +30,10 @@ public class UserDtoService {
             UserDto userDto = new UserDto();
             userDtosList.add(userDto = modelMapper.map(user, UserDto.class));
         }
+
+        for (UserDto userDto : userDtosList){
+            System.out.println(userDto);
+        }
         return userDtosList;
     }
 
@@ -44,23 +48,21 @@ public class UserDtoService {
     }
 
     public UserDto findByEmail(String email){
-        UserDto userDto = new UserDto();
-        for(UserDto userDto1 : findAll()){
-            if(userDto1.getEmail().equals(email)){
-                userDto = userDto1;
+        for(UserDto userDto : findAll()){
+            if(userDto.getEmail().equals(email)){
+                return userDto;
             }
         }
-        return userDto;
+        return null;
     }
 
     public UserDto findByUsername(String username){
-        UserDto userDto = new UserDto();
-        for(UserDto userDto1 : findAll()){
-            if(userDto1.getUsername().equals(username)){
-                userDto = userDto1;
+        for(UserDto userDto : findAll()){
+            if(userDto.getUsername().equals(username)){
+                return userDto;
             }
         }
-        return userDto;
+        return null;
     }
 
 }
