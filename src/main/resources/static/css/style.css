@@ -60,6 +60,7 @@ body {
     /*margin-bottom:;*/
     background-size: cover;
     background-attachment: fixed;
+	padding-bottom: 25px;
 }
 
 #admin-sidebar{

@@ -18,23 +18,23 @@ public class UserDto {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank (message = "Name is required")
     private String name;
 
-    @NotBlank
+    @NotBlank (message = "Surname is required")
     private String surname;
 
-    @NotBlank
+    @NotBlank (message = "Username is required")
     private String username;
 
     @ValidEmail
-    @NotBlank
+    @NotBlank (message = "Email is required")
     private String email;
 
-    @NotBlank
+    @NotBlank (message = "Password is required")
     private String password;
 
-    @NotBlank
+    @NotBlank (message = "Matching password is required")
     private String matchingPassword;
 
     private List<Role> roles = new ArrayList<>();
