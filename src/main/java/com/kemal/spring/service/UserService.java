@@ -57,6 +57,10 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void deleteUser(Long id){
+        userRepository.delete(id);
+    }
+
     public User createNewAccount(UserDto userDto) {
         User user = new User();
         user.setName(userDto.getName());

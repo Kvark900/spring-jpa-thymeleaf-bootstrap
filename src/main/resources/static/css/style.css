@@ -31,6 +31,7 @@ body {
 	border-bottom:#008ed6 3px solid;
 	opacity:0.8;
 }
+
 .global-errors{
 	list-style-type: none;
 	padding: 0px;
@@ -94,7 +95,7 @@ body {
     min-height: 100%; }
 
 .admin-table{
-	max-width: 85%;
+	max-width: 100%;
 }
 
 .edit-btn{
@@ -110,7 +111,10 @@ body {
 	width: 70%;
 }
 
-
+.thead{
+	background-color: darkslategrey; !important;
+	color: white;
+}
 
 footer {
 	position: absolute;

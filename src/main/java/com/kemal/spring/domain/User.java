@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 @Entity
-public  class  User {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -30,18 +30,19 @@ public  class  User {
 
     private boolean enabled;
 
-    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="role_id")}
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private List<Role> roles = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String name, String surname, String username, String email, String password, boolean enabled, List<Role> roles) {
+    public User(String name, String surname, String username, String email,
+                String password, boolean enabled, List<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.username = username;

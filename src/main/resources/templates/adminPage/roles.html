@@ -14,14 +14,20 @@
                 <div th:replace="fragments/adminSidebar :: admin-sidebar"></div>
 
                 <div id="admin-content">
-                    <div th:if="${roleHasBeenSaved}" class="alert alert-success" role="alert">
+                    <div th:if="${roleHasBeenSaved}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         <strong>Well done!</strong> Role has been saved!!!
                     </div>
-                    <div th:if="${roleHasBeenUpdated}" class="alert alert-success" role="alert">
+                    <div th:if="${roleHasBeenUpdated}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         <strong>Well done!</strong> Role has been updated!!!
                     </div>
-                    <table class="table table-striped admin-table">
-                        <thead>
+                    <table class="table table-striped table-responsive admin-table">
+                        <thead class="thead">
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
@@ -33,9 +39,10 @@
                             <td><a th:href="@{#}"><span
                                     th:text="${role.id}">1</span></a></td>
                             <td th:text="${role.name}">Role Name</td>
-                            <td><a style="text-decoration: none;" th:href="@{/adminPage/roles/{id}(id=${role.id})}"
-                                   class="edit-btn">
-                                <i class="fa fa-edit"></i>Edit
+                            <td><a style="text-decoration: none; color: blue;"
+                                   th:href="@{/adminPage/roles/{id}(id=${role.id})}" class="edit-btn"
+                                   data-toggle="tooltip" data-placement="right" title="Edit role">
+                                <i class="fa fa-edit"></i>
                             </a>
                             </td>
                         </tr>
@@ -51,6 +58,7 @@
 
 <footer th:replace="fragments/footer :: footer"></footer>
 
+<div th:replace="fragments/jsScripts :: scripts"></div>
 
 
 </body>

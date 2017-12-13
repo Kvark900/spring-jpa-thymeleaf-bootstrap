@@ -27,7 +27,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public SetupDataLoader(UserService userService, RoleService roleService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public SetupDataLoader(UserService userService, RoleService roleService, BCryptPasswordEncoder
+            bCryptPasswordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;

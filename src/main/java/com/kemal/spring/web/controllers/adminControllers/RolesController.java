@@ -27,14 +27,14 @@ public class RolesController {
     }
 
     @GetMapping("/roles")
-    public ModelAndView showRoles(){
+    public ModelAndView showRoles() {
         ModelAndView modelAndView = new ModelAndView("adminPage/roles");
         modelAndView.addObject("roles", roleService.getAllRoles());
         return modelAndView;
     }
 
     @GetMapping("/roles/{id}")
-    public ModelAndView getEditRoleForm(@PathVariable Long id){
+    public ModelAndView getEditRoleForm(@PathVariable Long id) {
         Role role = roleService.findById(id);
         ModelAndView modelAndView = new ModelAndView("adminPage/editRole");
         modelAndView.addObject("role", role);
@@ -42,9 +42,9 @@ public class RolesController {
     }
 
     @PostMapping("/roles/{id}")
-    public String updateRole (Model model, @PathVariable Long id,
-                              @ModelAttribute("oldRole") @Valid final Role role,
-                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String updateRole(Model model, @PathVariable Long id,
+                             @ModelAttribute("oldRole") @Valid final Role role,
+                             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         String formWithErrors = "adminPage/editRole";
         Role persistedRole = roleService.findById(id);
@@ -70,13 +70,12 @@ public class RolesController {
             hasErrors = true;
 
         }
-        if(hasErrors){
+        if (hasErrors) {
             model.addAttribute("role", role);
             model.addAttribute("org.springframework.validation.BindingResult.role",
                     bindingResult);
             return formWithErrors;
-        }
-        else {
+        } else {
             roleService.saveRole(role);
             redirectAttributes.addFlashAttribute("roleHasBeenUpdated", true);
             return "redirect:/adminPage/roles";
@@ -84,14 +83,14 @@ public class RolesController {
     }
 
     @GetMapping("/roles/newRole")
-    public String getAddNewRoleForm(Model model){
+    public String getAddNewRoleForm(Model model) {
         model.addAttribute("newUser", new UserDto());
         return "adminPage/newRole";
     }
 
-    @PostMapping ("/roles/newRole")
-    public String saveNewRole (Model model, @ModelAttribute("newRole") @Valid final Role newRole,
-                               BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    @PostMapping("/roles/newRole")
+    public String saveNewRole(Model model, @ModelAttribute("newRole") @Valid final Role newRole,
+                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         Role roleNameAlreadyExists = roleService.findByName(newRole.getName());
         boolean hasErrors = false;
@@ -109,9 +108,7 @@ public class RolesController {
 
         if (hasErrors) {
             return formWithErrors;
-        }
-
-        else {
+        } else {
             roleService.saveRole(newRole);
             redirectAttributes.addFlashAttribute("roleHasBeenSaved", true);
             return "redirect:/adminPage/roles";

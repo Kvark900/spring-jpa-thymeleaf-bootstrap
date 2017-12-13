@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -44,24 +43,20 @@ public class UsersController {
     }
 
     @GetMapping("/users")
-    public ModelAndView showUsers() {
-        ModelAndView modelAndView = new ModelAndView("adminPage/users");
-        modelAndView.addObject("users", userUpdateDtoService.findAll());
-        return modelAndView;
+    public String showUsers(Model model) {
+        model.addAttribute("users", userUpdateDtoService.findAll());
+        return "adminPage/users";
     }
 
     @GetMapping("/users/{id}")
-    public ModelAndView getEditUserForm(@PathVariable Long id) {
-
+    public String getEditUserForm(@PathVariable Long id, Model model) {
         UserUpdateDto userUpdateDto = userUpdateDtoService.findById(id);
-        ModelAndView modelAndView = new ModelAndView("adminPage/editUser");
-
         List<Role> allRoles = roleService.getAllRoles();
         userUpdateDto.setRoles(userService.getAssignedRolesList(userUpdateDto));
 
-        modelAndView.addObject("userUpdateDto", userUpdateDto);
-        modelAndView.addObject("rolesList", allRoles);
-        return modelAndView;
+        model.addAttribute("userUpdateDto", userUpdateDto);
+        model.addAttribute("rolesList", allRoles);
+        return "adminPage/editUser";
     }
 
     @PostMapping("/users/{id}")
@@ -114,13 +109,14 @@ public class UsersController {
             model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto",
                     bindingResult);
             return formWithErrors;
+
         } else {
             persistedUser.setName(userUpdateDto.getName());
             persistedUser.setSurname(userUpdateDto.getSurname());
             persistedUser.setUsername(userUpdateDto.getUsername());
             persistedUser.setEmail(userUpdateDto.getEmail());
             persistedUser.setRoles(userService.getAssignedRolesList(userUpdateDto));
-
+            persistedUser.setEnabled(userUpdateDto.isEnabled());
             userService.saveUser(persistedUser);
 
             redirectAttributes.addFlashAttribute("userHasBeenUpdated", true);
@@ -144,7 +140,6 @@ public class UsersController {
         boolean hasErrors = false;
         String formWithErrors = "adminPage/newUser";
 
-
         if (emailAlreadyExists != null) {
             bindingResult.rejectValue("email", "emailAlreadyExists",
                     "Oops!  There is already a user registered with the email provided.");
@@ -163,9 +158,7 @@ public class UsersController {
 
         if (hasErrors) {
             return formWithErrors;
-        }
-
-        else {
+        } else {
             User user = userService.createNewAccount(newUser);
             user.setEnabled(true);
 
@@ -173,6 +166,18 @@ public class UsersController {
             redirectAttributes.addFlashAttribute("userHasBeenSaved", true);
             return "redirect:/adminPage/users";
         }
-
     }
+
+    @GetMapping ("/users/delete/{id}")
+    public String deleteUser (@PathVariable Long id, Model model,
+                              RedirectAttributes redirectAttributes){
+        User deletedUser = userService.findById(id);
+        //removing all roles before deleting
+        deletedUser.getRoles().clear();
+
+        userService.deleteUser(id);
+        redirectAttributes.addFlashAttribute("userHasBeenDeleted", true);
+        return "redirect:/adminPage/users";
+    }
+
 }

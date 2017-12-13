@@ -25,12 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 
@@ -38,23 +38,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.
                 authorizeRequests()
-                    .antMatchers("/css/**","/images/**", "/index","/", "/register","/submit-registration").permitAll()
-                    .antMatchers("/adminPage/**").hasRole("ADMIN")
-                    .anyRequest().authenticated()
+                .antMatchers("/css/**","/js/**", "/images/**", "/index", "/", "/register", "/submit-registration").permitAll()
+                .antMatchers("/adminPage/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
-                    .loginProcessingUrl("/perform-login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/index",true)
-                    .failureUrl("/login-error.html")
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .loginProcessingUrl("/perform-login")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/index", true)
+                .failureUrl("/login-error.html")
                 .and()
-                    .logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login")
-                    .permitAll();
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .permitAll();
 
 
     }

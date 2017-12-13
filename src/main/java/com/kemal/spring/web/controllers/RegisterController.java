@@ -50,7 +50,7 @@ public class RegisterController {
             User user = userService.createNewAccount(userDto);
             // Disable user until they click on confirmation link in email
 
-            user.setEnabled(false);
+            user.setEnabled(true);
 
             userService.saveUser(user);
 

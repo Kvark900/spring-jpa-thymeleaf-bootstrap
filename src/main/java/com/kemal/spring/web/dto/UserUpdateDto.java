@@ -29,5 +29,7 @@ public class UserUpdateDto {
     @NotBlank
     private String email;
 
+    private boolean enabled;
+
     private List<Role> roles = new ArrayList<>();
 }

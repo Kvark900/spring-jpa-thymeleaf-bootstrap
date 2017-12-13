@@ -49,6 +49,16 @@
                                 </p>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label>Enabled</label>
+                            <div>
+                                <input type="checkbox" th:field="*{enabled}" th:value="*{enabled}" >
+                                    Enabled
+                                </input>
+                            </div>
+                        </div>
+
+
 
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
@@ -59,6 +69,7 @@
 </div>
 
 <footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/jsScripts :: scripts"></div>
 
 </body>
 </html>
