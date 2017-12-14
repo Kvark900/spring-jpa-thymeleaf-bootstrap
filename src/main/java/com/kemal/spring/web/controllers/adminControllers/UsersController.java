@@ -168,11 +168,12 @@ public class UsersController {
         }
     }
 
+//    @ResponseBody
     @GetMapping ("/users/delete/{id}")
     public String deleteUser (@PathVariable Long id, Model model,
                               RedirectAttributes redirectAttributes){
         User deletedUser = userService.findById(id);
-        //removing all roles before deleting
+        //removing all roles before deleting a user
         deletedUser.getRoles().clear();
 
         userService.deleteUser(id);

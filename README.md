@@ -5,9 +5,9 @@ Project in progress:
 
 -Admin details: 
 
-email: test@test.com;
+email: admin@gmail.com;
 
-password: test;
+password: admin;
 
 Technology stack:
 

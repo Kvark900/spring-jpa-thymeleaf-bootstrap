@@ -32,6 +32,17 @@ body {
 	opacity:0.8;
 }
 
+#users-nav-item .nav-item{
+	margin: 0px 5px;
+}
+
+#shopping-cart-icon{
+	font-size: 30px;
+}
+#shopping-cart-collapse{
+	max-width: 200px;
+}
+
 .global-errors{
 	list-style-type: none;
 	padding: 0px;

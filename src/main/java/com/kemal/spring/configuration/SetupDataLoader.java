@@ -50,17 +50,21 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         List<Role> adminRoles = new ArrayList<>();
         adminRoles.add(adminRole);
 
-        /*final User user = new User();
-        user.setName("Admin");
-        user.setSurname("Admin");
-        user.setUsername("admin");
-        user.setPassword(bCryptPasswordEncoder.encode("test"));
-        user.setEmail("test@test.com");
-        user.setRoles(Arrays.asList(adminRole));
-        user.setEnabled(true);
-        userService.saveNewUser(user);*/
+        final Role userRole = roleService.findByName("ROLE_USER");
+        List<Role> userRoles = new ArrayList<>();
+        userRoles.add(userRole);
 
-        createUserIfNotFound("test@test.com", adminRoles);
+        createUserIfNotFound("admin@gmail.com", "Admin", "Admin",
+                "admin", "admin", adminRoles);
+        createUserIfNotFound("user1@gmail.com", "User1", "User1",
+                "user1", "user1", userRoles);
+        createUserIfNotFound("user2@gmail.com", "User2", "User2",
+                "user2", "user2", userRoles);
+        createUserIfNotFound("user3@gmail.com", "User3", "User3",
+                "user3", "user3", userRoles);
+        createUserIfNotFound("user4@gmail.com", "User4", "User4",
+                "user4", "user4", userRoles);
+
         alreadySetup = true;
     }
 
@@ -75,19 +79,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    private final void createUserIfNotFound(final String email, List<Role> userRoles) {
+    private final void createUserIfNotFound(final String email, String name, String surname, String username, String password, List<Role> userRoles) {
         User user = userService.findByEmail(email);
         if (user == null) {
             user = new User();
-            user.setName("Admin");
-            user.setSurname("Admin");
-            user.setUsername("admin");
-            user.setPassword(bCryptPasswordEncoder.encode("test"));
-            user.setEmail("test@test.com");
+            user.setName(name);
+            user.setSurname(surname);
+            user.setUsername(username);
+            user.setPassword(bCryptPasswordEncoder.encode(password));
+            user.setEmail(email);
             user.setRoles(userRoles);
             user.setEnabled(true);
             userService.saveUser(user);
         }
     }
-
 }

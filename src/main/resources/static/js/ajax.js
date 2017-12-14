@@ -22,7 +22,9 @@ function deleteEntity(entity) {
         updateTable(data);
     });
     closeModal('#deleteModal');
-    input.val('');
+    input.val('' +
+        '' +
+        '');
 }
 
 function updateTable(data) {
@@ -38,7 +40,7 @@ function updateTable(data) {
             $('#table-body').empty();
             $.each(response, function (i, e) {
                 var end = e.id + ");'";
-                var del = "showDeleteModal(" + end;
+                var del = "'showDeleteModal(" + end;
                 var row = $('<tr>').append(
                     $('<td>').text(e.id),
                     $('<td>').text(e.name),

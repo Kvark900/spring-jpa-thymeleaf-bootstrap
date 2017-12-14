@@ -31,22 +31,39 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav ml-auto" sec:authorize="${isAuthenticated()}">
-                <li class="nav-item"  >
-                    <span class="navbar-text" sec:authentication="name"></span>
-                </li>
+            <ul class="navbar-nav ml-auto" id="users-nav-item" sec:authorize="${isAuthenticated()}">
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/adminPage}">
                         Admin Page
                     </a>
                 </li>
+                <li class="nav-item d-flex">
+                    <div class="shopping-cart align-self-center " sec:authorize="hasRole('ROLE_USER')" >
+                        <a type="button" style="text-decoration: none;" data-toggle="collapse"
+                           href="#shopping-cart-collapse" aria-expanded="false"
+                           aria-controls="collapseExample">
+                            <i class="fa fa-shopping-cart " id="shopping-cart-icon" aria-hidden="true"></i>
+                        </a>
+                        <div class="collapse" id="shopping-cart-collapse" style="position: absolute;">
+                            <div class="card card-body">
+                                <p>Total courses:</p>
+                                <a type="button" class="btn btn-primary" th:href="@{#}">Go to shopping cart</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <span class="navbar-text" sec:authentication="name"></span>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link"  href="javascript: document.logoutForm.submit()" role="menuitem">
                         Logout
                     </a>
-                <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-                    <input hidden type="submit" value="Sign Out"/>
-                </form>
+                    <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                        <input hidden type="submit" value="Sign Out"/>
+                    </form>
                 </li>
             </ul>
 

@@ -71,7 +71,12 @@
                                        data-placement="right" title="Remove user">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
-                                </td>
+                                    <!--<a data-toggle='modal' data-target='#dmodal'
+                                       th:onclick="'showDeleteModal(' + ${user.id} + ')'">Delete
+                                    </a>
+                                    <button type='button' class='btn btn-outline-danger' data-toggle='modal'
+                                            data-target='#deleteModal' th:onclick="'showDeleteModal(' + ${user.id} + ')'" > Remove </button>"
+-->                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -84,13 +89,7 @@
     </div>
 </div>
 
-<!--<script>
-    $(document).ready(function() {
-        $("#deleteModal").modal();
-    });
-</script>-->
-
-<!-- Modal -->
+ <!--Modal-->
 <!--<div class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -104,8 +103,12 @@
             <div class="modal-body">
                 <input id="delete-id" type="hidden"/>
                 Are you sure you want to delete this user?</div>
-            <div class="modal-footer">
+            &lt;!&ndash;<div class="modal-footer">
                 <a th:href="@{/adminPage/users/delete/{id}(id=${user.id})}" type="button" class="btn btn-danger">Delete</a>
+                <a type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</a>
+            </div>&ndash;&gt;
+            <div class="modal-footer">
+                <a type="button" class="btn btn-danger" onclick="deleteEntity('user')">Delete</a>
                 <a type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</a>
             </div>
         </div>
@@ -124,6 +127,7 @@
 
 
 <div th:replace="fragments/jsScripts :: scripts"></div>
+
 
 </body>
 </html>
