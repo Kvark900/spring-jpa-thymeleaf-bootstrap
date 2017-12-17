@@ -19,6 +19,9 @@ Technology stack:
 * Lombok
 * Thymeleaf
 * Bootstrap 4
+* jQuery
+* AJAX
+
 
 
 ## Requirements
