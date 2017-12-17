@@ -1,4 +1,4 @@
-package com.kemal.spring.web.controllers.adminControllers;
+package com.kemal.spring.web.controllers.viewControllers.adminControllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.kemal.spring.web.controllers.adminControllers;
+package com.kemal.spring.web.controllers.viewControllers.adminControllers;
 
 import com.kemal.spring.domain.Role;
 import com.kemal.spring.domain.User;
@@ -168,17 +168,17 @@ public class UsersController {
         }
     }
 
-//    @ResponseBody
-    @GetMapping ("/users/delete/{id}")
-    public String deleteUser (@PathVariable Long id, Model model,
+    /*@ResponseBody
+    @PostMapping ("/users/delete/{id}")
+    public void deleteUser (@PathVariable Long id, Model model,
                               RedirectAttributes redirectAttributes){
         User deletedUser = userService.findById(id);
         //removing all roles before deleting a user
         deletedUser.getRoles().clear();
 
         userService.deleteUser(id);
-        redirectAttributes.addFlashAttribute("userHasBeenDeleted", true);
-        return "redirect:/adminPage/users";
-    }
+        *//*redirectAttributes.addFlashAttribute("userHasBeenDeleted", true);
+        return "redirect:/adminPage/users";*//*
+    }*/
 
 }

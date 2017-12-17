@@ -1,4 +1,4 @@
-package com.kemal.spring.web.controllers;
+package com.kemal.spring.web.controllers.viewControllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

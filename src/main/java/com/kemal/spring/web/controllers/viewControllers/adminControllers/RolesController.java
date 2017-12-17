@@ -1,4 +1,4 @@
-package com.kemal.spring.web.controllers.adminControllers;
+package com.kemal.spring.web.controllers.viewControllers.adminControllers;
 
 import com.kemal.spring.domain.Role;
 import com.kemal.spring.service.RoleService;

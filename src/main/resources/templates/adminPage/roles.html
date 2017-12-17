@@ -36,8 +36,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="role : ${roles}">
-                            <td><a th:href="@{#}"><span
-                                    th:text="${role.id}">1</span></a></td>
+                            <td th:text="${role.id}"> >1</td>
                             <td th:text="${role.name}">Role Name</td>
                             <td><a style="text-decoration: none; color: blue;"
                                    th:href="@{/adminPage/roles/{id}(id=${role.id})}" class="edit-btn"
@@ -48,7 +47,7 @@
                         </tr>
                         </tbody>
                     </table>
-                    <a href="#" th:href="@{/adminPage/roles/newRole}"><button type="button" class="btn btn-primary">Add New Role</button>
+                    <a href="#" th:href="@{/adminPage/roles/newRole}"><button type="button" class="btn btn-primary">New Role</button>
                     </a>
                 </div>
             </div>

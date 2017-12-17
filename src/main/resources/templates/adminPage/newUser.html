@@ -55,7 +55,9 @@
                             <p class="text-danger"th:if="${#fields.hasErrors('matchingPassword')}"
                                th:errors="*{matchingPassword}"></p>
                         </div>
+                        <a class="btn btn-dark" th:href="@{/adminPage/users}">Cancel</a>
                         <button type="submit" class="btn btn-primary">Submit</button>
+
                     </form>
                 </div>
             </div>

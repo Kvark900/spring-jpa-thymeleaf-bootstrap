@@ -1,4 +1,4 @@
-package com.kemal.spring.web.controllers;
+package com.kemal.spring.web.controllers.viewControllers;
 
 import com.kemal.spring.web.dto.UserDto;
 import org.springframework.stereotype.Controller;

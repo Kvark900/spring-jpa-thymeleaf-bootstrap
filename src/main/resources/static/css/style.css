@@ -56,12 +56,6 @@ body {
     margin-top: 150px;
 }
 
-#home-section {
-    background: url("../images/keyboard.jpeg") no-repeat;
-    min-height: 700px;
-    background-size: cover;
-    background-attachment: fixed;
-}
 
 
 /*Admin page*/
@@ -98,6 +92,10 @@ body {
 	color: #D3D3D3;!important;
 }
 
+#remove-link{
+	cursor: pointer;
+}
+
 #admin-content .dark-overlay {
     background-color: rgba(0, 0, 0, 0.7);
     position: absolute;
@@ -106,9 +104,6 @@ body {
     width: 100%;
     min-height: 100%; }
 
-.admin-table{
-	max-width: 100%;
-}
 
 .edit-btn{
 	color: darkslategrey;

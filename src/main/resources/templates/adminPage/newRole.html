@@ -23,6 +23,7 @@
                             <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Enter name">
                             <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                         </div>
+                        <a class="btn btn-dark" th:href="@{/adminPage/roles}">Cancel</a>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>

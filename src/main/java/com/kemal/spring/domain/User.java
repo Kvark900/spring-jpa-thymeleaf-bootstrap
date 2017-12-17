@@ -1,7 +1,8 @@
 package com.kemal.spring.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,13 +31,14 @@ public class User {
 
     private boolean enabled;
 
-    @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
-    private List<Role> roles = new ArrayList<>();
+    private List<Role> roles;
 
     public User() {
     }

@@ -1,9 +1,9 @@
 package com.kemal.spring.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.kemal.spring.customAnnotations.ValidRoleName;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,8 +19,9 @@ public class Role {
     @Column(unique = true)
     private String name;
 
+    @JsonBackReference
     @ManyToMany (mappedBy = "roles")
-    private List<User> users = new ArrayList<>();
+    private List<User> users;
 
     public Role() {
     }
