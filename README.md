@@ -37,3 +37,11 @@ Technology stack:
   Download the latest Apache Maven from [http://maven.apache.org](http://maven.apache.org), and uncompress it into your local system. 
 
   Optionally, you can set **M2\_HOME** environment varible, and also do not forget to append *&lt;Maven Installation dir>/bin* your **PATH** environment variable.  
+  
+## Running the project
+The application uses [Spring Boot](http://projects.spring.io/spring-boot/), so it is easy to run. You can start it any of a few ways:
+* Run the `main` method from `SpringThymleafJpaApplication `
+* Use the Maven Spring Boot plugin: `mvn spring-boot:run`
+
+## Viewing the running application
+To view the running application, visit [http://localhost:8080](http://localhost:8080) in your browser
