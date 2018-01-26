@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="fragments/head :: head">
@@ -32,13 +31,8 @@
             </ul>
 
             <ul class="navbar-nav ml-auto" id="users-nav-item" sec:authorize="${isAuthenticated()}">
-                <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/adminPage}">
-                        Admin Page
-                    </a>
-                </li>
                 <li class="nav-item d-flex">
-                    <div class="shopping-cart align-self-center " sec:authorize="hasRole('ROLE_USER')" >
+                    <div class="shopping-cart align-self-center mx-2 " sec:authorize="hasRole('ROLE_USER')" >
                         <a type="button" style="text-decoration: none;" data-toggle="collapse"
                            href="#shopping-cart-collapse" aria-expanded="false"
                            aria-controls="collapseExample">
@@ -47,7 +41,7 @@
                         <div class="collapse" id="shopping-cart-collapse" style="position: absolute;">
                             <div class="card card-body">
                                 <p>Total courses:</p>
-                                <a type="button" class="btn btn-primary" th:href="@{#}">Go to shopping cart</a>
+                                <a type="button" class="btn btn-primary" style="font-size: 90%" th:href="@{#}">Go to shopping cart</a>
 
                             </div>
                         </div>
@@ -56,6 +50,13 @@
                 <li class="nav-item">
                     <span class="navbar-text" sec:authentication="name"></span>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/adminPage}">
+                        Admin Page
+                    </a>
+                </li>
+
+
 
                 <li class="nav-item">
                     <a class="nav-link"  href="javascript: document.logoutForm.submit()" role="menuitem">
