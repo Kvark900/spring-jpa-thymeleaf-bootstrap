@@ -48,7 +48,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <span class="navbar-text" sec:authentication="name"></span>
+                    <span class="navbar-text">Hello <span sec:authentication="name"></span></span>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/adminPage}">
