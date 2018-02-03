@@ -1,4 +1,4 @@
-# spring-jpa-thymleaf-bootstrap
+# spring-jpa-thymeleaf-bootstrap
 Project in progress:
 
 -User login and registration web app with admin page
