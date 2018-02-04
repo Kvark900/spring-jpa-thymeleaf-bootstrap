@@ -1,6 +1,5 @@
 # spring-jpa-thymeleaf-bootstrap
-Project in progress:
-
+Project in progress:  
 -User login and registration web app with admin page
 
 [Admin details:](https://github.com/Kvark900/spring-jpa-thymleaf-bootstrap/blob/master/src/main/java/com/kemal/spring/configuration/SetupDataLoader.java#L57)  
