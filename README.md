@@ -3,14 +3,15 @@ Project in progress:
 
 -User login and registration web app with admin page
 
-[Admin details:](https://github.com/Kvark900/spring-jpa-thymleaf-bootstrap/blob/master/src/main/java/com/kemal/spring/configuration/SetupDataLoader.java#L57)
-
-email: admin@gmail.com;
-
+[Admin details:](https://github.com/Kvark900/spring-jpa-thymleaf-bootstrap/blob/master/src/main/java/com/kemal/spring/configuration/SetupDataLoader.java#L57)  
+email: admin@gmail.com;  
 password: admin;
 
-Technology stack:
+[User details:](https://github.com/Kvark900/spring-jpa-thymeleaf-bootstrap/blob/90daa09263ec034f06c5858f7eb232a1d44fbc33/src/main/java/com/kemal/spring/configuration/SetupDataLoader.java#L59)  
+email: user1@gmail.com;  
+password: user1;
 
+Technology stack:
 * Spring Boot
 * Spring MVC
 * Spring Data JPA
