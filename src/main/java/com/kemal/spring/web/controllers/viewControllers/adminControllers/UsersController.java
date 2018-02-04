@@ -168,17 +168,4 @@ public class UsersController {
         }
     }
 
-    /*@ResponseBody
-    @PostMapping ("/users/delete/{id}")
-    public void deleteUser (@PathVariable Long id, Model model,
-                              RedirectAttributes redirectAttributes){
-        User deletedUser = userService.findById(id);
-        //removing all roles before deleting a user
-        deletedUser.getRoles().clear();
-
-        userService.deleteUser(id);
-        *//*redirectAttributes.addFlashAttribute("userHasBeenDeleted", true);
-        return "redirect:/adminPage/users";*//*
-    }*/
-
 }

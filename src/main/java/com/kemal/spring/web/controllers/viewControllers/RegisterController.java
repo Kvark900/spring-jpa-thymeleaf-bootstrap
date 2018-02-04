@@ -39,7 +39,8 @@ public class RegisterController {
 
         if (userExists != null) {
             modelAndView.setViewName("website/register");
-            bindingResult.rejectValue("email", "alreadyRegisteredMessage","Oops!  There is already a user registered with the email provided.");
+            bindingResult.rejectValue("email", "alreadyRegisteredMessage",
+                    "Oops!  There is already a user registered with the email provided.");
         }
 
         if (bindingResult.hasErrors()) {
@@ -64,7 +65,8 @@ public class RegisterController {
 
             emailService.sendEmail(registrationEmail);*/
 
-            modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + userDto.getEmail());
+            modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to "
+                                    + userDto.getEmail());
             modelAndView.setViewName("website/registered");
         }
 
