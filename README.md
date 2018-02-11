@@ -39,7 +39,7 @@ Technology stack:
   Optionally, you can set **M2\_HOME** environment varible, and also do not forget to append *&lt;Maven Installation dir>/bin* your **PATH** environment variable.  
 
 ## Set up MySQL
-Configure database according to [application.properties](https://github.com/Kvark900/spring-jpa-thymleaf-bootstrap/blob/328496c1ad1c1347f0b03af1504730cb52ffe3a4/src/main/resources/application.properties#L8) file
+Configure database according to [application.properties](https://github.com/Kvark900/spring-jpa-thymleaf-bootstrap/blob/328496c1ad1c1347f0b03af1504730cb52ffe3a4/src/main/resources/application.properties#L8) file, or update this file with yours properties.
 
   
 ## Running the project
