@@ -7,7 +7,8 @@
 <body>
     <nav th:fragment="nav" id="navbar-home" class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" th:href="@{/index}" href="index">Kvark900</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -32,20 +33,24 @@
 
             <ul class="navbar-nav ml-auto" id="users-nav-item" sec:authorize="${isAuthenticated()}">
                 <li class="nav-item d-flex">
-                    <div class="shopping-cart align-self-center mx-2 " sec:authorize="hasRole('ROLE_USER')" >
-                        <a type="button" style="text-decoration: none;" data-toggle="collapse"
+                    <span class="shopping-cart align-self-center mx-2 " sec:authorize="hasRole('ROLE_USER')">
+                        <a style="background-color: transparent!important;"
+                           data-toggle="collapse"
                            href="#shopping-cart-collapse" aria-expanded="false"
-                           aria-controls="collapseExample">
-                            <i class="fa fa-shopping-cart " id="shopping-cart-icon" aria-hidden="true"></i>
+                           aria-controls="shopping-cart-collapse">
+                            <i class="fa fa-shopping-cart " id="shopping-cart-icon" aria-hidden="true"
+                               style="background-color: transparent!important"></i>
                         </a>
                         <div class="collapse" id="shopping-cart-collapse" style="position: absolute;">
                             <div class="card card-body">
                                 <p>Total courses:</p>
-                                <a type="button" class="btn btn-primary" style="font-size: 90%" th:href="@{#}">Go to shopping cart</a>
-
+                                <a type="button" class="btn btn-primary" style="font-size: 90%" th:href="@{#}">
+                                    Go to shopping cart</a>
                             </div>
                         </div>
-                    </div>
+                    </span>
+
+
                 </li>
                 <li class="nav-item">
                     <span class="navbar-text">Hello <span sec:authentication="name"></span></span>

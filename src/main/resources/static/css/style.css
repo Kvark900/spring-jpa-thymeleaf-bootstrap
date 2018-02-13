@@ -38,6 +38,8 @@ body {
 
 #shopping-cart-icon{
 	font-size: 30px;
+	background-color: transparent;
+
 }
 #shopping-cart-collapse{
 	max-width: 180px;
