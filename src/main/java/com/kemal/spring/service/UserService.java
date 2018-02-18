@@ -7,9 +7,6 @@ import com.kemal.spring.domain.UserRepository;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +17,7 @@ import java.util.*;
  */
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService{
 
     private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -39,15 +36,12 @@ public class UserService implements UserDetailsService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
-
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
     public User findById(Long id) {
         return userRepository.findById(id);
     }
-
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -90,15 +84,5 @@ public class UserService implements UserDetailsService {
             }
         }
         return userRoles;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByEmail(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(username);
-        }
-
-        return new UserDetailsImpl(user);
     }
 }

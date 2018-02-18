@@ -1,4 +1,4 @@
-package com.kemal.spring.service;
+package com.kemal.spring.service.userDetails;
 
 import com.kemal.spring.domain.Role;
 import com.kemal.spring.domain.User;
