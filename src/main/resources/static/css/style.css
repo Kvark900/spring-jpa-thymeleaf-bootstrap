@@ -76,23 +76,28 @@ body {
 	border-radius: 3%;
 }
 
-.admin-nav{
+/*.admin-nav{
 	background: #333;
 	border-radius: 3%;
-}
+}*/
 
 #admin-content {
     padding-top: 75px;
     color: #333;
 	width: 85%;
 }
-.nav-link{
+
+/*.nav-link{
 	color: #848482;
 }
 
 .nav-link:hover{
 	color: #D3D3D3 !important;
 }
+
+.nav-link:active{
+	color: #D3D3D3 !important;
+}*/
 
 #remove-link{
 	cursor: pointer;

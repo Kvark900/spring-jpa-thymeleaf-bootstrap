@@ -4,12 +4,22 @@
 </head>
 <body>
 <div th:fragment="admin-sidebar" id="admin-sidebar" >
-    <aside class="navbar admin-nav navbar-dark">
-        <nav class="nav flex-column">
-            <a class="nav-link active" th:href="@{/adminPage/users}">Users</a>
-            <a class="nav-link" th:href="@{/adminPage/roles}">Roles</a>
-            <a class="nav-link" href="#!">Topics</a>
-            <a class="nav-link" href="#!">Courses</a>
+    <aside id="admin-nav">
+        <nav class="navbar navbar-dark bg-dark">
+            <ul class="navbar-nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/adminPage/users}" href="/adminPage/users">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/adminPage/roles}" href="/adminPage/roles">Roles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!">Topics</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!">Courses</a>
+                </li>
+            </ul>
         </nav>
     </aside>
 </div>

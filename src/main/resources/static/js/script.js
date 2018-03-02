@@ -9,3 +9,9 @@ console.log(menuItem);
 if(menuItem.includes("adminPage")){
     $("a[href='/adminPage']").parent("li").addClass("active");
 }
+if(menuItem.includes("users")){
+    $("a[href='/adminPage/users']").parent("li").addClass("active");
+}
+if(menuItem.includes("roles")){
+    $("a[href='/adminPage/roles']").parent("li").addClass("active");
+}
