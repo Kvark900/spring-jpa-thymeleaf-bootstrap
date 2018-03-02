@@ -91,7 +91,7 @@ body {
 }
 
 .nav-link:hover{
-	color: #D3D3D3;!important;
+	color: #D3D3D3 !important;
 }
 
 #remove-link{
@@ -121,7 +121,7 @@ body {
 }
 
 .thead{
-	background-color: darkslategrey; !important;
+	background-color: darkslategrey !important;
 	color: white;
 }
 

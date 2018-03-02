@@ -14,8 +14,8 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/index}">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/index}" href="/index" >Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="#">About us</a>
@@ -56,7 +56,7 @@
                     <span class="navbar-text">Hello <span sec:authentication="name"></span></span>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/adminPage}">
+                    <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/adminPage}" href="/adminPage">
                         Admin Page
                     </a>
                 </li>
@@ -72,13 +72,13 @@
             </ul>
 
             <ul class="navbar-nav ml-auto" sec:authorize="${!isAuthenticated()}">
-                    <li class="nav-item d-flex flex-row"  >
+                    <li class="nav-item d-flex flex-row" >
                         <i class="align-self-center fa fa-user-o " aria-hidden="true" style="color: white;"></i>
-                        <a class="nav-link mr-3" th:href="@{login}" href="login">Log In</a>
+                        <a class="nav-link mr-3" th:href="@{/login}" href="/login" >Log In</a>
                     </li>
                     <li class="nav-item d-flex flex-row">
                         <i class="align-self-center fa fa-sign-in " aria-hidden="true" style="color: white;" ></i>
-                        <a class="nav-link" th:href="@{register}" href="register">Register</a>
+                        <a class="nav-link" th:href="@{/register}" href="/register" >Register</a>
                     </li>
             </ul>
         </div>
