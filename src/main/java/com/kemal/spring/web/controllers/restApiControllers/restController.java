@@ -28,6 +28,6 @@ public class restController {
 
     @PostMapping ("/adminPage/json-users/delete/{id}")
     public void deleteUser (@PathVariable Long id){
-        userService.deleteUser(id);
+        userService.delete(id);
     }
 }

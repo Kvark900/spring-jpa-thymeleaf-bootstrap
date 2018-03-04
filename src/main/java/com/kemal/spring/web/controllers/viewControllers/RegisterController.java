@@ -53,7 +53,7 @@ public class RegisterController {
 
             user.setEnabled(true);
 
-            userService.saveUser(user);
+            userService.save(user);
 
             /*String appUrl = request.getScheme() + "://" + request.getServerName();
 

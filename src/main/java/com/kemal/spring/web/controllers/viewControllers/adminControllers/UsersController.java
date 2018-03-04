@@ -51,7 +51,7 @@ public class UsersController {
     @GetMapping("/users/{id}")
     public String getEditUserForm(@PathVariable Long id, Model model) {
         UserUpdateDto userUpdateDto = userUpdateDtoService.findById(id);
-        List<Role> allRoles = roleService.getAllRoles();
+        List<Role> allRoles = roleService.findAll();
         userUpdateDto.setRoles(userService.getAssignedRolesList(userUpdateDto));
 
         model.addAttribute("userUpdateDto", userUpdateDto);
@@ -72,7 +72,7 @@ public class UsersController {
         boolean hasErrors = false;
 
         List<User> allUsers = userService.findAll();
-        List<Role> allRoles = roleService.getAllRoles();
+        List<Role> allRoles = roleService.findAll();
 
         for (User user : allUsers) {
             //Check if the email is edited and if it is taken
@@ -117,7 +117,7 @@ public class UsersController {
             persistedUser.setEmail(userUpdateDto.getEmail());
             persistedUser.setRoles(userService.getAssignedRolesList(userUpdateDto));
             persistedUser.setEnabled(userUpdateDto.isEnabled());
-            userService.saveUser(persistedUser);
+            userService.save(persistedUser);
 
             redirectAttributes.addFlashAttribute("userHasBeenUpdated", true);
             return "redirect:/adminPage/users";
@@ -162,7 +162,7 @@ public class UsersController {
             User user = userService.createNewAccount(newUser);
             user.setEnabled(true);
 
-            userService.saveUser(user);
+            userService.save(user);
             redirectAttributes.addFlashAttribute("userHasBeenSaved", true);
             return "redirect:/adminPage/users";
         }

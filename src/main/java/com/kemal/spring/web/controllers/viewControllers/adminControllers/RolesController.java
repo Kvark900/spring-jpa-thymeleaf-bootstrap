@@ -29,7 +29,7 @@ public class RolesController {
     @GetMapping("/roles")
     public ModelAndView showRoles() {
         ModelAndView modelAndView = new ModelAndView("adminPage/roles");
-        modelAndView.addObject("roles", roleService.getAllRoles());
+        modelAndView.addObject("roles", roleService.findAll());
         return modelAndView;
     }
 
@@ -48,7 +48,7 @@ public class RolesController {
 
         String formWithErrors = "adminPage/editRole";
         Role persistedRole = roleService.findById(id);
-        List<Role> allRoles = roleService.getAllRoles();
+        List<Role> allRoles = roleService.findAll();
         boolean roleNameAlreadyExists = false;
         boolean hasErrors = false;
 
@@ -76,7 +76,7 @@ public class RolesController {
                     bindingResult);
             return formWithErrors;
         } else {
-            roleService.saveRole(role);
+            roleService.save(role);
             redirectAttributes.addFlashAttribute("roleHasBeenUpdated", true);
             return "redirect:/adminPage/roles";
         }
@@ -109,7 +109,7 @@ public class RolesController {
         if (hasErrors) {
             return formWithErrors;
         } else {
-            roleService.saveRole(newRole);
+            roleService.save(newRole);
             redirectAttributes.addFlashAttribute("roleHasBeenSaved", true);
             return "redirect:/adminPage/roles";
         }

@@ -17,18 +17,17 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
+    //Find methods
+    public List<Role> findAll(){return roleRepository.findAll();}
     public Role findByName(String name) {
         return roleRepository.findByName(name);
     }
-    public void saveRole (Role role){
+    public Role findById(Long id) {return roleRepository.findById(id);}
+
+    //Save
+    public void save(Role role){
         roleRepository.save(role);
     }
 
-    public List<Role> getAllRoles (){
-        return roleRepository.findAll();
-    }
 
-    public Role findById(Long id) {
-        return roleRepository.findById(id);
-    }
 }

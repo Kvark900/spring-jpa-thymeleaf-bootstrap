@@ -73,7 +73,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Role role = roleService.findByName(name);
         if (role == null) {
             role = new Role(name);
-            roleService.saveRole(role);
+            roleService.save(role);
         }
         return role;
     }
@@ -92,7 +92,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setEmail(email);
             user.setRoles(userRoles);
             user.setEnabled(true);
-            userService.saveUser(user);
+            userService.save(user);
         }
     }
 }

@@ -31,9 +31,6 @@ public class UserDtoService {
             userDtosList.add(userDto = modelMapper.map(user, UserDto.class));
         }
 
-        for (UserDto userDto : userDtosList){
-            System.out.println(userDto);
-        }
         return userDtosList;
     }
 
@@ -56,13 +53,7 @@ public class UserDtoService {
         return null;
     }
 
-    public UserDto findByUsername(String username){
-        for(UserDto userDto : findAll()){
-            if(userDto.getUsername().equals(username)){
-                return userDto;
-            }
-        }
-        return null;
-    }
+
+
 
 }

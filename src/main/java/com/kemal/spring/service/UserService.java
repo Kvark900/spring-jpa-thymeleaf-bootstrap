@@ -46,14 +46,13 @@ public class UserService{
         return userRepository.findByUsername(username);
     }
 
-
-    public void saveUser(User user) {
+    public void save (User user) {
         userRepository.save(user);
     }
-
-    public void deleteUser(Long id){
+    public void delete(Long id){
         userRepository.delete(id);
     }
+
 
     public User createNewAccount(UserDto userDto) {
         User user = new User();
@@ -75,7 +74,7 @@ public class UserService{
         }
 
         List<Role> userRoles = new ArrayList<>();
-        List<Role> allRoles = roleService.getAllRoles();
+        List<Role> allRoles = roleService.findAll();
         for (Role role : allRoles) {
             if (assignedRoleMap.containsKey(role.getId())) {
                 userRoles.add(role);
