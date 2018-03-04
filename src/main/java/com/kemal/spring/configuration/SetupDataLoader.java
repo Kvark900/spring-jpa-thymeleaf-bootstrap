@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,17 +43,19 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-        createRoleIfNotFound("ROLE_ADMIN");
-        createRoleIfNotFound("ROLE_USER");
+        //region Creating roles
+        //================================================================================
+        Role roleAdmin = createRoleIfNotFound("ROLE_ADMIN");
+        Role roleUser = createRoleIfNotFound("ROLE_USER");
 
-        final Role adminRole = roleService.findByName("ROLE_ADMIN");
-        List<Role> adminRoles = new ArrayList<>();
-        adminRoles.add(adminRole);
+        List<Role> adminRoles = Collections.singletonList(roleAdmin);
+        List<Role> userRoles = Collections.singletonList(roleUser);
+        //================================================================================
+        //endregion
 
-        final Role userRole = roleService.findByName("ROLE_USER");
-        List<Role> userRoles = new ArrayList<>();
-        userRoles.add(userRole);
 
+        //region Creating users
+        //================================================================================
         createUserIfNotFound("admin@gmail.com", "Admin", "Admin",
                 "admin", "admin", adminRoles);
         createUserIfNotFound("user1@gmail.com", "User1", "User1",
@@ -64,6 +66,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 "user3", "user3", userRoles);
         createUserIfNotFound("user4@gmail.com", "User4", "User4",
                 "user4", "user4", userRoles);
+        //================================================================================
+        //endregion
 
         alreadySetup = true;
     }
