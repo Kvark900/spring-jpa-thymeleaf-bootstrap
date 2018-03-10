@@ -52,7 +52,6 @@ public class RegisterController {
             // Disable user until they click on confirmation link in email
 
             user.setEnabled(true);
-
             userService.save(user);
 
             /*String appUrl = request.getScheme() + "://" + request.getServerName();
