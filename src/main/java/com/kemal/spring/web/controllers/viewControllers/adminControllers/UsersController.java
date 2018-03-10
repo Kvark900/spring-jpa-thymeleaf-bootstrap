@@ -8,7 +8,6 @@ import com.kemal.spring.service.UserService;
 import com.kemal.spring.service.UserUpdateDtoService;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,16 +27,14 @@ import java.util.List;
 public class UsersController {
     private UserService userService;
     private RoleService roleService;
-    private ModelMapper modelMapper;
     private UserUpdateDtoService userUpdateDtoService;
     private UserDtoService userDtoService;
 
     public UsersController(UserService userService, RoleService roleService,
-                           ModelMapper modelMapper, UserUpdateDtoService userUpdateDtoService,
+                           UserUpdateDtoService userUpdateDtoService,
                            UserDtoService userDtoService) {
         this.userService = userService;
         this.roleService = roleService;
-        this.modelMapper = modelMapper;
         this.userUpdateDtoService = userUpdateDtoService;
         this.userDtoService = userDtoService;
     }
@@ -67,25 +64,13 @@ public class UsersController {
         User persistedUser = userService.findById(id);
         String formWithErrors = "adminPage/editUser";
 
-        boolean emailAlreadyExists = false;
-        boolean usernameAlreadyExists = false;
-        boolean hasErrors = false;
-
         List<User> allUsers = userService.findAll();
         List<Role> allRoles = roleService.findAll();
 
-        for (User user : allUsers) {
-            //Check if the email is edited and if it is taken
-            if (!userUpdateDto.getEmail().equals(persistedUser.getEmail())
-                    && userUpdateDto.getEmail().equals(user.getEmail())) {
-                emailAlreadyExists = true;
-            }
-            //Check if the username is edited and if it is taken
-            if (!userUpdateDto.getUsername().equals(persistedUser.getUsername())
-                    && userUpdateDto.getUsername().equals(user.getUsername())) {
-                usernameAlreadyExists = true;
-            }
-        }
+        boolean emailAlreadyExists = userService.checkIfEmailIsTaken(allUsers, userUpdateDto, persistedUser);
+        boolean usernameAlreadyExists = userService.checkIfUsernameIsTaken(allUsers, userUpdateDto, persistedUser);
+        boolean hasErrors = false;
+
 
         if (emailAlreadyExists) {
             bindingResult.rejectValue("email", "emailAlreadyExists",

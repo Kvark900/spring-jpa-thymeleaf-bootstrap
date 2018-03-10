@@ -1,12 +1,10 @@
 package com.kemal.spring.service;
 
 import com.kemal.spring.domain.Role;
-import com.kemal.spring.domain.RoleRepository;
 import com.kemal.spring.domain.User;
 import com.kemal.spring.domain.UserRepository;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,20 +17,19 @@ import java.util.*;
 @Service
 public class UserService{
 
-    private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private UserRepository userRepository;
     private RoleService roleService;
-    private ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder,
-                       RoleRepository roleRepository, RoleService roleService, ModelMapper modelMapper) {
-        this.userRepository = userRepository;
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository, RoleService
+            roleService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userRepository = userRepository;
         this.roleService = roleService;
-        this.modelMapper = modelMapper;
     }
 
-    //find methods
+    //region find methods
+    //==============================================================================================
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -45,6 +42,8 @@ public class UserService{
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+    //==============================================================================================
+    //endregion
 
     public void save (User user) {
         userRepository.save(user);
@@ -53,15 +52,14 @@ public class UserService{
         userRepository.delete(id);
     }
 
-
-    public User createNewAccount(UserDto userDto) {
+    public  User createNewAccount(UserDto userDto) {
         User user = new User();
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-        user.setRoles(Arrays.asList(roleService.findByName("ROLE_USER")));
+        user.setRoles(Collections.singletonList(roleService.findByName("ROLE_USER")));
         return user;
 
     }
@@ -83,5 +81,31 @@ public class UserService{
             }
         }
         return userRoles;
+    }
+
+    public boolean checkIfEmailIsTaken(List<User> allUsers, UserUpdateDto userUpdateDto,
+                                              User persistedUser){
+        boolean emailAlreadyExists = false;
+        for (User user : allUsers) {
+            //Check if the email is edited and if it is taken
+            if (!userUpdateDto.getEmail().equals(persistedUser.getEmail())
+                    && userUpdateDto.getEmail().equals(user.getEmail())) {
+                emailAlreadyExists = true;
+            }
+        }
+        return emailAlreadyExists;
+    }
+
+    public boolean checkIfUsernameIsTaken(List<User> allUsers, UserUpdateDto userUpdateDto,
+                                                 User persistedUser){
+        boolean usernameAlreadyExists = false;
+        for (User user : allUsers) {
+            //Check if the email is edited and if it is taken
+            if (!userUpdateDto.getEmail().equals(persistedUser.getUsername())
+                    && userUpdateDto.getEmail().equals(user.getUsername())) {
+                usernameAlreadyExists = true;
+            }
+        }
+        return usernameAlreadyExists;
     }
 }

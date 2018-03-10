@@ -18,7 +18,6 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/adminPage")
-
 public class RolesController {
     private RoleService roleService;
 
@@ -49,16 +48,11 @@ public class RolesController {
         String formWithErrors = "adminPage/editRole";
         Role persistedRole = roleService.findById(id);
         List<Role> allRoles = roleService.findAll();
-        boolean roleNameAlreadyExists = false;
+
+        boolean roleNameAlreadyExists =
+                roleService.checkIfRoleNameIsTaken(allRoles, role, persistedRole);
         boolean hasErrors = false;
 
-        for (Role role1 : allRoles) {
-            //Check if the role name is edited and if it is taken
-            if (!role.getName().equals(persistedRole.getName())
-                    && role.getName().equals(role1.getName())) {
-                roleNameAlreadyExists = true;
-            }
-        }
 
         if (roleNameAlreadyExists) {
             bindingResult.rejectValue("name", "roleNameAlreadyExists",
