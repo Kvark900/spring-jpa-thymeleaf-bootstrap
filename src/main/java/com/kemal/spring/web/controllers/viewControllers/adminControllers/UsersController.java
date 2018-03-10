@@ -99,9 +99,7 @@ public class UsersController {
             hasErrors = true;
         }
 
-        if (bindingResult.hasErrors()) {
-            hasErrors = true;
-        }
+        if (bindingResult.hasErrors()) hasErrors = true;
 
         if (hasErrors) {
             model.addAttribute("userUpdateDto", userUpdateDto);
@@ -109,8 +107,8 @@ public class UsersController {
             model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto",
                     bindingResult);
             return formWithErrors;
-
-        } else {
+        }
+        else {
             persistedUser.setName(userUpdateDto.getName());
             persistedUser.setSurname(userUpdateDto.getSurname());
             persistedUser.setUsername(userUpdateDto.getUsername());
@@ -152,13 +150,11 @@ public class UsersController {
             hasErrors = true;
         }
 
-        if (bindingResult.hasErrors()) {
-            hasErrors = true;
-        }
+        if (bindingResult.hasErrors()) hasErrors = true;
 
-        if (hasErrors) {
-            return formWithErrors;
-        } else {
+        if (hasErrors) return formWithErrors;
+
+        else {
             User user = userService.createNewAccount(newUser);
             user.setEnabled(true);
 

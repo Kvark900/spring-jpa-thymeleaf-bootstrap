@@ -66,10 +66,8 @@ public class RolesController {
             hasErrors = true;
         }
 
-        if (bindingResult.hasErrors()) {
-            hasErrors = true;
+        if (bindingResult.hasErrors()) hasErrors = true;
 
-        }
         if (hasErrors) {
             model.addAttribute("role", role);
             model.addAttribute("org.springframework.validation.BindingResult.role",
@@ -102,13 +100,11 @@ public class RolesController {
             hasErrors = true;
         }
 
-        if (bindingResult.hasErrors()) {
-            hasErrors = true;
-        }
+        if (bindingResult.hasErrors()) hasErrors = true;
 
-        if (hasErrors) {
-            return formWithErrors;
-        } else {
+        if (hasErrors) return formWithErrors;
+
+        else {
             roleService.save(newRole);
             redirectAttributes.addFlashAttribute("roleHasBeenSaved", true);
             return "redirect:/adminPage/roles";
