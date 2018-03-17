@@ -54,6 +54,7 @@ public class RegisterController {
             user.setEnabled(true);
             userService.save(user);
 
+
             /*String appUrl = request.getScheme() + "://" + request.getServerName();
 
             SimpleMailMessage registrationEmail = new SimpleMailMessage();

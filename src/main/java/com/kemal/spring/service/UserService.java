@@ -100,7 +100,7 @@ public class UserService{
                                                  User persistedUser){
         boolean usernameAlreadyExists = false;
         for (User user : allUsers) {
-            //Check if the email is edited and if it is taken
+            //Check if the username is edited and if it is taken
             if (!userUpdateDto.getEmail().equals(persistedUser.getUsername())
                     && userUpdateDto.getEmail().equals(user.getUsername())) {
                 usernameAlreadyExists = true;
