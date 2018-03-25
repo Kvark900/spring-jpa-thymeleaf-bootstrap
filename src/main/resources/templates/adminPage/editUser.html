@@ -11,7 +11,6 @@
         <div class="container">
             <div class="d-flex flex-row" >
                 <div th:replace="fragments/adminSidebar :: admin-sidebar"></div>
-
                 <div id="admin-content" >
                     <form class="admin-form" th:action="@{/adminPage/users/{id}(id=${userUpdateDto.id})}"
                           th:object="${userUpdateDto}" th th:method="post" method="post">

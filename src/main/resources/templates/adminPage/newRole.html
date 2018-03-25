@@ -11,7 +11,6 @@
         <div class="container">
             <div class="d-flex flex-row" >
                 <div th:replace="fragments/adminSidebar :: admin-sidebar"></div>
-
                 <div id="admin-content" >
                     <form class="admin-form" th:action="@{/adminPage/roles/newRole}"  th:object="${newUser}" th:method="post" method="post">
                         <ul class="global-errors" th:if="${#fields.hasErrors('global')}">
