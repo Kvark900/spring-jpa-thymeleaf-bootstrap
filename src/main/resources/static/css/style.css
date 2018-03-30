@@ -41,6 +41,7 @@ body {
 	background-color: transparent;
 
 }
+
 #shopping-cart-collapse{
 	max-width: 180px;
 }
@@ -59,8 +60,8 @@ body {
 }
 
 
-
-/*Admin page*/
+/*region Admin page*/
+/*================================================================*/
 #admin-section {
     /*background: url("../images/code1.jpeg") no-repeat;*/
     min-height: 100%;
@@ -76,28 +77,11 @@ body {
 	border-radius: 3%;
 }
 
-/*.admin-nav{
-	background: #333;
-	border-radius: 3%;
-}*/
-
 #admin-content {
     padding-top: 75px;
     color: #333;
 	width: 85%;
 }
-
-/*.nav-link{
-	color: #848482;
-}
-
-.nav-link:hover{
-	color: #D3D3D3 !important;
-}
-
-.nav-link:active{
-	color: #D3D3D3 !important;
-}*/
 
 #remove-link{
 	cursor: pointer;
@@ -129,7 +113,12 @@ body {
 	background-color: darkslategrey !important;
 	color: white;
 }
+/*================================================================*/
+/*endregion*/
 
+
+/*region Footer*/
+/*================================================================*/
 footer {
 	position: absolute;
 	bottom: 0;
@@ -138,3 +127,5 @@ footer {
 	line-height: 60px; /* Vertically center the text there */
     color: darkgrey;
 }
+/*================================================================*/
+/*endregion*/
