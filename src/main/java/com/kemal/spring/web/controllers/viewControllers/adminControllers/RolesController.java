@@ -49,14 +49,11 @@ public class RolesController {
         Role persistedRole = roleService.findById(id);
         List<Role> allRoles = roleService.findAll();
 
-        boolean roleNameAlreadyExists =
-                roleService.checkIfRoleNameIsTaken(allRoles, role, persistedRole);
+        boolean roleNameAlreadyExists = roleService.checkIfRoleNameIsTaken(allRoles, role, persistedRole);
         boolean hasErrors = false;
 
-
         if (roleNameAlreadyExists) {
-            bindingResult.rejectValue("name", "roleNameAlreadyExists",
-                    "Oops!  There is already a role registered with the name provided.");
+            bindingResult.rejectValue("name", "roleNameAlreadyExists", "Oops!  There is already a role registered with the name provided.");
             hasErrors = true;
         }
 
@@ -64,8 +61,7 @@ public class RolesController {
 
         if (hasErrors) {
             model.addAttribute("role", role);
-            model.addAttribute("org.springframework.validation.BindingResult.role",
-                    bindingResult);
+            model.addAttribute("org.springframework.validation.BindingResult.role", bindingResult);
             return formWithErrors;
         } else {
             roleService.save(role);
@@ -89,8 +85,7 @@ public class RolesController {
         String formWithErrors = "adminPage/newRole";
 
         if (roleNameAlreadyExists != null) {
-            bindingResult.rejectValue("name", "usernameAlreadyExists",
-                    "Oops!  There is already a role registered with the name provided.");
+            bindingResult.rejectValue("name", "usernameAlreadyExists", "Oops!  There is already a role registered with the name provided.");
             hasErrors = true;
         }
 

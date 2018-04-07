@@ -73,14 +73,12 @@ public class UsersController {
 
 
         if (emailAlreadyExists) {
-            bindingResult.rejectValue("email", "emailAlreadyExists",
-                    "Oops!  There is already a user registered with the email provided.");
+            bindingResult.rejectValue("email", "emailAlreadyExists", "Oops!  There is already a user registered with the email provided.");
             hasErrors = true;
         }
 
         if (usernameAlreadyExists) {
-            bindingResult.rejectValue("username", "usernameAlreadyExists",
-                    "Oops!  There is already a user registered with the username provided.");
+            bindingResult.rejectValue("username", "usernameAlreadyExists", "Oops!  There is already a user registered with the username provided.");
             hasErrors = true;
         }
 
@@ -89,19 +87,11 @@ public class UsersController {
         if (hasErrors) {
             model.addAttribute("userUpdateDto", userUpdateDto);
             model.addAttribute("rolesList", allRoles);
-            model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto",
-                    bindingResult);
+            model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
             return formWithErrors;
         }
         else {
-            persistedUser.setName(userUpdateDto.getName());
-            persistedUser.setSurname(userUpdateDto.getSurname());
-            persistedUser.setUsername(userUpdateDto.getUsername());
-            persistedUser.setEmail(userUpdateDto.getEmail());
-            persistedUser.setRoles(userService.getAssignedRolesList(userUpdateDto));
-            persistedUser.setEnabled(userUpdateDto.isEnabled());
-            userService.save(persistedUser);
-
+            userService.save(userService.updateUser(persistedUser, userUpdateDto));
             redirectAttributes.addFlashAttribute("userHasBeenUpdated", true);
             return "redirect:/adminPage/users";
         }

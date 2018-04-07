@@ -64,6 +64,16 @@ public class UserService{
 
     }
 
+    public User updateUser (User persistedUser, UserUpdateDto userUpdateDto){
+        persistedUser.setName(userUpdateDto.getName());
+        persistedUser.setSurname(userUpdateDto.getSurname());
+        persistedUser.setUsername(userUpdateDto.getUsername());
+        persistedUser.setEmail(userUpdateDto.getEmail());
+        persistedUser.setRoles(getAssignedRolesList(userUpdateDto));
+        persistedUser.setEnabled(userUpdateDto.isEnabled());
+        return persistedUser;
+    }
+
     public List<Role> getAssignedRolesList(UserUpdateDto userUpdateDto) {
         Map<Long, Role> assignedRoleMap = new HashMap<>();
         List<Role> roles = userUpdateDto.getRoles();
