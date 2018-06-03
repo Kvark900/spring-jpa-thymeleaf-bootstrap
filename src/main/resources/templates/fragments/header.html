@@ -8,14 +8,15 @@
     <nav th:fragment="nav" id="navbar-home" class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" th:href="@{/index}" href="index">Kvark900</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/index}" href="/index" >Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" th:href="@{/index}" href="/index">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="#">About us</a>
@@ -31,7 +32,11 @@
                 </li>
             </ul>
 
+
             <ul class="navbar-nav ml-auto" id="users-nav-item" sec:authorize="${isAuthenticated()}">
+
+                <!--region For ROLE_USER diplay shoping cart icon-->
+                <!--======================================================================================-->
                 <li class="nav-item d-flex">
                     <span class="shopping-cart align-self-center mx-2 " sec:authorize="hasRole('ROLE_USER')">
                         <a style="background-color: transparent!important;"
@@ -50,35 +55,59 @@
                         </div>
                     </span>
                 </li>
+                <!--======================================================================================-->
+                <!--endregion-->
+
+
+                <!--region Displaying hello + username-->
+                <!--==============================================================================-->
                 <li class="nav-item">
                     <span class="navbar-text">Hello <span sec:authentication="name"></span></span>
                 </li>
-                <li class="nav-item">
+                <!--=============================================================================-->
+                <!--endregion-->
+
+
+                <!--region For ROLE_ADMIN display admin page-->
+                <!--================================================================================================-->
+                <li class="nav-item d-flex">
+                    <i class="align-self-center fas fa-user-cog" style="color: white;"></i>
                     <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/adminPage}" href="/adminPage">
                         Admin Page
                     </a>
                 </li>
+                <!--================================================================================================-->
+                <!--endregion-->
 
+
+                <!--region Logout button-->
+                <!--==================================================================================-->
                 <li class="nav-item">
-                    <a class="nav-link"  href="javascript: document.logoutForm.submit()" role="menuitem">
+                    <a class="nav-link" href="javascript: document.logoutForm.submit()" role="menuitem">
                         Logout
                     </a>
                     <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
                         <input hidden type="submit" value="Sign Out"/>
                     </form>
                 </li>
+                <!--==================================================================================-->
+                <!--endregion-->
             </ul>
 
+            <!--region Login and Register menu items-->
+            <!--==========================================================================================-->
             <ul class="navbar-nav ml-auto" sec:authorize="${!isAuthenticated()}">
-                    <li class="nav-item d-flex flex-row" >
-                        <i class="align-self-center fa fa-user-o " aria-hidden="true" style="color: white;"></i>
-                        <a class="nav-link mr-3" th:href="@{/login}" href="/login" >Log In</a>
-                    </li>
-                    <li class="nav-item d-flex flex-row">
-                        <i class="align-self-center fa fa-sign-in " aria-hidden="true" style="color: white;" ></i>
-                        <a class="nav-link" th:href="@{/register}" href="/register" >Register</a>
-                    </li>
+                <li class="nav-item d-flex flex-row">
+                    <i class="align-self-center fa fa-user-o " aria-hidden="true" style="color: white;"></i>
+                    <a class="nav-link mr-3" th:href="@{/login}" href="/login">Log In</a>
+                </li>
+                <li class="nav-item d-flex flex-row">
+                    <i class="align-self-center fa fa-sign-in " aria-hidden="true" style="color: white;"></i>
+                    <a class="nav-link" th:href="@{/register}" href="/register">Register</a>
+                </li>
             </ul>
+            <!--==========================================================================================-->
+            <!--endregion-->
         </div>
     </nav>
 
