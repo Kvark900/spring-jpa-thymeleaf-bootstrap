@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+</head>
+<body>
+
+<nav th:replace="fragments/header :: nav"></nav>
+
+<div id="admin-section">
+    <div class="admin-inner">
+        <div class="container">
+            <div class="d-flex flex-row">
+                <div th:replace="fragments/adminSidebar :: admin-sidebar"></div>
+                <div id="admin-content">
+                    <div th:if="${userHasBeenSaved}" class="alert alert-success alert-dismissible fade show"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>Well done!</strong> User has been saved!!!
+                    </div>
+                    <div th:if="${userHasBeenUpdated}" class="alert alert-success alert-dismissible fade show"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>Well done!</strong> User has been updated!!!
+                    </div>
+                    <div id="delete-alert"></div>
+                    <table class="table table-striped table-responsive" id="user-table">
+                        <thead class="thead">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.surname}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:switch="${user.enabled}">
+                                <span th:case="true" style="color:green">Enabled</span>
+                                <span th:case="false" style="color:red">Disabled</span>
+                            </td>
+
+                            <td><a style="text-decoration: none; color:blue"
+                                   th:href="@{/adminPage/users/{id}(id=${user.id})}"
+                                   class="editBtn" data-toggle="tooltip"
+                                   data-placement="right" title="Edit user">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            </td>
+                            <td>
+                                <!--<a type="button" style="text-decoration: none; color:red"
+                                   th:href="@{/adminPage/users/delete/{id}(id=${user.id})}"
+                                   class="remove-btn" data-toggle="tooltip"
+                                   data-placement="right" title="Remove user">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </a>-->
+                                <a id="remove-link" style="text-decoration: none; color:red"
+                                   data-toggle='modal' data-target='#deleteModal'
+                                   data-placement="right" title="Remove user"
+                                   th:onclick="'showDeleteModal(' + ${user.id} + ')'">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </a>
+                                <!--<button type='button' class='btn btn-outline-danger' data-toggle='modal'
+                                        data-target='#deleteModal' th:onclick="'showDeleteModal(' + ${user.id} + ')'" > Remove </button>"-->
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a href="#" th:href="@{/adminPage/users/newUser}">
+                        <button type="button" class="btn btn-primary">New User</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal-->
+<div class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input id="delete-id" type="hidden"/>
+                Are you sure you want to delete this user?
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-dark" data-dismiss="modal"
+                   style="color: #ffffff;">
+                    Cancel
+                </a>
+                <a type="button" class="btn btn-danger" onclick="deleteEntity('user')"
+                   style="text-decoration: none;  color: #ffffff;">Delete
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+<div class="modal-footer">
+    <a type="button" class="btn btn-danger" onclick="deleteEntity('user')">Delete</a>
+    <a type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</a>
+</div>
+-->
+
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+
+<div th:replace="fragments/jsScripts :: scripts"></div>
+
+
+</body>
+</html>

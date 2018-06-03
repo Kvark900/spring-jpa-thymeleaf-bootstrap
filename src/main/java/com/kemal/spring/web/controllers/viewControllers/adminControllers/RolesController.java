@@ -27,7 +27,7 @@ public class RolesController {
 
     @GetMapping("/roles")
     public ModelAndView showRoles() {
-        ModelAndView modelAndView = new ModelAndView("adminPage/roles");
+        ModelAndView modelAndView = new ModelAndView("adminPage/role/roles");
         modelAndView.addObject("roles", roleService.findAll());
         return modelAndView;
     }
@@ -35,7 +35,7 @@ public class RolesController {
     @GetMapping("/roles/{id}")
     public ModelAndView getEditRoleForm(@PathVariable Long id) {
         Role role = roleService.findById(id);
-        ModelAndView modelAndView = new ModelAndView("adminPage/editRole");
+        ModelAndView modelAndView = new ModelAndView("adminPage/role/editRole");
         modelAndView.addObject("role", role);
         return modelAndView;
     }
@@ -45,7 +45,7 @@ public class RolesController {
                              @ModelAttribute("oldRole") @Valid final Role role,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        String formWithErrors = "adminPage/editRole";
+        String formWithErrors = "adminPage/role/editRole";
         Role persistedRole = roleService.findById(id);
         List<Role> allRoles = roleService.findAll();
 
@@ -73,7 +73,7 @@ public class RolesController {
     @GetMapping("/roles/newRole")
     public String getAddNewRoleForm(Model model) {
         model.addAttribute("newUser", new UserDto());
-        return "adminPage/newRole";
+        return "adminPage/role/newRole";
     }
 
     @PostMapping("/roles/newRole")
@@ -82,7 +82,7 @@ public class RolesController {
 
         Role roleNameAlreadyExists = roleService.findByName(newRole.getName());
         boolean hasErrors = false;
-        String formWithErrors = "adminPage/newRole";
+        String formWithErrors = "adminPage/role/newRole";
 
         if (roleNameAlreadyExists != null) {
             bindingResult.rejectValue("name", "usernameAlreadyExists", "Oops!  There is already a role registered with the name provided.");

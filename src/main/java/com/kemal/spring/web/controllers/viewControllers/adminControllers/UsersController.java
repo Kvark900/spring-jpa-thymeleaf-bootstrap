@@ -42,7 +42,7 @@ public class UsersController {
     @GetMapping("/users")
     public String showUsers(Model model) {
         model.addAttribute("users", userUpdateDtoService.findAll());
-        return "adminPage/users";
+        return "adminPage/user/users";
     }
 
     @GetMapping("/users/{id}")
@@ -53,7 +53,7 @@ public class UsersController {
 
         model.addAttribute("userUpdateDto", userUpdateDto);
         model.addAttribute("rolesList", allRoles);
-        return "adminPage/editUser";
+        return "adminPage/user/editUser";
     }
 
     @PostMapping("/users/{id}")
@@ -62,7 +62,7 @@ public class UsersController {
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         User persistedUser = userService.findById(id);
-        String formWithErrors = "adminPage/editUser";
+        String formWithErrors = "adminPage/user/editUser";
 
         List<User> allUsers = userService.findAll();
         List<Role> allRoles = roleService.findAll();
@@ -101,7 +101,7 @@ public class UsersController {
     public String getAddNewUserForm(Model model) {
         UserDto newUser = new UserDto();
         model.addAttribute("newUser", newUser);
-        return "adminPage/newUser";
+        return "adminPage/user/newUser";
     }
 
     @PostMapping("/users/newUser")
@@ -111,7 +111,7 @@ public class UsersController {
         UserDto emailAlreadyExists = userDtoService.findByEmail(newUser.getEmail());
         UserDto usernameAlreadyExists = userDtoService.findByUsername(newUser.getUsername());
         boolean hasErrors = false;
-        String formWithErrors = "adminPage/newUser";
+        String formWithErrors = "adminPage/user/newUser";
 
         if (emailAlreadyExists != null) {
             bindingResult.rejectValue("email", "emailAlreadyExists",
