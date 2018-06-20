@@ -2,6 +2,8 @@ package com.kemal.spring.service;
 
 import com.kemal.spring.domain.Role;
 import com.kemal.spring.domain.RoleRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,12 +25,16 @@ public class RoleService {
     public Role findByName(String name) {
         return roleRepository.findByName(name);
     }
-    public Role findById(Long id) {return roleRepository.findById(id);}
+
+    @Cacheable(value = "cache.roleById", key = "#id", unless = "#result == null")
+    public Role findById(Long id) {
+        return roleRepository.findById(id);
+    }
     //==================================================================================
     //endregion
 
-    //Save
-    public void save(Role role){
+    @CacheEvict(value = {"cache.allRoles" , "cache.roleByName", "cache.roleById"}, allEntries = true)
+    public void save(Role role) {
         roleRepository.save(role);
     }
 

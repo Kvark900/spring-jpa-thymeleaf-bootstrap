@@ -5,6 +5,9 @@ import com.kemal.spring.domain.User;
 import com.kemal.spring.domain.UserRepository;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,44 +18,62 @@ import java.util.*;
  */
 
 @Service
-public class UserService{
+public class UserService {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UserRepository userRepository;
     private RoleService roleService;
+    private CacheManager cacheManager;
 
     public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository, RoleService
-            roleService) {
+            roleService, CacheManager cacheManager) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.cacheManager = cacheManager;
     }
 
     //region find methods
     //==============================================================================================
+    @Cacheable(value = "cache.allUsers")
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+    @Cacheable(value = "cache.allUsersEagerly")
+    public List<User> findAllEagerly() {
+        return userRepository.findAllEagerly();
+    }
+
+
+
+    @Cacheable (value = "cache.userByEmail", key = "#email", unless="#result == null")
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    @Cacheable (value = "cache.userById", key = "#id", unless="#result == null")
     public User findById(Long id) {
         return userRepository.findById(id);
     }
+
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
     //==============================================================================================
     //endregion
 
-    public void save (User user) {
+    @CacheEvict(value = {"cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
+    public void save(User user) {
         userRepository.save(user);
     }
-    public void delete(Long id){
+
+    @CacheEvict(value = {"cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
+    public void delete(Long id) {
         userRepository.delete(id);
     }
 
-    public  User createNewAccount(UserDto userDto) {
+    public User createNewAccount(UserDto userDto) {
         User user = new User();
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
@@ -61,10 +82,9 @@ public class UserService{
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         user.setRoles(Collections.singletonList(roleService.findByName("ROLE_USER")));
         return user;
-
     }
 
-    public User updateUser (User persistedUser, UserUpdateDto userUpdateDto){
+    public User getUpdatedUser(User persistedUser, UserUpdateDto userUpdateDto) {
         persistedUser.setName(userUpdateDto.getName());
         persistedUser.setSurname(userUpdateDto.getSurname());
         persistedUser.setUsername(userUpdateDto.getUsername());
@@ -94,7 +114,7 @@ public class UserService{
     }
 
     public boolean checkIfEmailIsTaken(List<User> allUsers, UserUpdateDto userUpdateDto,
-                                              User persistedUser){
+                                       User persistedUser) {
         boolean emailAlreadyExists = false;
         for (User user : allUsers) {
             //Check if the email is edited and if it is taken
@@ -107,7 +127,7 @@ public class UserService{
     }
 
     public boolean checkIfUsernameIsTaken(List<User> allUsers, UserUpdateDto userUpdateDto,
-                                                 User persistedUser){
+                                          User persistedUser) {
         boolean usernameAlreadyExists = false;
         for (User user : allUsers) {
             //Check if the username is edited and if it is taken
