@@ -69,11 +69,11 @@
                                 <a id="remove-link" style="text-decoration: none; color:red"
                                    data-toggle='modal' data-target='#deleteModal'
                                    data-placement="right" title="Remove user"
-                                   th:onclick="'showDeleteModal(' + ${user.id} + ')'">
+                                   th:onclick="'getUserId(' + ${user.id} + ')'">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                                 <!--<button type='button' class='btn btn-outline-danger' data-toggle='modal'
-                                        data-target='#deleteModal' th:onclick="'showDeleteModal(' + ${user.id} + ')'" > Remove </button>"-->
+                                        data-target='#deleteModal' th:onclick="'getUserIdOnShowingModal(' + ${user.id} + ')'" > Remove </button>"-->
                             </td>
                         </tr>
                         </tbody>
