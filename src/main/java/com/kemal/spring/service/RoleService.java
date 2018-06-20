@@ -21,7 +21,12 @@ public class RoleService {
 
     //region Find methods
     //==================================================================================
-    public List<Role> findAll(){return roleRepository.findAll();}
+    @Cacheable("cache.allRoles")
+    public List<Role> findAll() {
+        return roleRepository.findAll();
+    }
+
+    @Cacheable(value = "cache.roleByName", key = "#name", unless = "#result == null")
     public Role findByName(String name) {
         return roleRepository.findByName(name);
     }
@@ -38,7 +43,7 @@ public class RoleService {
         roleRepository.save(role);
     }
 
-    public boolean checkIfRoleNameIsTaken (List<Role> allRoles, Role role, Role persistedRole){
+    public boolean checkIfRoleNameIsTaken(List<Role> allRoles, Role role, Role persistedRole) {
         boolean roleNameAlreadyExists = false;
         for (Role role1 : allRoles) {
             //Check if the role name is edited and if it is taken
