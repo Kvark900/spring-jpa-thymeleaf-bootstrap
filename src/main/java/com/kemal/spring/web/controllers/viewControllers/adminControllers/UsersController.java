@@ -41,7 +41,7 @@ public class UsersController {
 
     @GetMapping("/users")
     public String showUsers(Model model) {
-        model.addAttribute("users", userUpdateDtoService.findAll());
+        model.addAttribute("users", userDtoService.findAll());
         return "adminPage/user/users";
     }
 
@@ -49,10 +49,11 @@ public class UsersController {
     public String getEditUserForm(@PathVariable Long id, Model model) {
         UserUpdateDto userUpdateDto = userUpdateDtoService.findById(id);
         List<Role> allRoles = roleService.findAll();
+
         userUpdateDto.setRoles(userService.getAssignedRolesList(userUpdateDto));
 
         model.addAttribute("userUpdateDto", userUpdateDto);
-        model.addAttribute("rolesList", allRoles);
+        model.addAttribute("allRoles", allRoles);
         return "adminPage/user/editUser";
     }
 
@@ -65,7 +66,7 @@ public class UsersController {
         String formWithErrors = "adminPage/user/editUser";
 
         List<User> allUsers = userService.findAll();
-        List<Role> allRoles = roleService.findAll();
+        List <Role> allRoles = roleService.findAll();
 
         boolean emailAlreadyExists = userService.checkIfEmailIsTaken(allUsers, userUpdateDto, persistedUser);
         boolean usernameAlreadyExists = userService.checkIfUsernameIsTaken(allUsers, userUpdateDto, persistedUser);
@@ -91,7 +92,7 @@ public class UsersController {
             return formWithErrors;
         }
         else {
-            userService.save(userService.updateUser(persistedUser, userUpdateDto));
+            userService.save(userService.getUpdatedUser(persistedUser, userUpdateDto));
             redirectAttributes.addFlashAttribute("userHasBeenUpdated", true);
             return "redirect:/adminPage/users";
         }

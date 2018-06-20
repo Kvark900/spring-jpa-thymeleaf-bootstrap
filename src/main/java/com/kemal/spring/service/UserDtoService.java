@@ -27,8 +27,7 @@ public class UserDtoService {
         List<UserDto> userDtosList = new ArrayList<>();
 
         for(User user : userList){
-            UserDto userDto = new UserDto();
-            userDtosList.add(userDto = modelMapper.map(user, UserDto.class));
+            userDtosList.add(modelMapper.map(user, UserDto.class));
         }
 
         return userDtosList;

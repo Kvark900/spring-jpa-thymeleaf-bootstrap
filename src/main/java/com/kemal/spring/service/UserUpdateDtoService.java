@@ -24,12 +24,11 @@ public class UserUpdateDtoService {
     }
 
     public List<UserUpdateDto> findAll(){
-        List<User> userList = userService.findAll();
+        List<User> userList = userService.findAllEagerly();
         List<UserUpdateDto> userUpdateDtosList = new ArrayList<>();
 
         for(User user : userList){
-            UserUpdateDto userUpdateDto = new UserUpdateDto();
-            userUpdateDtosList.add(userUpdateDto = modelMapper.map(user, UserUpdateDto.class));
+            userUpdateDtosList.add(modelMapper.map(user, UserUpdateDto.class));
         }
         return userUpdateDtosList;
     }

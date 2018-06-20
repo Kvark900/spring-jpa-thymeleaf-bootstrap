@@ -4,9 +4,9 @@ import com.kemal.spring.domain.User;
 import com.kemal.spring.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,17 +23,22 @@ public class restController {
         this.userService = userService;
     }
 
-    @GetMapping("/adminPage/json-users")
+        @GetMapping("/adminPage/json-users")
     public ResponseEntity<List<User>> getUsers() {
         List<User> allUsers = userService.findAll();
+
         if(allUsers == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         else if(allUsers.isEmpty()) return new ResponseEntity<>(allUsers, HttpStatus.NOT_FOUND);
+
         else return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
-    @PostMapping ("/adminPage/json-users/delete/{id}")
+
+    @DeleteMapping("/adminPage/json-users/delete/{id}")
     public ResponseEntity<User> deleteUser (@PathVariable Long id){
         User userToDelete = userService.findById(id);
+
         if(userToDelete == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         else {

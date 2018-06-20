@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label for="editedUserRoles">Roles</label>
                             <div>
-                                <p th:each="role,rowStat : ${rolesList}">
+                                <p th:each="role,rowStat : ${allRoles}">
                                     <input id="editedUserRoles" type="checkbox"
                                            th:field="*{roles[__${rowStat.index}__].id}" th:value="${role.id}"/>
                                     <label th:text="${role.name}">Role</label>
