@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="delete-user-modal" id="delete-user-modal" >
+    <div class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input id="user-id-to-delete" type="hidden"/>
+                    <input id="row-to-delete" type="hidden"/>
+                    Are you sure you want to delete this user?
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-dark" data-dismiss="modal"
+                       style="color: #ffffff;">
+                        Cancel
+                    </a>
+                    <a type="button" class="btn btn-danger" onclick="deleteEntity('user')"
+                       style="text-decoration: none;  color: #ffffff;">Delete
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
