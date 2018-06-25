@@ -66,7 +66,7 @@
                                 <a id="remove-link" style="text-decoration: none; color:red"
                                    data-toggle='modal' data-target='#deleteModal'
                                    data-placement="right" title="Remove user"
-                                   th:onclick="'getUserId(' + ${user.id} + ')'">
+                                   th:onclick="'setRowIndexAndUserId(this, ' + ${user.id} + ')'">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                             </td>
@@ -79,6 +79,44 @@
                     <a href="#" th:href="@{/adminPage/users/newUser}">
                         <button type="button" class="btn btn-primary">New User</button>
                     </a>
+
+                    <!--Paging-->
+                    <div class="row" style="margin-top: 10px;">
+
+                        <!--Page size dropdown-->
+                        <div class="form-group col-md-1">
+                            <select class="form-control pagination" id="pageSizeSelect">
+                                <option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}"
+                                        th:selected="${pageSize} == ${selectedPageSize}"></option>
+                            </select>
+                        </div>
+
+                        <!--Pages-->
+                        <nav aria-label="Page navigation example" class="form-group col-md-11 pagination-centered">
+                            <ul class="pagination">
+                                <li th:class="${users.number == 0} ? 'page-item disabled'" class="page-item">
+                                    <a class="page-link" th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
+                                </li>
+                                <li th:class="${users.number == 0} ? 'page-item disabled'" class="page-item">
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=${users.number})}">&larr;</a>
+                                </li>
+                                <li th:class="${users.number == (page - 1)} ? 'active pointer-disabled'" class="page-item"
+                                    th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+                                    <a class="page-link" th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=${page})}"
+                                       th:text="${page}"></a>
+                                </li>
+                                <li th:class="${users.number + 1 == users.totalPages} ? 'page-item disabled'" class="page-item">
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=${users.number + 2})}">&rarr;</a>
+                                </li>
+                                <li th:class="${users.number + 1 == users.totalPages} ? 'page-item disabled'" class="page-item">
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=${users.totalPages})}">&raquo;</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
 
                 </div>
             </div>

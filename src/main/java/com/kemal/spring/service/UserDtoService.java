@@ -3,6 +3,9 @@ package com.kemal.spring.service;
 import com.kemal.spring.domain.User;
 import com.kemal.spring.web.dto.UserDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,6 +36,16 @@ public class UserDtoService {
         return userDtosList;
     }
 
+    public Page<UserDto> findAllPageable(Pageable pageable) {
+        Page<User> users = userService.findAllPageable(pageable);
+        List <UserDto> userDtos = new ArrayList<>();
+
+        for (User user: users) {
+            userDtos.add(modelMapper.map(user, UserDto.class));
+        }
+        return new PageImpl<>(userDtos, pageable, users.getTotalElements());
+    }
+
     public UserDto findById(Long id){
         UserDto userDto = new UserDto();
         for(UserDto userDto1 : findAll()){
@@ -60,8 +73,4 @@ public class UserDtoService {
         }
         return null;
     }
-
-
-
-
 }

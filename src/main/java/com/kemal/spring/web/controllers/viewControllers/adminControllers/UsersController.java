@@ -8,6 +8,10 @@ import com.kemal.spring.service.UserService;
 import com.kemal.spring.service.UserUpdateDtoService;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
+import com.kemal.spring.web.paging.InitialPagingSizes;
+import com.kemal.spring.web.paging.Pager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Keno&Kemo on 20.11.2017..
@@ -40,8 +45,23 @@ public class UsersController {
     }
 
     @GetMapping("/users")
-    public String showUsers(Model model) {
-        model.addAttribute("users", userDtoService.findAll());
+    public String showUsers(Model model, @RequestParam("pageSize") Optional<Integer> pageSize,
+                            @RequestParam("page") Optional<Integer> page) {
+
+        // Evaluate page size. If requested parameter is null, return initial
+        // page size
+        int evalPageSize = pageSize.orElse(InitialPagingSizes.getInitialPageSize());
+        // Evaluate page. If requested parameter is null or less than 0 (to
+        // prevent exception), return initial size. Otherwise, return value of
+        // param. decreased by 1.
+        int evalPage = (page.orElse(0) < 1) ? InitialPagingSizes.getInitialPage() : page.get() - 1;
+
+        Page<UserDto> users = userDtoService.findAllPageable(new PageRequest(evalPage, evalPageSize));
+        Pager pager = new Pager(users.getTotalPages(), users.getNumber(), InitialPagingSizes.getButtonsToShow());
+        model.addAttribute("users", users);
+        model.addAttribute("selectedPageSize", evalPageSize);
+        model.addAttribute("pageSizes", InitialPagingSizes.getPageSizes());
+        model.addAttribute("pager", pager);
         return "adminPage/user/users";
     }
 

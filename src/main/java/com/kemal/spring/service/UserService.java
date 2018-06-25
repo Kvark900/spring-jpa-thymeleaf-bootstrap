@@ -8,6 +8,8 @@ import com.kemal.spring.web.dto.UserUpdateDto;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +47,9 @@ public class UserService {
         return userRepository.findAllEagerly();
     }
 
-
+    public Page<User> findAllPageable(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
 
     @Cacheable (value = "cache.userByEmail", key = "#email", unless="#result == null")
     public User findByEmail(String email) {
@@ -62,6 +66,7 @@ public class UserService {
     }
     //==============================================================================================
     //endregion
+
 
     @CacheEvict(value = {"cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
     public void save(User user) {
