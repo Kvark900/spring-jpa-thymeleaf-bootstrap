@@ -58,14 +58,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         //================================================================================
         createUserIfNotFound("admin@gmail.com", "Admin", "Admin",
                 "admin", "admin", adminRoles);
-        createUserIfNotFound("user1@gmail.com", "User1", "User1",
-                "user1", "user1", userRoles);
-        createUserIfNotFound("user2@gmail.com", "User2", "User2",
-                "user2", "user2", userRoles);
-        createUserIfNotFound("user3@gmail.com", "User3", "User3",
-                "user3", "user3", userRoles);
-        createUserIfNotFound("user4@gmail.com", "User4", "User4",
-                "user4", "user4", userRoles);
+
+        for (int i = 1; i < 50; i++) {
+            createUserIfNotFound("user" + i + "@gmail.com", "User" + i,
+                    "User" + i, "user" + i, "user" + i, userRoles);
+        }
         //================================================================================
         //endregion
 
