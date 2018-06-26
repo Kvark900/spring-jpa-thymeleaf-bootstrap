@@ -47,6 +47,7 @@ public class UserService {
         return userRepository.findAllEagerly();
     }
 
+    @Cacheable(value = "cache.allUsersPageable")
     public Page<User> findAllPageable(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
@@ -68,12 +69,12 @@ public class UserService {
     //endregion
 
 
-    @CacheEvict(value = {"cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
+    @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
     public void save(User user) {
         userRepository.save(user);
     }
 
-    @CacheEvict(value = {"cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
+    @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
     public void delete(Long id) {
         userRepository.delete(id);
     }
