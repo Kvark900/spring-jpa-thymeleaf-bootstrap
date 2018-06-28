@@ -113,6 +113,12 @@ body {
 	background-color: darkslategrey !important;
 	color: white;
 }
+
+#pageSizeSelect{
+	width: 50px;
+	padding: 0px;
+	margin: 0px;
+}
 /*================================================================*/
 /*endregion*/
 
