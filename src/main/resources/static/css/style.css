@@ -114,6 +114,10 @@ body {
 	color: white;
 }
 
+th {
+	cursor: pointer;
+}
+
 #pageSizeSelect{
 	width: 50px;
 	padding: 0px;
