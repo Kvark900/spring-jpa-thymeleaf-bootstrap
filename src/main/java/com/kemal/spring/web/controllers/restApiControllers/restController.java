@@ -23,7 +23,7 @@ public class restController {
         this.userService = userService;
     }
 
-        @GetMapping("/adminPage/json-users")
+    @GetMapping("/adminPage/json-users")
     public ResponseEntity<List<User>> getUsers() {
         List<User> allUsers = userService.findAll();
 

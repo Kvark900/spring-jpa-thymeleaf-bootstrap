@@ -49,7 +49,7 @@ public class UserDtoService {
     public UserDto findById(Long id){
         UserDto userDto = new UserDto();
         for(UserDto userDto1 : findAll()){
-            if(userDto1.getId() == id){
+            if(userDto1.getId().equals(id)){
                 userDto = userDto1;
             }
         }

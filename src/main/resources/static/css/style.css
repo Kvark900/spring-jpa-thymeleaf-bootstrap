@@ -120,8 +120,16 @@ th {
 
 #pageSizeSelect{
 	width: 50px;
-	padding: 0px;
-	margin: 0px;
+	padding: 0;
+	margin: 0;
+}
+
+#search-user-dropdown{
+	font-size: 15px;
+}
+
+#user-table{
+	width: 100%;
 }
 /*================================================================*/
 /*endregion*/
