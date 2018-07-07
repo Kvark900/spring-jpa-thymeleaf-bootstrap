@@ -17,7 +17,7 @@
                 <!--Admin content-->
                 <div id="admin-content">
                     <div class="row mb-2">
-                        <div class="col-lg-9 d-flex flex-wrap">
+                        <div class="col-lg-9 d-flex flex-wrap align-content-start">
                             <!--Search user-->
                             <div class="row col-lg-12 d-flex flex-nowrap pb-2">
                                 <div class="input-group">
@@ -34,53 +34,55 @@
                                 <button type="button" class="btn btn-secondary ml-2">Search</button>
                             </div>
 
-                            <!--Table with users-->
-                            <table class="table table-striped table-responsive" id="user-table">
-                                <thead class="thead">
-                                <tr>
-                                    <th onclick="sortTable(0)">ID</th>
-                                    <th onclick="sortTable(1)">Name</th>
-                                    <th onclick="sortTable(2)">Surname</th>
-                                    <th onclick="sortTable(3)">Username</th>
-                                    <th onclick="sortTable(4)">Email</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody id="table-body">
-                                <tr th:each="user : ${users}">
-                                    <td th:text="${user.id}"></td>
-                                    <td th:text="${user.name}"></td>
-                                    <td th:text="${user.surname}"></td>
-                                    <td th:text="${user.username}"></td>
-                                    <td th:text="${user.email}"></td>
-                                    <td th:switch="${user.enabled}">
-                                        <span th:case="true" style="color:green">Enabled</span>
-                                        <span th:case="false" style="color:red">Disabled</span>
-                                    </td>
+                            <div class="row col-lg-12">
+                                <!--Table with users-->
+                                <table class="table table-striped table-responsive" id="user-table">
+                                    <thead class="thead">
+                                    <tr>
+                                        <th onclick="sortTable(0)">ID</th>
+                                        <th onclick="sortTable(1)">Name</th>
+                                        <th onclick="sortTable(2)">Surname</th>
+                                        <th onclick="sortTable(3)">Username</th>
+                                        <th onclick="sortTable(4)">Email</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="table-body">
+                                    <tr th:each="user : ${users}">
+                                        <td th:text="${user.id}"></td>
+                                        <td th:text="${user.name}"></td>
+                                        <td th:text="${user.surname}"></td>
+                                        <td th:text="${user.username}"></td>
+                                        <td th:text="${user.email}"></td>
+                                        <td th:switch="${user.enabled}">
+                                            <span th:case="true" style="color:green">Enabled</span>
+                                            <span th:case="false" style="color:red">Disabled</span>
+                                        </td>
 
-                                    <!--Edit user button-->
-                                    <td><a style="text-decoration: none; color:blue"
-                                           th:href="@{/adminPage/users/{id}(id=${user.id})}"
-                                           class="editBtn" data-toggle="tooltip"
-                                           data-placement="right" title="Edit user">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    </td>
-
-                                    <!--Remove user button-->
-                                    <td>
-                                        <a id="remove-link" style="text-decoration: none; color:red"
-                                           data-toggle='modal' data-target='#deleteModal'
-                                           data-placement="right" title="Remove user"
-                                           th:onclick="'setRowIndexAndUserId(this, ' + ${user.id} + ')'">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        <!--Edit user button-->
+                                        <td><a style="text-decoration: none; color:blue"
+                                               th:href="@{/adminPage/users/{id}(id=${user.id})}"
+                                               class="editBtn" data-toggle="tooltip"
+                                               data-placement="right" title="Edit user">
+                                            <i class="fa fa-edit"></i>
                                         </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                        </td>
+
+                                        <!--Remove user button-->
+                                        <td>
+                                            <a id="remove-link" style="text-decoration: none; color:red"
+                                               data-toggle='modal' data-target='#deleteModal'
+                                               data-placement="right" title="Remove user"
+                                               th:onclick="'setRowIndexAndUserId(this, ' + ${user.id} + ')'">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <div th:replace="fragments/deleteUserModal :: delete-user-modal"></div>
                         </div>
 
