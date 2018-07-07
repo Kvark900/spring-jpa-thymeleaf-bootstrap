@@ -33,14 +33,21 @@ public class RegisterController {
     public ModelAndView saveUser(ModelAndView modelAndView, @ModelAttribute("userDto") @Valid final UserDto userDto,
                                  BindingResult bindingResult, HttpServletRequest request, Errors errors){
 
-        User userExists = userService.findByEmail(userDto.getEmail());
+        User emailExists = userService.findByEmail(userDto.getEmail());
+        User userNameExists = userService.findByUsername(userDto.getUsername());
 
-        System.out.println(userExists);
+        System.out.println(emailExists);
 
-        if (userExists != null) {
+        if (emailExists != null) {
             modelAndView.setViewName("website/register");
-            bindingResult.rejectValue("email", "alreadyRegisteredMessage",
+            bindingResult.rejectValue("email", "alreadyRegisteredEmail",
                     "Oops!  There is already a user registered with the email provided.");
+        }
+
+        if (userNameExists!= null) {
+            modelAndView.setViewName("website/register");
+            bindingResult.rejectValue("username", "alreadyRegisteredUsername",
+                    "Oops!  There is already a user registered with the username provided.");
         }
 
         if (bindingResult.hasErrors()) {
