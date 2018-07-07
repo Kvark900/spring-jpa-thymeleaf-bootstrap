@@ -88,17 +88,16 @@ public class UsersController {
         List<User> allUsers = userService.findAll();
         List <Role> allRoles = roleService.findAll();
 
-        boolean emailAlreadyExists = userService.checkIfEmailIsTaken(allUsers, userUpdateDto, persistedUser);
-        boolean usernameAlreadyExists = userService.checkIfUsernameIsTaken(allUsers, userUpdateDto, persistedUser);
+        User emailAlreadyExists = userService.findByEmailAndIdNot(userUpdateDto.getEmail(), id);
+        User usernameAlreadyExists = userService.findByUsernameAndIdNot(userUpdateDto.getUsername(), id);
         boolean hasErrors = false;
 
-
-        if (emailAlreadyExists) {
+        if (emailAlreadyExists != null) {
             bindingResult.rejectValue("email", "emailAlreadyExists", "Oops!  There is already a user registered with the email provided.");
             hasErrors = true;
         }
 
-        if (usernameAlreadyExists) {
+        if (usernameAlreadyExists != null) {
             bindingResult.rejectValue("username", "usernameAlreadyExists", "Oops!  There is already a user registered with the username provided.");
             hasErrors = true;
         }
@@ -129,8 +128,8 @@ public class UsersController {
     public String saveNewUser(Model model, @ModelAttribute("newUser") @Valid final UserDto newUser,
                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        UserDto emailAlreadyExists = userDtoService.findByEmail(newUser.getEmail());
-        UserDto usernameAlreadyExists = userDtoService.findByUsername(newUser.getUsername());
+        User emailAlreadyExists = userService.findByEmail(newUser.getEmail());
+        User usernameAlreadyExists = userService.findByUsername(newUser.getUsername());
         boolean hasErrors = false;
         String formWithErrors = "adminPage/user/newUser";
 

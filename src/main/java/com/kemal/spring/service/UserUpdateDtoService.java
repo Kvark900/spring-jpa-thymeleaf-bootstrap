@@ -34,13 +34,7 @@ public class UserUpdateDtoService {
     }
 
     public UserUpdateDto findById(Long id){
-        UserUpdateDto userUpdateDto = new UserUpdateDto();
-        for(UserUpdateDto userUpdateDto1 : findAll()){
-            if(userUpdateDto1.getId() == id){
-                userUpdateDto = userUpdateDto1;
-            }
-        }
-        return userUpdateDto;
+        return modelMapper.map(userService.findById(id), UserUpdateDto.class);
     }
 
 

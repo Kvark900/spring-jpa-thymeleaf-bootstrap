@@ -47,30 +47,14 @@ public class UserDtoService {
     }
 
     public UserDto findById(Long id){
-        UserDto userDto = new UserDto();
-        for(UserDto userDto1 : findAll()){
-            if(userDto1.getId().equals(id)){
-                userDto = userDto1;
-            }
-        }
-        return userDto;
+        return modelMapper.map(userService.findById(id), UserDto.class);
     }
 
     public UserDto findByEmail(String email){
-        for(UserDto userDto : findAll()){
-            if(userDto.getEmail().equals(email)){
-                return userDto;
-            }
-        }
-        return null;
+        return modelMapper.map(userService.findByEmail(email), UserDto.class);
     }
 
     public UserDto findByUsername(String username){
-        for(UserDto userDto : findAll()){
-            if(userDto.getUsername().equals(username)){
-                return userDto;
-            }
-        }
-        return null;
+        return modelMapper.map(userService.findByUsername(username), UserDto.class);
     }
 }

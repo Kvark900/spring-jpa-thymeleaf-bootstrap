@@ -65,6 +65,15 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public User findByEmailAndIdNot (String email, Long id){
+        return userRepository.findByEmailAndIdNot(email, id);
+    }
+
+    public User findByUsernameAndIdNot(String username, Long id){
+        return userRepository.findByUsernameAndIdNot(username, id);
+    }
+
     //==============================================================================================
     //endregion
 
@@ -119,29 +128,4 @@ public class UserService {
         return userRoles;
     }
 
-    public boolean checkIfEmailIsTaken(List<User> allUsers, UserUpdateDto userUpdateDto,
-                                       User persistedUser) {
-        boolean emailAlreadyExists = false;
-        for (User user : allUsers) {
-            //Check if the email is edited and if it is taken
-            if (!userUpdateDto.getEmail().equals(persistedUser.getEmail())
-                    && userUpdateDto.getEmail().equals(user.getEmail())) {
-                emailAlreadyExists = true;
-            }
-        }
-        return emailAlreadyExists;
-    }
-
-    public boolean checkIfUsernameIsTaken(List<User> allUsers, UserUpdateDto userUpdateDto,
-                                          User persistedUser) {
-        boolean usernameAlreadyExists = false;
-        for (User user : allUsers) {
-            //Check if the username is edited and if it is taken
-            if (!userUpdateDto.getEmail().equals(persistedUser.getUsername())
-                    && userUpdateDto.getEmail().equals(user.getUsername())) {
-                usernameAlreadyExists = true;
-            }
-        }
-        return usernameAlreadyExists;
-    }
 }
