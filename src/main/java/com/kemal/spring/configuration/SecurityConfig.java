@@ -1,7 +1,6 @@
 package com.kemal.spring.configuration;
 
 
-import com.kemal.spring.service.CustomRememberMeServices;
 import com.kemal.spring.service.userDetails.UserDetailsServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -44,11 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
-    @Bean
-    public RememberMeServices rememberMeServices() {
-        return new CustomRememberMeServices("theKey",
-                userDetailsServiceImpl, new InMemoryTokenRepositoryImpl());
-    }
+//    @Bean
+//    public RememberMeServices rememberMeServices() {
+//        return new CustomRememberMeServices("theKey",
+//                userDetailsServiceImpl, new InMemoryTokenRepositoryImpl());
+//    }
 
 
     //Override methods
@@ -73,9 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
-                .permitAll()
-                .and()
-                .rememberMe().rememberMeServices(rememberMeServices()).key("theKey");
+                .permitAll();
     }
 
     @Override

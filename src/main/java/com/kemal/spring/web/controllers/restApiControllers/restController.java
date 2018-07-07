@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Keno&Kemo on 16.12.2017..
@@ -37,13 +38,13 @@ public class restController {
 
     @DeleteMapping("/adminPage/json-users/delete/{id}")
     public ResponseEntity<User> deleteUser (@PathVariable Long id){
-        User userToDelete = userService.findById(id);
+        Optional<User> userToDelete = userService.findById(id);
 
-        if(userToDelete == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!userToDelete.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         else {
-            userService.delete(id);
-            return new ResponseEntity<>(userToDelete, HttpStatus.NO_CONTENT);
+            userService.deleteById(id);
+            return new ResponseEntity<>(userToDelete.get(), HttpStatus.NO_CONTENT);
         }
     }
 }

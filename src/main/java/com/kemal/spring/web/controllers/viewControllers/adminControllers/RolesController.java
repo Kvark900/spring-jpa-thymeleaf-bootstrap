@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Keno&Kemo on 20.11.2017..
@@ -34,9 +35,9 @@ public class RolesController {
 
     @GetMapping("/roles/{id}")
     public ModelAndView getEditRoleForm(@PathVariable Long id) {
-        Role role = roleService.findById(id);
+        Optional<Role> role = roleService.findById(id);
         ModelAndView modelAndView = new ModelAndView("adminPage/role/editRole");
-        modelAndView.addObject("role", role);
+        modelAndView.addObject("role", role.get());
         return modelAndView;
     }
 
@@ -46,10 +47,10 @@ public class RolesController {
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         String formWithErrors = "adminPage/role/editRole";
-        Role persistedRole = roleService.findById(id);
+        Optional<Role> persistedRole = roleService.findById(id);
         List<Role> allRoles = roleService.findAll();
 
-        boolean roleNameAlreadyExists = roleService.checkIfRoleNameIsTaken(allRoles, role, persistedRole);
+        boolean roleNameAlreadyExists = roleService.checkIfRoleNameIsTaken(allRoles, role, persistedRole.get());
         boolean hasErrors = false;
 
         if (roleNameAlreadyExists) {

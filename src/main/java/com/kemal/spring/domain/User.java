@@ -1,6 +1,6 @@
 package com.kemal.spring.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class User {
 
     private boolean enabled;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "users_roles",
             joinColumns = {@JoinColumn(name = "user_id")},

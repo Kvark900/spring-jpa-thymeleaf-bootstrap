@@ -1,6 +1,6 @@
 package com.kemal.spring.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.kemal.spring.customAnnotations.ValidRoleName;
 
 import javax.persistence.*;
@@ -20,7 +20,7 @@ public class Role {
     @Column(unique = true)
     private String name;
 
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToMany (mappedBy = "roles", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<User> users = new HashSet<>();
 

@@ -82,7 +82,7 @@ public class UsersController {
                              @ModelAttribute("oldUser") @Valid final UserUpdateDto userUpdateDto,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        User persistedUser = userService.findById(id);
+        Optional<User> persistedUser = userService.findById(id);
         String formWithErrors = "adminPage/user/editUser";
 
         List<User> allUsers = userService.findAll();
@@ -111,7 +111,7 @@ public class UsersController {
             return formWithErrors;
         }
         else {
-            userService.save(userService.getUpdatedUser(persistedUser, userUpdateDto));
+            userService.save(userService.getUpdatedUser(persistedUser.get(), userUpdateDto));
             redirectAttributes.addFlashAttribute("userHasBeenUpdated", true);
             return "redirect:/adminPage/users";
         }

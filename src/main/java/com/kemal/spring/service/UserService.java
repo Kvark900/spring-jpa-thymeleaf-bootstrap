@@ -58,7 +58,7 @@ public class UserService {
     }
 
     @Cacheable (value = "cache.userById", key = "#id", unless="#result == null")
-    public User findById(Long id) {
+    public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
 
@@ -84,8 +84,8 @@ public class UserService {
     }
 
     @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
-    public void delete(Long id) {
-        userRepository.delete(id);
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 
     public User createNewAccount(UserDto userDto) {

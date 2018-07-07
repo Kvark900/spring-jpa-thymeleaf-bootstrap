@@ -20,9 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmailAndIdNot(String email, Long id);
     User findByUsernameAndIdNot(String username, Long id);
 
-    User findById(Long id);
     User findByUsername(String username);
 
     @Query("SELECT u FROM User u JOIN FETCH u.roles")
     List<User> findAllEagerly();
+
 }

@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Keno&Kemo on 04.11.2017..
@@ -32,7 +33,7 @@ public class RoleService {
     }
 
     @Cacheable(value = "cache.roleById", key = "#id", unless = "#result == null")
-    public Role findById(Long id) {
+    public Optional<Role> findById(Long id) {
         return roleRepository.findById(id);
     }
     //==================================================================================
