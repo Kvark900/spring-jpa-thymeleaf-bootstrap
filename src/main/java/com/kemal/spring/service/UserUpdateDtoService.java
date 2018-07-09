@@ -34,7 +34,7 @@ public class UserUpdateDtoService {
     }
 
     public UserUpdateDto findById(Long id){
-        return modelMapper.map(userService.findById(id).get(), UserUpdateDto.class);
+        return modelMapper.map(userService.findByIdEagerly(id), UserUpdateDto.class);
     }
 
 

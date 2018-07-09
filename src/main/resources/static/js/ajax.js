@@ -51,4 +51,57 @@ function deleteEntity() {
     });
 }
 
+function searchUserByProperty() {
+    let selectedProperty = $( "#search-user-dropdown option:selected" ).text();
+    let value = $("#searchUserBar").val();
+
+    let getUsersByProperty = '/adminPage/json-users/search?usersProperty=' + selectedProperty + '&propertyValue=' + value;
+
+    $.ajax({
+        url: getUsersByProperty,
+        type: 'GET',
+        success: function (data, status, xhr) {
+
+            let tableBody = $("#user-table-body");
+            tableBody.empty();
+            $.each(data, function (i, e) {
+                let end = e.id + ");'";
+                let del = "'setRowIndexAndUserId(this, " + end;
+                let enabled;
+                if (e.enabled === true) {
+                    enabled = "<span style='color: green'>Enabled</span>"
+                }
+                else enabled = "<span style='color: red'>Disabled</span>";
+
+                let row = $('<tr>').append(
+                    $('<td>').text(e.id),
+                    $('<td>').text(e.name),
+                    $('<td>').text(e.surname),
+                    $('<td>').text(e.username),
+                    $('<td>').text(e.email),
+                    $('<td>').append(enabled),
+                    $('<td>').append(
+                        "<a style='text-decoration: none; color:blue' href='/adminPage/users/" + e.id + "'" +
+                        "class='editBtn' data-toggle='tooltip' data-placement='right' title='Edit user'>" +
+                        "<i class='fa fa-edit'></i></a>"
+                    ),
+                    $('<td>').append(
+                        "<a id='remove-link' style='text-decoration: none; color:red'" +
+                        "data-toggle='modal' data-placement='right' title='Remove user' " +
+                        "data-target='#deleteModal' onclick=" +
+                        del + "><i class='fa fa-times' aria-hidden='true'></i></a>"
+                    )
+                );
+                $('#user-table-body').append(row);
+            });
+        },
+        error: function (jqXhr, textStatus, errorMessage) {
+            console.log("AJAX ERROR: " + errorMessage +"\n"+
+                "TEXT STATUS: " + textStatus + "\n"+
+                "JQXHR: " + jqXhr);
+        }
+    });
+}
+
+
 

@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.email = (:email)")
     User findByEmail(@Param("email") String email);
 
+    List<User> findByNameContaining (String name);
+    List<User> findBySurnameContaining(String surname);
+
     User findByEmailAndIdNot(String email, Long id);
     User findByUsernameAndIdNot(String username, Long id);
 
@@ -25,4 +28,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN FETCH u.roles")
     List<User> findAllEagerly();
 
+    List<User> findByUsernameContaining(String username);
+
+    List<User> findByEmailContaining(String email);
+
+    @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.id = (:id)")
+    User findByIdEagerly(@Param("id")Long id);
 }

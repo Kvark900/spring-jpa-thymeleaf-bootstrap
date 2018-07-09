@@ -27,11 +27,11 @@
                                         <option value="3">Surname</option>
                                         <option value="4">Email</option>
                                     </select>
-                                    <input type="text" id="searchUserBar" onkeyup="searchUser(criteria)"
+                                    <input type="text" id="searchUserBar"
                                            placeholder="Search for users.." class="form-control"
                                            aria-label="Text input with dropdown button">
                                 </div>
-                                <button type="button" class="btn btn-secondary ml-2">Search</button>
+                                <button type="button" class="btn btn-secondary ml-2" onclick="searchUserByProperty()">Search</button>
                             </div>
 
                             <div class="row col-lg-12">
@@ -49,7 +49,7 @@
                                         <th></th>
                                     </tr>
                                     </thead>
-                                    <tbody id="table-body">
+                                    <tbody id="user-table-body">
                                     <tr th:each="user : ${users}">
                                         <td th:text="${user.id}"></td>
                                         <td th:text="${user.name}"></td>

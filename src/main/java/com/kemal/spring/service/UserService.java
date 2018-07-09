@@ -62,6 +62,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public User findByIdEagerly (Long id){
+        return userRepository.findByIdEagerly(id);
+    }
+
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -72,6 +76,10 @@ public class UserService {
 
     public User findByUsernameAndIdNot(String username, Long id){
         return userRepository.findByUsernameAndIdNot(username, id);
+    }
+
+    public List<User> findByNameContaining (String name){
+        return userRepository.findByNameContaining(name);
     }
 
     //==============================================================================================
@@ -128,4 +136,15 @@ public class UserService {
         return userRoles;
     }
 
+    public List<User> findBySurnameContaining(String surname) {
+        return userRepository.findBySurnameContaining(surname);
+    }
+
+    public List<User> findByUsernameContaining(String username) {
+        return userRepository.findByUsernameContaining(username);
+    }
+
+    public List<User> findByEmailContaining(String email) {
+        return userRepository.findByEmailContaining(email);
+    }
 }
