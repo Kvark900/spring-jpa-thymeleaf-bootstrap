@@ -19,7 +19,6 @@ if(menuItem.includes("roles")){
     $("a[href='/adminPage/roles']").parent("li").addClass("active");
 }
 
-
 function changePageAndSize() {
     $('#pageSizeSelect').change(function(evt) {
         window.location.replace("/adminPage/users/?pageSize=" + this.value + "&page=1");
@@ -99,3 +98,10 @@ function sortTable(n) {
         }
     }
 }
+
+//Search users on enter key pressed too
+$("#searchUserBar").keypress(function (event) {
+    if (event.which === 13) {
+        searchUserByProperty();
+    }
+});
