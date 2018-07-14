@@ -37,7 +37,7 @@ function deleteEntity() {
             let table = $("#user-table");
             table[0].deleteRow(rowIndexToDelete);
 
-            $('#delete-alert').append(
+            $('#alert-messages').append(
                 "<div class='alert alert-success alert-dismissible fade show' role='alert'>"+
                 "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
                 "<span aria-hidden='true'>&times;</span> </button>"+
@@ -96,9 +96,17 @@ function searchUserByProperty() {
             });
         },
         error: function (jqXhr, textStatus, errorMessage) {
-            console.log("AJAX ERROR: " + errorMessage +"\n"+
-                "TEXT STATUS: " + textStatus + "\n"+
-                "JQXHR: " + jqXhr);
+            let httpStatusCode = jqXhr.status;
+
+            if(httpStatusCode === 404){
+                $('#alert-messages').append(
+                    "<div class='alert alert-info alert-dismissible fade show' role='alert'>"+
+                    "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+                    "<span aria-hidden='true'>&times;</span> </button>"+
+                    "Sorry, no matches found for "+ selectedProperty + " = " + value +
+                    "</div>"
+                );
+            }
         }
     });
 }
