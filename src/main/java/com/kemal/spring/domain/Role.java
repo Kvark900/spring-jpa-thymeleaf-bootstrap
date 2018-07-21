@@ -21,7 +21,7 @@ public class Role {
     private String name;
 
     @JsonManagedReference
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.MERGE)
     private Set<User> users = new HashSet<>();
 
     public Role() {
