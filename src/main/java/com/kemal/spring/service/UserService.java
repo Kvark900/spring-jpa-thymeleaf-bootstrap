@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -42,11 +43,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    @Cacheable(value = "cache.allUsersEagerly")
-    public List<User> findAllEagerly() {
-        return userRepository.findAllEagerly();
-    }
-
     @Cacheable(value = "cache.allUsersPageable")
     public Page<User> findAllPageable(Pageable pageable) {
         return userRepository.findAll(pageable);
@@ -62,14 +58,6 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User findByIdEagerly (Long id){
-        return userRepository.findByIdEagerly(id);
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
     public User findByEmailAndIdNot (String email, Long id){
         return userRepository.findByEmailAndIdNot(email, id);
     }
@@ -78,20 +66,58 @@ public class UserService {
         return userRepository.findByUsernameAndIdNot(username, id);
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    //region Find eagerly
+    public User findByIdEagerly (Long id){
+        return userRepository.findByIdEagerly(id);
+    }
+
+    @Cacheable(value = "cache.allUsersEagerly")
+    public List<User> findAllEagerly() {
+        return userRepository.findAllEagerly();
+    }
+    //endregion
+
+    //region Find by containing
+    @Cacheable (value = "cache.byNameContaining")
     public List<User> findByNameContaining (String name){
         return userRepository.findByNameContaining(name);
     }
+
+    @Cacheable (value = "cache.bySurnameContaining")
+    public List<User> findBySurnameContaining(String surname) {
+        return userRepository.findBySurnameContaining(surname);
+    }
+
+    @Cacheable (value = "cache.byUsernameContaining")
+    public List<User> findByUsernameContaining(String username) {
+        return userRepository.findByUsernameContaining(username);
+    }
+
+    @Cacheable (value = "cache.byEmailContaining")
+    public List<User> findByEmailContaining(String email) {
+        return userRepository.findByEmailContaining(email);
+    }
+    //endregion
 
     //==============================================================================================
     //endregion
 
 
-    @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
+    @Transactional
+    @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById",
+                    "cache.allUsersEagerly", "cache.byNameContaining", "cache.bySurnameContaining",
+                    "cache.byUsernameContaining ", "cache.byEmailContaining "}, allEntries = true)
     public void save(User user) {
         userRepository.save(user);
     }
 
-    @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById", "cache.allUsersEagerly"}, allEntries = true)
+    @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById",
+            "cache.allUsersEagerly", "cache.byNameContaining", "cache.bySurnameContaining",
+            "cache.byUsernameContaining ", "cache.byEmailContaining "}, allEntries = true)
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
@@ -134,17 +160,5 @@ public class UserService {
             }
         }
         return userRoles;
-    }
-
-    public List<User> findBySurnameContaining(String surname) {
-        return userRepository.findBySurnameContaining(surname);
-    }
-
-    public List<User> findByUsernameContaining(String username) {
-        return userRepository.findByUsernameContaining(username);
-    }
-
-    public List<User> findByEmailContaining(String email) {
-        return userRepository.findByEmailContaining(email);
     }
 }
