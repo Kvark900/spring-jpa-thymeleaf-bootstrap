@@ -12,6 +12,7 @@ import com.kemal.spring.web.paging.InitialPagingSizes;
 import com.kemal.spring.web.paging.Pager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -56,7 +57,7 @@ public class UsersController {
         // param. decreased by 1.
         int evalPage = (page.orElse(0) < 1) ? InitialPagingSizes.getInitialPage() : page.get() - 1;
 
-        Page<UserDto> users = userDtoService.findAllPageable(new PageRequest(evalPage, evalPageSize));
+        Page<UserDto> users = userDtoService.findAllPageable(PageRequest.of(evalPage, evalPageSize, new Sort(Sort.Direction.ASC, "id")));
         Pager pager = new Pager(users.getTotalPages(), users.getNumber(), InitialPagingSizes.getButtonsToShow());
         model.addAttribute("users", users);
         model.addAttribute("selectedPageSize", evalPageSize);
