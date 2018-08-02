@@ -52,10 +52,19 @@ function deleteEntity() {
 }
 
 function searchUserByProperty() {
-    let selectedProperty = $( "#search-user-dropdown option:selected" ).text();
+    let selectedProperty = $("#search-user-dropdown option:selected").text();
     let value = $("#searchUserBar").val();
 
-    let getUsersByProperty = '/adminPage/json-users/search?usersProperty=' + selectedProperty + '&propertyValue=' + value;
+    if (value != null && value !== "") {
+        window.location.href = "/adminPage/users?usersProperty=" + selectedProperty + "&propertyValue=" + value;
+    }
+
+    else {
+        window.location.href = "/adminPage/users";
+    }
+
+    //Old code:
+    /*let getUsersByProperty = '/adminPage/json-users/search?usersProperty=' + selectedProperty + '&propertyValue=' + value;
 
     $.ajax({
         url: getUsersByProperty,
@@ -108,7 +117,7 @@ function searchUserByProperty() {
                 );
             }
         }
-    });
+    });*/
 }
 
 

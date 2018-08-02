@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     changePageAndSize();
 });
@@ -20,10 +19,58 @@ if(menuItem.includes("roles")){
 }
 
 function changePageAndSize() {
+
     $('#pageSizeSelect').change(function(evt) {
-        window.location.replace("/adminPage/users/?pageSize=" + this.value + "&page=1");
+        let selectedProperty = $("#search-user-dropdown option:selected").text();
+        let value = $("#searchUserBar").val();
+
+        if (value !== "" && value != null) {
+            window.location.replace("/adminPage/users?usersProperty=" + selectedProperty + "&propertyValue=" + value + "pageSize=" + this.value + "&page=1");
+        }
+
+        else{
+            window.location.replace("/adminPage/users?pageSize=" + this.value + "&page=1");
+        }
     });
 }
+
+//region Keep searching parameters after page refresh
+//=================================================================================================
+$("#searchUserBar").val(getSavedValueForTextBox("searchUserBar"));
+$("#search-user-dropdown").val(getSavedValueForDropDown("search-user-dropdown"));
+
+
+function saveValue(e){
+    let id = e.id;  // get the sender's id to save it .
+    let val = e.value; // get the value.
+    localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override .
+}
+
+function getSavedValueForTextBox  (v){
+    let usersPropertyParam = new URL(location.href).searchParams.get('usersProperty');
+    if (localStorage.getItem(v) === null) {
+        return "";// You can change this to your defualt value.
+    }
+    else if(usersPropertyParam === null){
+        return "";
+    }
+
+    return localStorage.getItem(v);
+}
+
+function getSavedValueForDropDown(v){
+    let propertyValue = new URL(location.href).searchParams.get('propertyValue');
+    if (localStorage.getItem(v) === null) {
+        return "ID";// You can change this to your defualt value.
+    }
+    else if(propertyValue === null){
+        return "ID";
+    }
+
+    return localStorage.getItem(v);
+}
+//=================================================================================================
+//endregion
 
 function sortTable(n) {
     let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;

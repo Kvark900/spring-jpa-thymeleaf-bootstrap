@@ -21,13 +21,14 @@
                             <!--Search user-->
                             <div class="row col-lg-12 d-flex flex-nowrap pb-2">
                                 <div class="input-group">
-                                    <select class="custom-select" id="search-user-dropdown">
-                                        <option value="1">ID</option>
-                                        <option value="2">Name</option>
-                                        <option value="3">Surname</option>
-                                        <option value="4">Email</option>
+                                    <select class="custom-select" id="search-user-dropdown" onchange="saveValue(this);">
+                                        <option value="ID">ID</option>
+                                        <option value="Name">Name</option>
+                                        <option value="Surname">Surname</option>
+                                        <option value="Email">Email</option>
                                     </select>
                                     <input type="text" id="searchUserBar"
+                                           onkeyup='saveValue(this);'
                                            placeholder="Search for users.." class="form-control"
                                            aria-label="Text input with dropdown button">
                                 </div>
@@ -107,6 +108,22 @@
                                 </button>
                                 <strong>Well done!</strong> User has been updated!!!
                             </div>
+
+                            <!--Number format exception message-->
+                            <div th:if="${numberFormatException}" class="alert alert-danger alert-dismissible fade show"
+                                 role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button> Please enter valid number
+                            </div>
+
+                            <!--No matches found message-->
+                            <div th:if="${noMatches}" class='alert alert-info alert-dismissible fade show' role='alert'>
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                                    Sorry, no matches found for <span th:text="${usersProperty}"></span> = <span th:text="${propertyValue}"></span>
+                            </div>
                         </div>
                     </div>
 
@@ -115,10 +132,10 @@
                     </a>
 
                     <!--Paging-->
-                    <div class="row" style="margin-top: 10px;">
+                    <div id="paging-section" class="row" style="margin-top: 10px;">
 
                         <!--Page size dropdown-->
-                        <div class="form-group col-md-1">
+                        <div class="form-group col-md-1" th:if="${users.totalPages != 0}">
                             <select class="form-control pagination" id="pageSizeSelect">
                                 <option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}"
                                         th:selected="${pageSize} == ${selectedPageSize}"></option>
@@ -127,26 +144,63 @@
 
                         <!--Pages-->
                         <nav aria-label="Page navigation example" class="form-group col-md-11 pagination-centered">
-                            <ul class="pagination">
+                            <ul class="pagination" th:if="${users.totalPages != 0}">
                                 <li th:class="${users.number == 0} ? 'page-item disabled'" class="page-item">
-                                    <a class="page-link" th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users(usersProperty=${usersProperty},
+                                       propertyValue=${propertyValue}, pageSize=${selectedPageSize}, page=1)}"
+                                       th:if="${not #strings.isEmpty(propertyValue)}"
+                                    >&laquo;</a>
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users(pageSize=${selectedPageSize}, page=1)}"
+                                       th:if="${#strings.isEmpty(propertyValue)  }"
+                                    >&laquo;</a>
                                 </li>
                                 <li th:class="${users.number == 0} ? 'page-item disabled'" class="page-item">
                                     <a class="page-link"
-                                       th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=${users.number})}">&larr;</a>
+                                       th:href="@{/adminPage/users(usersProperty=${usersProperty}, propertyValue=${propertyValue}, pageSize=${selectedPageSize}, page=${users.number})}"
+                                       th:if="${not #strings.isEmpty(propertyValue) }"
+                                    >&larr;</a>
+
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users(pageSize=${selectedPageSize}, page=${users.number})}"
+                                       th:if="${#strings.isEmpty(propertyValue)}"
+                                    >&larr;</a>
+
                                 </li>
                                 <li th:class="${users.number == (page - 1)} ? 'active pointer-disabled'" class="page-item"
                                     th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                                    <a class="page-link" th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=${page})}"
-                                       th:text="${page}"></a>
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users(usersProperty=${usersProperty},
+                                       propertyValue=${propertyValue}, pageSize=${selectedPageSize}, page=${page})}"
+                                       th:text="${page}"
+                                       th:if="${not #strings.isEmpty(propertyValue)}"
+                                    ></a>
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users(pageSize=${selectedPageSize}, page=${page})}"
+                                       th:text="${page}"
+                                       th:if="${#strings.isEmpty(propertyValue)}"
+                                    ></a>
                                 </li>
                                 <li th:class="${users.number + 1 == users.totalPages} ? 'page-item disabled'" class="page-item">
                                     <a class="page-link"
-                                       th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=${users.number + 2})}">&rarr;</a>
+                                       th:href="@{/adminPage/users(usersProperty=${usersProperty}, propertyValue=${propertyValue}, pageSize=${selectedPageSize}, page=${users.number + 2})}"
+                                       th:if="${not #strings.isEmpty(propertyValue)}"
+                                    >&rarr;</a>
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users(pageSize=${selectedPageSize}, page=${users.number + 2})}"
+                                       th:if="${#strings.isEmpty(propertyValue)}"
+                                    >&rarr;</a>
                                 </li>
                                 <li th:class="${users.number + 1 == users.totalPages} ? 'page-item disabled'" class="page-item">
                                     <a class="page-link"
-                                       th:href="@{/adminPage/users/(pageSize=${selectedPageSize}, page=${users.totalPages})}">&raquo;</a>
+                                       th:href="@{/adminPage/users(usersProperty=${usersProperty}, propertyValue=${propertyValue}, pageSize=${selectedPageSize}, page=${users.totalPages})}"
+                                       th:if="${not #strings.isEmpty(propertyValue) }"
+                                    >&raquo;</a>
+                                    <a class="page-link"
+                                       th:href="@{/adminPage/users(pageSize=${selectedPageSize}, page=${users.totalPages})}"
+                                       th:if="${#strings.isEmpty(propertyValue)}"
+                                    >&raquo;</a>
                                 </li>
                             </ul>
                         </nav>

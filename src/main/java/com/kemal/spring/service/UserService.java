@@ -50,7 +50,7 @@ public class UserService {
 
     @Cacheable (value = "cache.userByEmail", key = "#email", unless="#result == null")
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailEagerly(email);
     }
 
     @Cacheable (value = "cache.userById", key = "#id", unless="#result == null")
@@ -83,23 +83,23 @@ public class UserService {
 
     //region Find by containing
     @Cacheable (value = "cache.byNameContaining")
-    public List<User> findByNameContaining (String name){
-        return userRepository.findByNameContaining(name);
+    public Page<User> findByNameContaining (String name, Pageable pageable){
+        return userRepository.findByNameContainingOrderByIdAsc(name, pageable);
     }
 
     @Cacheable (value = "cache.bySurnameContaining")
-    public List<User> findBySurnameContaining(String surname) {
-        return userRepository.findBySurnameContaining(surname);
+    public Page<User> findBySurnameContaining(String surname, Pageable pageable) {
+        return userRepository.findBySurnameContainingOrderByIdAsc(surname, pageable);
     }
 
     @Cacheable (value = "cache.byUsernameContaining")
-    public List<User> findByUsernameContaining(String username) {
-        return userRepository.findByUsernameContaining(username);
+    public Page<User> findByUsernameContaining(String username, Pageable pageable) {
+        return userRepository.findByUsernameContainingOrderByIdAsc(username, pageable);
     }
 
     @Cacheable (value = "cache.byEmailContaining")
-    public List<User> findByEmailContaining(String email) {
-        return userRepository.findByEmailContaining(email);
+    public Page<User> findByEmailContaining(String email, Pageable pageable) {
+        return userRepository.findByEmailContainingOrderByIdAsc(email, pageable);
     }
     //endregion
 

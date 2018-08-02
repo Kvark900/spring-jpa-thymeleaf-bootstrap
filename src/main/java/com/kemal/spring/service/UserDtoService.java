@@ -5,6 +5,7 @@ import com.kemal.spring.web.dto.UserDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,9 @@ public class UserDtoService {
     }
 
     public UserDto findById(Long id){
-        return modelMapper.map(userService.findById(id), UserDto.class);
+        if (userService.findById(id).isPresent())
+            return modelMapper.map(userService.findById(id).get(), UserDto.class);
+        return null;
     }
 
     public UserDto findByEmail(String email){
@@ -56,5 +59,46 @@ public class UserDtoService {
 
     public UserDto findByUsername(String username){
         return modelMapper.map(userService.findByUsername(username), UserDto.class);
+    }
+
+    public Page<UserDto> findByNameContaining(String name, PageRequest pageRequest) {
+        Page<User> users = userService.findByNameContaining(name, pageRequest);
+        List <UserDto> userDtos = new ArrayList<>();
+
+        for (User user: users) {
+            userDtos.add(modelMapper.map(user, UserDto.class));
+        }
+        return new PageImpl<>(userDtos, pageRequest, users.getTotalElements());
+
+    }
+
+    public Page<UserDto> findBySurnameContaining(String surname, PageRequest pageRequest) {
+        Page<User> users = userService.findBySurnameContaining(surname, pageRequest);
+        List <UserDto> userDtos = new ArrayList<>();
+
+        for (User user: users) {
+            userDtos.add(modelMapper.map(user, UserDto.class));
+        }
+        return new PageImpl<>(userDtos, pageRequest, users.getTotalElements());
+    }
+
+    public Page<UserDto> findByUsernameContaining(String username, PageRequest pageRequest) {
+        Page<User> users = userService.findByUsernameContaining(username, pageRequest);
+        List <UserDto> userDtos = new ArrayList<>();
+
+        for (User user: users) {
+            userDtos.add(modelMapper.map(user, UserDto.class));
+        }
+        return new PageImpl<>(userDtos, pageRequest, users.getTotalElements());
+    }
+
+    public Page<UserDto> findByEmailContaining(String email, PageRequest pageRequest) {
+        Page<User> users = userService.findByEmailContaining(email, pageRequest);
+        List <UserDto> userDtos = new ArrayList<>();
+
+        for (User user: users) {
+            userDtos.add(modelMapper.map(user, UserDto.class));
+        }
+        return new PageImpl<>(userDtos, pageRequest, users.getTotalElements());
     }
 }
