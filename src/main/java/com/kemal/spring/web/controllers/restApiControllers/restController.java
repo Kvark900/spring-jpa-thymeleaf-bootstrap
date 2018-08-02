@@ -4,9 +4,11 @@ import com.kemal.spring.domain.User;
 import com.kemal.spring.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +35,9 @@ public class restController {
         else return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
-    @GetMapping("/adminPage/json-users/search")
+    //region Unused
+    //================================================================================================================
+    /*@GetMapping("/adminPage/json-users/search")
     public ResponseEntity<List<User>> getUsersByProperty(@RequestParam(value = "usersProperty") String usersProperty,
                                                          @RequestParam(value = "propertyValue") String propertyValue){
         List<User> users = new ArrayList();
@@ -66,7 +70,9 @@ public class restController {
         else if (users.isEmpty()) return new ResponseEntity<>(users, HttpStatus.NOT_FOUND);
 
         else return new ResponseEntity<>(users, HttpStatus.OK);
-    }
+    }*/
+    //================================================================================================================
+    //endregion
 
 
     @DeleteMapping("/adminPage/json-users/delete/{id}")
