@@ -110,14 +110,14 @@ public class UserService {
     @Transactional
     @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById",
                     "cache.allUsersEagerly", "cache.byNameContaining", "cache.bySurnameContaining",
-                    "cache.byUsernameContaining ", "cache.byEmailContaining "}, allEntries = true)
+                    "cache.byUsernameContaining", "cache.byEmailContaining"}, allEntries = true)
     public void save(User user) {
         userRepository.save(user);
     }
 
     @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById",
             "cache.allUsersEagerly", "cache.byNameContaining", "cache.bySurnameContaining",
-            "cache.byUsernameContaining ", "cache.byEmailContaining "}, allEntries = true)
+            "cache.byUsernameContaining", "cache.byEmailContaining"}, allEntries = true)
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }

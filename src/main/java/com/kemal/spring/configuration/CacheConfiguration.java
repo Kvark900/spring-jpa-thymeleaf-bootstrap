@@ -17,6 +17,6 @@ public class CacheConfiguration {
                 "cache.allUsersPageable", "cache.allUsers",
                 "cache.allUsersEagerly", "cache.userByEmail", "cache.userById", "cache.allRoles",
                 "cache.roleByName", "cache.roleById", "cache.byNameContaining", "cache.bySurnameContaining",
-                "cache.byUsernameContaining ", "cache.byEmailContaining ");
+                "cache.byUsernameContaining", "cache.byEmailContaining");
     }
 }
