@@ -110,11 +110,9 @@
                             </div>
 
                             <!--Number format exception message-->
-                            <div th:if="${numberFormatException}" class="alert alert-danger alert-dismissible fade show"
-                                 role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button> Please enter valid number
+                            <div th:if="${numberFormatException}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                Please enter a valid number
                             </div>
 
                             <!--No matches found message-->
@@ -136,6 +134,10 @@
 
                         <!--Page size dropdown-->
                         <div class="form-group col-md-1" th:if="${users.totalPages != 0}">
+
+                            <!--Get pageSizesToShow-->
+                            <div hidden id="pageSizesToShow" th:attr="data-pageSizesToShow = ${pager.pageSizesToShowInJSON}"></div>
+
                             <select class="form-control pagination" id="pageSizeSelect">
                                 <option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}"
                                         th:selected="${pageSize} == ${selectedPageSize}"></option>

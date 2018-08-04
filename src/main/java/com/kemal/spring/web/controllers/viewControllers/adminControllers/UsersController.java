@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by Keno&Kemo on 20.11.2017..
@@ -81,7 +84,7 @@ public class UsersController {
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                         userDtoPage = userDtoService.findAllPageable(pageRequest);
-                        Pager pager = new Pager(userDtoPage.getTotalPages(), userDtoPage.getNumber(), InitialPagingSizes.getButtonsToShow());
+                        Pager pager = new Pager(userDtoPage.getTotalPages(), userDtoPage.getNumber(), InitialPagingSizes.getButtonsToShow(), userDtoPage.getTotalElements());
                         model.addAttribute("numberFormatException", "Please enter valid number");
                         model.addAttribute("users", userDtoPage);
                         model.addAttribute("pager", pager);
@@ -114,7 +117,7 @@ public class UsersController {
         //==============================================================================================================
         //endregion
 
-        Pager pager = new Pager(userDtoPage.getTotalPages(), userDtoPage.getNumber(), InitialPagingSizes.getButtonsToShow());
+        Pager pager = new Pager(userDtoPage.getTotalPages(), userDtoPage.getNumber(), InitialPagingSizes.getButtonsToShow(), userDtoPage.getTotalElements());
         model.addAttribute("pager", pager);
         model.addAttribute("users", userDtoPage);
         model.addAttribute("users", userDtoPage);

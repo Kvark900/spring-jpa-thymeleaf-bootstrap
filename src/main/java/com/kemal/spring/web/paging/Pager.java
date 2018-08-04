@@ -1,5 +1,13 @@
 package com.kemal.spring.web.paging;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Pager {
 
     private int buttonsToShow = 5;
@@ -8,9 +16,12 @@ public class Pager {
 
     private int endPage;
 
-    public Pager(int totalPages, int currentPage, int buttonsToShow) {
+    private List<Integer> pageSizesToShow = new ArrayList<>();
+
+    public Pager(int totalPages, int currentPage, int buttonsToShow, long totalSize) {
 
         setButtonsToShow(buttonsToShow);
+        setPageSizesToShow(totalSize);
 
         int halfPagesToShow = getButtonsToShow() / 2;
 
@@ -70,4 +81,22 @@ public class Pager {
         return "Pager [startPage=" + startPage + ", endPage=" + endPage + "]";
     }
 
+    public List<Integer> getPageSizesToShow() {
+        return pageSizesToShow;
+    }
+
+    public String getPageSizesToShowInJSON() {
+        Gson gson = new GsonBuilder().create();
+        return gson.toJson(pageSizesToShow);
+    }
+
+    public void setPageSizesToShow(List<Integer> pageSizesToShow) {
+        this.pageSizesToShow = pageSizesToShow;
+    }
+
+    public void setPageSizesToShow(long totalSize) {
+        this.pageSizesToShow = Arrays.stream(InitialPagingSizes.getPageSizes()).boxed()
+                .filter(pageSize -> totalSize > pageSize)
+                .collect(Collectors.toList());
+    }
 }

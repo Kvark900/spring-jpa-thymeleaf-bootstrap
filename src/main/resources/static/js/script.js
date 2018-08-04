@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    checkPageSizes();
     changePageAndSize();
     searchUsersOnEnterKeyPressed();
     changeActiveLinks();
@@ -78,8 +79,17 @@ function keepSearchingParametersAfterPageRefresh(){
         return localStorage.getItem(v);
     }
 }
-//=================================================================================================
-//endregion
+
+//If the page size option is greater than total number of elements (users) - disable it
+function checkPageSizes() {
+    let pageSizesToShow = $('#pageSizesToShow').data('pagesizestoshow');
+
+    $("#pageSizeSelect option").each(function(i, option) {
+        if($.inArray(parseInt(option.value), pageSizesToShow) ===-1){
+            option.disabled = true;
+        }
+    });
+}
 
 function sortTable(n) {
     let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
