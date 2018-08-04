@@ -19,13 +19,12 @@ if(menuItem.includes("roles")){
 }
 
 function changePageAndSize() {
-
     $('#pageSizeSelect').change(function(evt) {
         let selectedProperty = $("#search-user-dropdown option:selected").text();
         let value = $("#searchUserBar").val();
 
-        if (value !== "" && value != null) {
-            window.location.replace("/adminPage/users?usersProperty=" + selectedProperty + "&propertyValue=" + value + "pageSize=" + this.value + "&page=1");
+        if (value != null && value !== "") {
+            window.location.replace("/adminPage/users?usersProperty=" + selectedProperty + "&propertyValue=" + value + "&pageSize=" + this.value + "&page=1");
         }
 
         else{
