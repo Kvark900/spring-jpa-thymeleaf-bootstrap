@@ -1,21 +1,24 @@
 $(document).ready(function() {
     changePageAndSize();
+    searchUsersOnEnterKeyPressed();
+    changeActiveLinks();
+    keepSearchingParametersAfterPageRefresh();
 });
 
-let qs = decodeURIComponent(location);
-let menuItem = qs.replace("http://localhost:8080", "");
+function changeActiveLinks() {
+    let qs = decodeURIComponent(location);
+    let menuItem = qs.replace("http://localhost:8080", "");
+    $("a[href='" + menuItem + "']").parent("li").addClass("active");
 
-//making active links
-$("a[href='" + menuItem + "']").parent("li").addClass("active");
-
-if(menuItem.includes("adminPage")){
-    $("a[href='/adminPage']").parent("li").addClass("active");
-}
-if(menuItem.includes("users")){
-    $("a[href='/adminPage/users']").parent("li").addClass("active");
-}
-if(menuItem.includes("roles")){
-    $("a[href='/adminPage/roles']").parent("li").addClass("active");
+    if(menuItem.includes("adminPage")){
+        $("a[href='/adminPage']").parent("li").addClass("active");
+    }
+    if(menuItem.includes("users")){
+        $("a[href='/adminPage/users']").parent("li").addClass("active");
+    }
+    if(menuItem.includes("roles")){
+        $("a[href='/adminPage/roles']").parent("li").addClass("active");
+    }
 }
 
 function changePageAndSize() {
@@ -33,40 +36,47 @@ function changePageAndSize() {
     });
 }
 
-//region Keep searching parameters after page refresh
-//=================================================================================================
-$("#searchUserBar").val(getSavedValueForTextBox("searchUserBar"));
-$("#search-user-dropdown").val(getSavedValueForDropDown("search-user-dropdown"));
-
-
-function saveValue(e){
-    let id = e.id;  // get the sender's id to save it .
-    let val = e.value; // get the value.
-    localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override .
+function searchUsersOnEnterKeyPressed(){
+    $("#searchUserBar").keypress(function (event) {
+        if (event.which === 13) {
+            searchUserByProperty();
+        }
+    });
 }
 
-function getSavedValueForTextBox  (v){
-    let usersPropertyParam = new URL(location.href).searchParams.get('usersProperty');
-    if (localStorage.getItem(v) === null) {
-        return "";// You can change this to your defualt value.
-    }
-    else if(usersPropertyParam === null){
-        return "";
+function keepSearchingParametersAfterPageRefresh(){
+    $("#searchUserBar").val(getSavedValueForTextBox("searchUserBar"));
+    $("#search-user-dropdown").val(getSavedValueForDropDown("search-user-dropdown"));
+
+    function saveValue(e){
+        let id = e.id;  // get the sender's id to save it .
+        let val = e.value; // get the value.
+        localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override .
     }
 
-    return localStorage.getItem(v);
-}
+    function getSavedValueForTextBox  (v){
+        let usersPropertyParam = new URL(location.href).searchParams.get('usersProperty');
+        if (localStorage.getItem(v) === null) {
+            return "";// You can change this to your defualt value.
+        }
+        else if(usersPropertyParam === null){
+            return "";
+        }
 
-function getSavedValueForDropDown(v){
-    let propertyValue = new URL(location.href).searchParams.get('propertyValue');
-    if (localStorage.getItem(v) === null) {
-        return "ID";// You can change this to your defualt value.
-    }
-    else if(propertyValue === null){
-        return "ID";
+        return localStorage.getItem(v);
     }
 
-    return localStorage.getItem(v);
+    function getSavedValueForDropDown(v){
+        let propertyValue = new URL(location.href).searchParams.get('propertyValue');
+        if (localStorage.getItem(v) === null) {
+            return "ID";// You can change this to your defualt value.
+        }
+        else if(propertyValue === null){
+            return "ID";
+        }
+
+        return localStorage.getItem(v);
+    }
 }
 //=================================================================================================
 //endregion
@@ -145,9 +155,3 @@ function sortTable(n) {
     }
 }
 
-//Search users on enter key pressed too
-$("#searchUserBar").keypress(function (event) {
-    if (event.which === 13) {
-        searchUserByProperty();
-    }
-});
