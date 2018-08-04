@@ -3,7 +3,7 @@ $(document).ready(function() {
     changePageAndSize();
     searchUsersOnEnterKeyPressed();
     changeActiveLinks();
-    keepSearchingParametersAfterPageRefresh();
+    keepSearchParametersAfterPageRefresh();
 });
 
 function changeActiveLinks() {
@@ -45,20 +45,20 @@ function searchUsersOnEnterKeyPressed(){
     });
 }
 
-function keepSearchingParametersAfterPageRefresh(){
+function saveSearchParameters(e){
+    let id = e.id;
+    let val = e.value;
+    localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override .
+}
+
+function keepSearchParametersAfterPageRefresh(){
     $("#searchUserBar").val(getSavedValueForTextBox("searchUserBar"));
     $("#search-user-dropdown").val(getSavedValueForDropDown("search-user-dropdown"));
-
-    function saveValue(e){
-        let id = e.id;  // get the sender's id to save it .
-        let val = e.value; // get the value.
-        localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override .
-    }
 
     function getSavedValueForTextBox  (v){
         let usersPropertyParam = new URL(location.href).searchParams.get('usersProperty');
         if (localStorage.getItem(v) === null) {
-            return "";// You can change this to your defualt value.
+            return "";
         }
         else if(usersPropertyParam === null){
             return "";
@@ -70,7 +70,7 @@ function keepSearchingParametersAfterPageRefresh(){
     function getSavedValueForDropDown(v){
         let propertyValue = new URL(location.href).searchParams.get('propertyValue');
         if (localStorage.getItem(v) === null) {
-            return "ID";// You can change this to your defualt value.
+            return "ID";
         }
         else if(propertyValue === null){
             return "ID";

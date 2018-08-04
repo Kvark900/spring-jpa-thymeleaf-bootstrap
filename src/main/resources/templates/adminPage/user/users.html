@@ -21,14 +21,14 @@
                             <!--Search user-->
                             <div class="row col-lg-12 d-flex flex-nowrap pb-2">
                                 <div class="input-group">
-                                    <select class="custom-select" id="search-user-dropdown" onchange="saveValue(this);">
+                                    <select class="custom-select" id="search-user-dropdown" onchange="saveSearchParameters(this);">
                                         <option value="ID">ID</option>
                                         <option value="Name">Name</option>
                                         <option value="Surname">Surname</option>
                                         <option value="Email">Email</option>
                                     </select>
                                     <input type="text" id="searchUserBar"
-                                           onkeyup='saveValue(this);'
+                                           onkeyup='saveSearchParameters(this);'
                                            placeholder="Search for users.." class="form-control"
                                            aria-label="Text input with dropdown button">
                                 </div>
