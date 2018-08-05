@@ -120,7 +120,6 @@ public class UsersController {
         Pager pager = new Pager(userDtoPage.getTotalPages(), userDtoPage.getNumber(), InitialPagingSizes.getButtonsToShow(), userDtoPage.getTotalElements());
         model.addAttribute("pager", pager);
         model.addAttribute("users", userDtoPage);
-        model.addAttribute("users", userDtoPage);
         model.addAttribute("selectedPageSize", evalPageSize);
         model.addAttribute("pageSizes", InitialPagingSizes.getPageSizes());
         return "adminPage/user/users";
@@ -143,10 +142,8 @@ public class UsersController {
                              @ModelAttribute("oldUser") @Valid final UserUpdateDto userUpdateDto,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        Optional<User> persistedUser = userService.findById(id);
         String formWithErrors = "adminPage/user/editUser";
-
-        List<User> allUsers = userService.findAll();
+        Optional<User> persistedUser = userService.findById(id);
         List<Role> allRoles = roleService.findAll();
 
         User emailAlreadyExists = userService.findByEmailAndIdNot(userUpdateDto.getEmail(), id);
