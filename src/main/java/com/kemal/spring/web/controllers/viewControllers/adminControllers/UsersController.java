@@ -2,14 +2,13 @@ package com.kemal.spring.web.controllers.viewControllers.adminControllers;
 
 import com.kemal.spring.domain.Role;
 import com.kemal.spring.domain.User;
-import com.kemal.spring.service.RoleService;
-import com.kemal.spring.service.UserDtoService;
-import com.kemal.spring.service.UserService;
-import com.kemal.spring.service.UserUpdateDtoService;
+import com.kemal.spring.service.*;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
 import com.kemal.spring.web.paging.InitialPagingSizes;
 import com.kemal.spring.web.paging.Pager;
+import com.kemal.spring.web.searching.UserSearchParameters;
+import com.kemal.spring.web.searching.UserSearchResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -52,74 +50,54 @@ public class UsersController {
      * Get all users or search users if there are searching parameters
      */
     @GetMapping("/users")
-    public String getUsers (Model model, @RequestParam("usersProperty") Optional<String> usersProperty,
-                           @RequestParam("propertyValue") Optional<String> propertyValue,
-                           @RequestParam("pageSize") Optional<Integer> pageSize,
-                           @RequestParam("page") Optional<Integer> page) {
-
+    public String getUsers (Model model, UserSearchParameters userSearchParameters) {
         // Evaluate page size. If requeste parameter is null, return initial page size
-        int evalPageSize = pageSize.orElse(InitialPagingSizes.getInitialPageSize());
+        int evalPageSize = userSearchParameters.getPageSize().orElse(InitialPagingSizes.getInitialPageSize());
 
         // Evaluate page. If requested parameter is null or less than 0 (to prevent exception), return initial size.
         // Otherwise, return value of param. decreased by 1.
-        int evalPage = (page.orElse(0) < 1) ? InitialPagingSizes.getInitialPage() : page.get() - 1;
+        int evalPage = (userSearchParameters.getPage().orElse(0) < 1) ? InitialPagingSizes.getInitialPage() : userSearchParameters.getPage().get() - 1;
 
         PageRequest pageRequest = PageRequest.of(evalPage, evalPageSize, new Sort(Sort.Direction.ASC, "id"));
         Page<UserDto> userDtoPage = new PageImpl<>(new ArrayList<>(), pageRequest, 0);
+        UserSearchResult userSearchResult = new UserSearchResult(userDtoPage, false);
 
         //Empty search parameters
-        if (!propertyValue.isPresent() || propertyValue.get().isEmpty())
-            userDtoPage = userDtoService.findAllPageable(pageRequest);
+        if (!userSearchParameters.getPropertyValue().isPresent() || userSearchParameters.getPropertyValue().get().isEmpty())
+            userSearchResult.setUserDtoPage(userDtoService.findAllPageable(pageRequest));
 
         // region Searching queries
         //==============================================================================================================
         else {
-            switch (usersProperty.get()) {
-                case "ID":
-                    try {
-                        List<UserDto> users = new ArrayList();
-                        users.add(userDtoService.findById(Long.parseLong(propertyValue.get())));
-                        users.removeIf(Objects::isNull);
-                        userDtoPage = new PageImpl<>(users, pageRequest, users.size());
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                        userDtoPage = userDtoService.findAllPageable(pageRequest);
-                        Pager pager = new Pager(userDtoPage.getTotalPages(), userDtoPage.getNumber(), InitialPagingSizes.getButtonsToShow(), userDtoPage.getTotalElements());
-                        model.addAttribute("numberFormatException", "Please enter valid number");
-                        model.addAttribute("users", userDtoPage);
-                        model.addAttribute("pager", pager);
-                        return "adminPage/user/users";
-                    }
-                    break;
-                case "Name":
-                    userDtoPage = userDtoService.findByNameContaining(propertyValue.get(), pageRequest);
-                    break;
-                case "Surname":
-                    userDtoPage = userDtoService.findBySurnameContaining(propertyValue.get(), pageRequest);
-                    break;
-                case "Username":
-                    userDtoPage = userDtoService.findByUsernameContaining(propertyValue.get(), pageRequest);
-                    break;
-                case "Email":
-                    userDtoPage = userDtoService.findByEmailContaining(propertyValue.get(), pageRequest);
-                    break;
+            userSearchResult = userDtoService.searchUsersByProperty(userSearchParameters.getUsersProperty().get(),
+                                userSearchParameters.getPropertyValue().get(), userDtoPage, pageRequest);
+
+            if(userSearchResult.isHasNumberFormatException()){
+                Pager pager = new Pager(userSearchResult.getUserDtoPage().getTotalPages(), userSearchResult.getUserDtoPage().getNumber(),
+                                        InitialPagingSizes.getButtonsToShow(), userSearchResult.getUserDtoPage().getTotalElements());
+                model.addAttribute("numberFormatException", "Please enter valid number");
+                model.addAttribute("users", userSearchResult.getUserDtoPage());
+                model.addAttribute("pager", pager);
+                return "adminPage/user/users";
             }
 
-            if (userDtoPage.getTotalElements() == 0) {
-                userDtoPage = userDtoService.findAllPageable(pageRequest);
+            if (userSearchResult.getUserDtoPage().getTotalElements() == 0) {
+                userSearchResult.setUserDtoPage(userDtoService.findAllPageable(pageRequest));
                 model.addAttribute("noMatches", true);
-                model.addAttribute("users", userDtoPage);
+                model.addAttribute("users", userSearchResult.getUserDtoPage());
             }
 
-            model.addAttribute("usersProperty", usersProperty.get());
-            model.addAttribute("propertyValue", propertyValue.get());
+            model.addAttribute("usersProperty", userSearchParameters.getUsersProperty().get());
+            model.addAttribute("propertyValue", userSearchParameters.getPropertyValue().get());
         }
         //==============================================================================================================
         //endregion
 
-        Pager pager = new Pager(userDtoPage.getTotalPages(), userDtoPage.getNumber(), InitialPagingSizes.getButtonsToShow(), userDtoPage.getTotalElements());
+        Pager pager = new Pager(userSearchResult.getUserDtoPage().getTotalPages(), userSearchResult.getUserDtoPage()
+                .getNumber(), InitialPagingSizes.getButtonsToShow(), userSearchResult.getUserDtoPage()
+                .getTotalElements());
         model.addAttribute("pager", pager);
-        model.addAttribute("users", userDtoPage);
+        model.addAttribute("users", userSearchResult.getUserDtoPage());
         model.addAttribute("selectedPageSize", evalPageSize);
         model.addAttribute("pageSizes", InitialPagingSizes.getPageSizes());
         return "adminPage/user/users";
@@ -138,8 +116,7 @@ public class UsersController {
     }
 
     @PostMapping("/users/{id}")
-    public String updateUser(Model model, @PathVariable Long id,
-                             @ModelAttribute("oldUser") @Valid final UserUpdateDto userUpdateDto,
+    public String updateUser(Model model, @PathVariable Long id, @ModelAttribute("oldUser") @Valid final UserUpdateDto userUpdateDto,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         String formWithErrors = "adminPage/user/editUser";

@@ -2,6 +2,7 @@ package com.kemal.spring.service;
 
 import com.kemal.spring.domain.User;
 import com.kemal.spring.web.dto.UserDto;
+import com.kemal.spring.web.searching.UserSearchResult;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Keno&Kemo on 04.12.2017..
@@ -100,5 +102,37 @@ public class UserDtoService {
             userDtos.add(modelMapper.map(user, UserDto.class));
         }
         return new PageImpl<>(userDtos, pageRequest, users.getTotalElements());
+    }
+
+    public UserSearchResult searchUsersByProperty(String usersProperty, String propertyValue,
+                                                  Page<UserDto> userDtoPage, PageRequest pageRequest) {
+        switch (usersProperty) {
+            case "ID":
+                try {
+                    List<UserDto> users = new ArrayList();
+                    users.add(findById(Long.parseLong(propertyValue)));
+                    users.removeIf(Objects::isNull);
+                    userDtoPage = new PageImpl<>(users, pageRequest, users.size());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    userDtoPage = findAllPageable(pageRequest);
+                    return new UserSearchResult(userDtoPage, true);
+                }
+                break;
+            case "Name":
+                userDtoPage = findByNameContaining(propertyValue, pageRequest);
+                break;
+            case "Surname":
+                userDtoPage = findBySurnameContaining(propertyValue, pageRequest);
+                break;
+            case "Username":
+                userDtoPage = findByUsernameContaining(propertyValue, pageRequest);
+                break;
+            case "Email":
+                userDtoPage = findByEmailContaining(propertyValue, pageRequest);
+                break;
+        }
+
+        return new UserSearchResult(userDtoPage, false);
     }
 }
