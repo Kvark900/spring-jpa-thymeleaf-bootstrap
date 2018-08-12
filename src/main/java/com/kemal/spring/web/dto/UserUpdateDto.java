@@ -2,8 +2,7 @@ package com.kemal.spring.web.dto;
 
 import com.kemal.spring.customAnnotations.ValidEmail;
 import com.kemal.spring.domain.Role;
-import org.hibernate.validator.constraints.NotBlank;
-
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
