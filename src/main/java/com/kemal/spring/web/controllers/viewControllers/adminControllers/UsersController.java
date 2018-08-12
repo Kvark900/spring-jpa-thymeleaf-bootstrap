@@ -3,12 +3,13 @@ package com.kemal.spring.web.controllers.viewControllers.adminControllers;
 import com.kemal.spring.domain.Role;
 import com.kemal.spring.domain.User;
 import com.kemal.spring.service.*;
+import com.kemal.spring.service.searching.UserFinder;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
 import com.kemal.spring.web.paging.InitialPagingSizes;
 import com.kemal.spring.web.paging.Pager;
-import com.kemal.spring.web.searching.UserSearchParameters;
-import com.kemal.spring.web.searching.UserSearchResult;
+import com.kemal.spring.service.searching.UserSearchParameters;
+import com.kemal.spring.service.searching.UserSearchResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -36,21 +38,23 @@ public class UsersController {
     private RoleService roleService;
     private UserUpdateDtoService userUpdateDtoService;
     private UserDtoService userDtoService;
+    private UserFinder userFinder;
 
     public UsersController(UserService userService, RoleService roleService,
                            UserUpdateDtoService userUpdateDtoService,
-                           UserDtoService userDtoService) {
+                           UserDtoService userDtoService, UserFinder userFinder) {
         this.userService = userService;
         this.roleService = roleService;
         this.userUpdateDtoService = userUpdateDtoService;
         this.userDtoService = userDtoService;
+        this.userFinder = userFinder;
     }
 
     /*
      * Get all users or search users if there are searching parameters
      */
     @GetMapping("/users")
-    public String getUsers (Model model, UserSearchParameters userSearchParameters) {
+    public ModelAndView getUsers (ModelAndView modelAndView, UserSearchParameters userSearchParameters) {
         // Evaluate page size. If requeste parameter is null, return initial page size
         int evalPageSize = userSearchParameters.getPageSize().orElse(InitialPagingSizes.getInitialPageSize());
 
@@ -66,41 +70,31 @@ public class UsersController {
         if (!userSearchParameters.getPropertyValue().isPresent() || userSearchParameters.getPropertyValue().get().isEmpty())
             userSearchResult.setUserDtoPage(userDtoService.findAllPageable(pageRequest));
 
-        // region Searching queries
-        //==============================================================================================================
+        //Search queries
         else {
-            userSearchResult = userDtoService.searchUsersByProperty(userSearchParameters.getUsersProperty().get(),
+            userSearchResult = userFinder.searchUsersByProperty(userSearchParameters.getUsersProperty().get(),
                                 userSearchParameters.getPropertyValue().get(), userDtoPage, pageRequest);
 
             if(userSearchResult.isHasNumberFormatException()){
-                Pager pager = new Pager(userSearchResult.getUserDtoPage().getTotalPages(), userSearchResult.getUserDtoPage().getNumber(),
-                                        InitialPagingSizes.getButtonsToShow(), userSearchResult.getUserDtoPage().getTotalElements());
-                model.addAttribute("numberFormatException", "Please enter valid number");
-                model.addAttribute("users", userSearchResult.getUserDtoPage());
-                model.addAttribute("pager", pager);
-                return "adminPage/user/users";
+               return userFinder.searchResultHasNumberFormatException(modelAndView, userSearchResult);
             }
 
             if (userSearchResult.getUserDtoPage().getTotalElements() == 0) {
-                userSearchResult.setUserDtoPage(userDtoService.findAllPageable(pageRequest));
-                model.addAttribute("noMatches", true);
-                model.addAttribute("users", userSearchResult.getUserDtoPage());
+                modelAndView = userFinder.searchResultIsEmpty(modelAndView, userSearchResult, pageRequest);
             }
 
-            model.addAttribute("usersProperty", userSearchParameters.getUsersProperty().get());
-            model.addAttribute("propertyValue", userSearchParameters.getPropertyValue().get());
+            modelAndView.addObject("usersProperty", userSearchParameters.getUsersProperty().get());
+            modelAndView.addObject("propertyValue", userSearchParameters.getPropertyValue().get());
         }
-        //==============================================================================================================
-        //endregion
 
         Pager pager = new Pager(userSearchResult.getUserDtoPage().getTotalPages(), userSearchResult.getUserDtoPage()
-                .getNumber(), InitialPagingSizes.getButtonsToShow(), userSearchResult.getUserDtoPage()
-                .getTotalElements());
-        model.addAttribute("pager", pager);
-        model.addAttribute("users", userSearchResult.getUserDtoPage());
-        model.addAttribute("selectedPageSize", evalPageSize);
-        model.addAttribute("pageSizes", InitialPagingSizes.getPageSizes());
-        return "adminPage/user/users";
+                .getNumber(), InitialPagingSizes.getButtonsToShow(), userSearchResult.getUserDtoPage().getTotalElements());
+        modelAndView.addObject("pager", pager);
+        modelAndView.addObject("users", userSearchResult.getUserDtoPage());
+        modelAndView.addObject("selectedPageSize", evalPageSize);
+        modelAndView.addObject("pageSizes", InitialPagingSizes.getPageSizes());
+        modelAndView.setViewName("adminPage/user/users");
+        return modelAndView;
     }
 
     @GetMapping("/users/{id}")

@@ -1,4 +1,4 @@
-package com.kemal.spring.web.searching;
+package com.kemal.spring.service.searching;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.kemal.spring.web.searching;
+package com.kemal.spring.service.searching;
 
 import com.kemal.spring.web.dto.UserDto;
 import lombok.AllArgsConstructor;
