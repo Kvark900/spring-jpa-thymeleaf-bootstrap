@@ -2,16 +2,17 @@ package com.kemal.spring.web.controllers.viewControllers.adminControllers;
 
 import com.kemal.spring.domain.Role;
 import com.kemal.spring.domain.User;
-import com.kemal.spring.service.*;
+import com.kemal.spring.service.RoleService;
+import com.kemal.spring.service.UserDtoService;
+import com.kemal.spring.service.UserService;
+import com.kemal.spring.service.UserUpdateDtoService;
 import com.kemal.spring.service.searching.UserFinder;
+import com.kemal.spring.service.searching.UserSearchParameters;
+import com.kemal.spring.service.searching.UserSearchResult;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
 import com.kemal.spring.web.paging.InitialPagingSizes;
 import com.kemal.spring.web.paging.Pager;
-import com.kemal.spring.service.searching.UserSearchParameters;
-import com.kemal.spring.service.searching.UserSearchResult;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,8 +63,7 @@ public class UsersController {
         int evalPage = (userSearchParameters.getPage().orElse(0) < 1) ? InitialPagingSizes.getInitialPage() : userSearchParameters.getPage().get() - 1;
 
         PageRequest pageRequest = PageRequest.of(evalPage, evalPageSize, new Sort(Sort.Direction.ASC, "id"));
-        Page<UserDto> userDtoPage = new PageImpl<>(new ArrayList<>(), pageRequest, 0);
-        UserSearchResult userSearchResult = new UserSearchResult(userDtoPage, false);
+        UserSearchResult userSearchResult = new UserSearchResult();
 
         //Empty search parameters
         if (!userSearchParameters.getPropertyValue().isPresent() || userSearchParameters.getPropertyValue().get().isEmpty())
@@ -72,15 +71,15 @@ public class UsersController {
 
         //Search queries
         else {
-            userSearchResult = userFinder.searchUsersByProperty(userSearchParameters.getUsersProperty().get(),
-                                userSearchParameters.getPropertyValue().get(), userDtoPage, pageRequest);
+            userFinder.setUserSearchParameters(userSearchParameters);
+            userSearchResult = userFinder.searchUsersByProperty(pageRequest);
 
             if(userSearchResult.isHasNumberFormatException()){
-               return userFinder.searchResultHasNumberFormatException(modelAndView, userSearchResult);
+               return userFinder.searchResultHasNumberFormatException(modelAndView);
             }
 
             if (userSearchResult.getUserDtoPage().getTotalElements() == 0) {
-                modelAndView = userFinder.searchResultIsEmpty(modelAndView, userSearchResult, pageRequest);
+                modelAndView = userFinder.searchResultIsEmpty(modelAndView, pageRequest);
             }
 
             modelAndView.addObject("usersProperty", userSearchParameters.getUsersProperty().get());
