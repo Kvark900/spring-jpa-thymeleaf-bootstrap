@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +35,8 @@ public class UserFinder {
         switch (userSearchParameters.getUsersProperty().get()) {
             case "ID":
                 try {
-                    List<UserDto> users = List.of(userDtoService.findById(Long.parseLong(userSearchParameters.getPropertyValue().get())));
+                    List<UserDto> users = new ArrayList<>();
+                    users.add(userDtoService.findById(Long.parseLong(userSearchParameters.getPropertyValue().get())));
                     users.removeIf(Objects::isNull);
                     userDtoPage = new PageImpl<>(users, pageRequest, users.size());
                 } catch (NumberFormatException e) {
