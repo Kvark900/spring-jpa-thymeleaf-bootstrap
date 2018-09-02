@@ -74,13 +74,11 @@ public class UsersController {
             userFinder.setUserSearchParameters(userSearchParameters);
             userSearchResult = userFinder.searchUsersByProperty(pageRequest);
 
-            if(userSearchResult.isHasNumberFormatException()){
-               return userFinder.searchResultHasNumberFormatException(modelAndView);
-            }
+            if (userSearchResult.isHasNumberFormatException())
+                return userFinder.searchResultHasNumberFormatException(modelAndView);
 
-            if (userSearchResult.getUserDtoPage().getTotalElements() == 0) {
+            if (userSearchResult.getUserDtoPage().getTotalElements() == 0)
                 modelAndView = userFinder.searchResultIsEmpty(modelAndView, pageRequest);
-            }
 
             modelAndView.addObject("usersProperty", userSearchParameters.getUsersProperty().get());
             modelAndView.addObject("propertyValue", userSearchParameters.getPropertyValue().get());

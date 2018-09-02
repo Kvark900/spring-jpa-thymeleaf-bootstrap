@@ -9,6 +9,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,12 @@ public class UserService {
     @Cacheable (value = "cache.userById", key = "#id", unless="#result == null")
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
+    }
+
+    public Page<User> findByIdPageable(Long id, Pageable pageRequest){
+        Optional<User> user = userRepository.findById(id);
+        List<User> users = user.isPresent() ? Collections.singletonList(user.get()) : Collections.emptyList();
+        return new PageImpl<>(users, pageRequest, users.size());
     }
 
     public User findByEmailAndIdNot (String email, Long id){

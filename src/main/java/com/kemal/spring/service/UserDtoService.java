@@ -57,6 +57,15 @@ public class UserDtoService {
         return modelMapper.map(userService.findByEmail(email), UserDto.class);
     }
 
+    public Page<UserDto> findByIdPageable(Long id, PageRequest pageRequest) {
+        Page<User> users = userService.findByIdPageable(id, pageRequest);
+        List<UserDto> userDtos = new ArrayList<>();
+        for (User user : users) {
+            userDtos.add(modelMapper.map(user, UserDto.class));
+        }
+        return new PageImpl<>(userDtos, pageRequest, users.getTotalElements());
+    }
+
     public UserDto findByUsername(String username){
         return modelMapper.map(userService.findByUsername(username), UserDto.class);
     }
