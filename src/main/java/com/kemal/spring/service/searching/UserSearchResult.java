@@ -11,5 +11,5 @@ import org.springframework.data.domain.Page;
 @NoArgsConstructor
 public class UserSearchResult {
     private Page<UserDto> userDtoPage;
-    private boolean hasNumberFormatException;
+    private boolean numberFormatException;
 }

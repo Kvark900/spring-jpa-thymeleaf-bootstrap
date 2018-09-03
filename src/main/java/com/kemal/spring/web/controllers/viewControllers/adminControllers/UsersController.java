@@ -8,6 +8,7 @@ import com.kemal.spring.service.UserService;
 import com.kemal.spring.service.UserUpdateDtoService;
 import com.kemal.spring.service.searching.UserFinder;
 import com.kemal.spring.service.searching.UserSearchParameters;
+import com.kemal.spring.service.searching.UserSearchErrorResponse;
 import com.kemal.spring.service.searching.UserSearchResult;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
@@ -39,15 +40,18 @@ public class UsersController {
     private UserUpdateDtoService userUpdateDtoService;
     private UserDtoService userDtoService;
     private UserFinder userFinder;
+    private UserSearchErrorResponse userSearchErrorResponse;
 
     public UsersController(UserService userService, RoleService roleService,
                            UserUpdateDtoService userUpdateDtoService,
-                           UserDtoService userDtoService, UserFinder userFinder) {
+                           UserDtoService userDtoService, UserFinder userFinder, UserSearchErrorResponse
+                                   userSearchErrorResponse) {
         this.userService = userService;
         this.roleService = roleService;
         this.userUpdateDtoService = userUpdateDtoService;
         this.userDtoService = userDtoService;
         this.userFinder = userFinder;
+        this.userSearchErrorResponse = userSearchErrorResponse;
     }
 
     /*
@@ -71,15 +75,15 @@ public class UsersController {
 
         //Search queries
         else {
-            userFinder.setUserSearchParameters(userSearchParameters);
-            userSearchResult = userFinder.searchUsersByProperty(pageRequest);
+            userSearchResult = userFinder.searchUsersByProperty(pageRequest, userSearchParameters);
 
-            if (userSearchResult.isHasNumberFormatException())
-                return userFinder.searchResultHasNumberFormatException(modelAndView);
+            if (userSearchResult.isNumberFormatException())
+                return userSearchErrorResponse.respondToNumberFormatException(userSearchResult, modelAndView);
 
-            if (userSearchResult.getUserDtoPage().getTotalElements() == 0)
-                modelAndView = userFinder.searchResultIsEmpty(modelAndView, pageRequest);
-
+            if (userSearchResult.getUserDtoPage().getTotalElements() == 0){
+                modelAndView = userSearchErrorResponse.respondToEmptySearchResult(modelAndView, pageRequest);
+                userSearchResult.setUserDtoPage(userDtoService.findAllPageable(pageRequest));
+            }
             modelAndView.addObject("usersProperty", userSearchParameters.getUsersProperty().get());
             modelAndView.addObject("propertyValue", userSearchParameters.getPropertyValue().get());
         }
