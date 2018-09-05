@@ -18,7 +18,7 @@ public class UserSearchErrorResponse {
 
     public ModelAndView respondToNumberFormatException(UserSearchResult userSearchResult, ModelAndView modelAndView) {
         Pager pager = new Pager(userSearchResult.getUserDtoPage().getTotalPages(),
-                userSearchResult.getUserDtoPage().getNumber(), InitialPagingSizes.getButtonsToShow(),
+                userSearchResult.getUserDtoPage().getNumber(), InitialPagingSizes.BUTTONS_TO_SHOW,
                 userSearchResult.getUserDtoPage().getTotalElements());
 
         modelAndView.addObject("numberFormatException", true);

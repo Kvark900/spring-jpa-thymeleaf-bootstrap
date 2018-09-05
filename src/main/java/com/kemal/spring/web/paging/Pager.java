@@ -95,7 +95,7 @@ public class Pager {
     }
 
     public void setPageSizesToShow(long totalSize) {
-        this.pageSizesToShow = Arrays.stream(InitialPagingSizes.getPageSizes()).boxed()
+        this.pageSizesToShow = Arrays.stream(InitialPagingSizes.PAGE_SIZES).boxed()
                 .filter(pageSize -> totalSize > pageSize)
                 .collect(Collectors.toList());
     }

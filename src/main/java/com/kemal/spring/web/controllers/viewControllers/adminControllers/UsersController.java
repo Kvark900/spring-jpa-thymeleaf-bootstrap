@@ -60,11 +60,11 @@ public class UsersController {
     @GetMapping("/users")
     public ModelAndView getUsers (ModelAndView modelAndView, UserSearchParameters userSearchParameters) {
         // Evaluate page size. If requeste parameter is null, return initial page size
-        int evalPageSize = userSearchParameters.getPageSize().orElse(InitialPagingSizes.getInitialPageSize());
+        int evalPageSize = userSearchParameters.getPageSize().orElse(InitialPagingSizes.INITIAL_PAGE_SIZE);
 
         // Evaluate page. If requested parameter is null or less than 0 (to prevent exception), return initial size.
         // Otherwise, return value of param. decreased by 1.
-        int evalPage = (userSearchParameters.getPage().orElse(0) < 1) ? InitialPagingSizes.getInitialPage() : userSearchParameters.getPage().get() - 1;
+        int evalPage = (userSearchParameters.getPage().orElse(0) < 1) ? InitialPagingSizes.INITIAL_PAGE : userSearchParameters.getPage().get() - 1;
 
         PageRequest pageRequest = PageRequest.of(evalPage, evalPageSize, new Sort(Sort.Direction.ASC, "id"));
         UserSearchResult userSearchResult = new UserSearchResult();
@@ -89,11 +89,11 @@ public class UsersController {
         }
 
         Pager pager = new Pager(userSearchResult.getUserDtoPage().getTotalPages(), userSearchResult.getUserDtoPage()
-                .getNumber(), InitialPagingSizes.getButtonsToShow(), userSearchResult.getUserDtoPage().getTotalElements());
+                .getNumber(), InitialPagingSizes.BUTTONS_TO_SHOW, userSearchResult.getUserDtoPage().getTotalElements());
         modelAndView.addObject("pager", pager);
         modelAndView.addObject("users", userSearchResult.getUserDtoPage());
         modelAndView.addObject("selectedPageSize", evalPageSize);
-        modelAndView.addObject("pageSizes", InitialPagingSizes.getPageSizes());
+        modelAndView.addObject("pageSizes", InitialPagingSizes.PAGE_SIZES);
         modelAndView.setViewName("adminPage/user/users");
         return modelAndView;
     }
