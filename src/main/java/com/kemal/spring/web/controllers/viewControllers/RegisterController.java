@@ -41,13 +41,13 @@ public class RegisterController {
         if (emailExists != null) {
             modelAndView.setViewName("website/register");
             bindingResult.rejectValue("email", "alreadyRegisteredEmail",
-                    "Oops!  There is already a user registered with the email provided.");
+                    "There is already a user registered with the email provided.");
         }
 
         if (userNameExists!= null) {
             modelAndView.setViewName("website/register");
             bindingResult.rejectValue("username", "alreadyRegisteredUsername",
-                    "Oops!  There is already a user registered with the username provided.");
+                    "There is already a user registered with the username provided.");
         }
 
         if (bindingResult.hasErrors()) {

@@ -59,14 +59,11 @@ public class UsersController {
      */
     @GetMapping("/users")
     public ModelAndView getUsers (ModelAndView modelAndView, UserSearchParameters userSearchParameters) {
-        // Evaluate page size. If requeste parameter is null, return initial page size
-        int evalPageSize = userSearchParameters.getPageSize().orElse(InitialPagingSizes.INITIAL_PAGE_SIZE);
+        int selectedPageSize = userSearchParameters.getPageSize().orElse(InitialPagingSizes.INITIAL_PAGE_SIZE);
+        int selectedPage = (userSearchParameters.getPage().orElse(0) < 1) ?
+                            InitialPagingSizes.INITIAL_PAGE : userSearchParameters.getPage().get() - 1;
 
-        // Evaluate page. If requested parameter is null or less than 0 (to prevent exception), return initial size.
-        // Otherwise, return value of param. decreased by 1.
-        int evalPage = (userSearchParameters.getPage().orElse(0) < 1) ? InitialPagingSizes.INITIAL_PAGE : userSearchParameters.getPage().get() - 1;
-
-        PageRequest pageRequest = PageRequest.of(evalPage, evalPageSize, new Sort(Sort.Direction.ASC, "id"));
+        PageRequest pageRequest = PageRequest.of(selectedPage, selectedPageSize, new Sort(Sort.Direction.ASC, "id"));
         UserSearchResult userSearchResult = new UserSearchResult();
 
         //Empty search parameters
@@ -92,7 +89,7 @@ public class UsersController {
                 .getNumber(), InitialPagingSizes.BUTTONS_TO_SHOW, userSearchResult.getUserDtoPage().getTotalElements());
         modelAndView.addObject("pager", pager);
         modelAndView.addObject("users", userSearchResult.getUserDtoPage());
-        modelAndView.addObject("selectedPageSize", evalPageSize);
+        modelAndView.addObject("selectedPageSize", selectedPageSize);
         modelAndView.addObject("pageSizes", InitialPagingSizes.PAGE_SIZES);
         modelAndView.setViewName("adminPage/user/users");
         return modelAndView;
@@ -123,12 +120,12 @@ public class UsersController {
         boolean hasErrors = false;
 
         if (emailAlreadyExists != null) {
-            bindingResult.rejectValue("email", "emailAlreadyExists", "Oops!  There is already a user registered with the email provided.");
+            bindingResult.rejectValue("email", "emailAlreadyExists", "There is already a user registered with the email provided.");
             hasErrors = true;
         }
 
         if (usernameAlreadyExists != null) {
-            bindingResult.rejectValue("username", "usernameAlreadyExists", "Oops!  There is already a user registered with the username provided.");
+            bindingResult.rejectValue("username", "usernameAlreadyExists", "There is already a user registered with the username provided.");
             hasErrors = true;
         }
 
@@ -165,13 +162,13 @@ public class UsersController {
 
         if (emailAlreadyExists != null) {
             bindingResult.rejectValue("email", "emailAlreadyExists",
-                    "Oops!  There is already a user registered with the email provided.");
+                    "There is already a user registered with the email provided.");
             hasErrors = true;
         }
 
         if (usernameAlreadyExists != null) {
             bindingResult.rejectValue("username", "usernameAlreadyExists",
-                    "Oops!  There is already a user registered with the username provided.");
+                    "There is already a user registered with the username provided.");
             hasErrors = true;
         }
 
