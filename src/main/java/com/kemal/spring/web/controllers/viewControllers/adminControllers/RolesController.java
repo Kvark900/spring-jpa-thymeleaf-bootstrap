@@ -54,7 +54,8 @@ public class RolesController {
         boolean hasErrors = false;
 
         if (roleNameAlreadyExists) {
-            bindingResult.rejectValue("name", "roleNameAlreadyExists", "Oops!  There is already a role registered with the name provided.");
+            bindingResult.rejectValue("name", "roleNameAlreadyExists",
+                    "There is already a role registered with the name provided.");
             hasErrors = true;
         }
 
@@ -64,11 +65,11 @@ public class RolesController {
             model.addAttribute("role", role);
             model.addAttribute("org.springframework.validation.BindingResult.role", bindingResult);
             return formWithErrors;
-        } else {
-            roleService.save(role);
-            redirectAttributes.addFlashAttribute("roleHasBeenUpdated", true);
-            return "redirect:/adminPage/roles";
         }
+        roleService.save(role);
+        redirectAttributes.addFlashAttribute("roleHasBeenUpdated", true);
+        return "redirect:/adminPage/roles";
+
     }
 
     @GetMapping("/roles/newRole")
@@ -78,7 +79,7 @@ public class RolesController {
     }
 
     @PostMapping("/roles/newRole")
-    public String saveNewRole(Model model, @ModelAttribute("newRole") @Valid final Role newRole,
+    public String saveNewRole(@ModelAttribute("newRole") @Valid final Role newRole,
                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         Role roleNameAlreadyExists = roleService.findByName(newRole.getName());
@@ -86,7 +87,8 @@ public class RolesController {
         String formWithErrors = "adminPage/role/newRole";
 
         if (roleNameAlreadyExists != null) {
-            bindingResult.rejectValue("name", "usernameAlreadyExists", "Oops!  There is already a role registered with the name provided.");
+            bindingResult.rejectValue("name", "usernameAlreadyExists", "" +
+                    "There is already a role registered with the name provided.");
             hasErrors = true;
         }
 
@@ -94,10 +96,8 @@ public class RolesController {
 
         if (hasErrors) return formWithErrors;
 
-        else {
-            roleService.save(newRole);
-            redirectAttributes.addFlashAttribute("roleHasBeenSaved", true);
-            return "redirect:/adminPage/roles";
-        }
+        roleService.save(newRole);
+        redirectAttributes.addFlashAttribute("roleHasBeenSaved", true);
+        return "redirect:/adminPage/roles";
     }
 }

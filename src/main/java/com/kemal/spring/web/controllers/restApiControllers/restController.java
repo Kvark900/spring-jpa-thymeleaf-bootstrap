@@ -32,58 +32,17 @@ public class restController {
 
         else if (allUsers.isEmpty()) return new ResponseEntity<>(allUsers, HttpStatus.NOT_FOUND);
 
-        else return new ResponseEntity<>(allUsers, HttpStatus.OK);
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
-
-    //region Unused
-    //================================================================================================================
-    /*@GetMapping("/adminPage/json-users/search")
-    public ResponseEntity<List<User>> getUsersByProperty(@RequestParam(value = "usersProperty") String usersProperty,
-                                                         @RequestParam(value = "propertyValue") String propertyValue){
-        List<User> users = new ArrayList();
-
-        switch (usersProperty) {
-            case "ID":
-                try {
-                    Optional<User> user = userService.findById(Long.parseLong(propertyValue));
-                    users.add(user.get());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case "Name":
-                users = userService.findByNameContaining(propertyValue);
-                break;
-            case "Surname":
-                users = userService.findBySurnameContaining(propertyValue);
-                break;
-            case "Username":
-                users = userService.findByUsernameContaining(propertyValue);
-                break;
-            case "Email":
-                users = userService.findByEmailContaining(propertyValue);
-                break;
-        }
-
-        if (users == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        else if (users.isEmpty()) return new ResponseEntity<>(users, HttpStatus.NOT_FOUND);
-
-        else return new ResponseEntity<>(users, HttpStatus.OK);
-    }*/
-    //================================================================================================================
-    //endregion
-
 
     @DeleteMapping("/adminPage/json-users/delete/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable Long id) {
         Optional<User> userToDelete = userService.findById(id);
 
-        if (!userToDelete.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!userToDelete.isPresent())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        else {
-            userService.deleteById(id);
-            return new ResponseEntity<>(userToDelete.get(), HttpStatus.NO_CONTENT);
-        }
+        userService.deleteById(id);
+        return new ResponseEntity<>(userToDelete.get(), HttpStatus.NO_CONTENT);
     }
 }

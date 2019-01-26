@@ -44,33 +44,26 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
 
         //region Creating roles
-        //================================================================================
         Role roleAdmin = createRoleIfNotFound("ROLE_ADMIN");
         Role roleUser = createRoleIfNotFound("ROLE_USER");
-
         List<Role> adminRoles = Collections.singletonList(roleAdmin);
         List<Role> userRoles = Collections.singletonList(roleUser);
-        //================================================================================
         //endregion
 
 
         //region Creating users
-        //================================================================================
-        createUserIfNotFound("admin@gmail.com", "Admin", "Admin",
-                "admin", "admin", adminRoles);
+        createUserIfNotFound("admin@gmail.com", "Admin", "Admin", "admin", "admin", adminRoles);
 
         for (int i = 1; i < 50; i++) {
-            createUserIfNotFound("user" + i + "@gmail.com", "User" + i,
-                    "User" + i, "user" + i, "user" + i, userRoles);
+            createUserIfNotFound("user" + i + "@gmail.com", "User" + i, "User" + i, "user" + i, "user" + i, userRoles);
         }
-        //================================================================================
         //endregion
 
         alreadySetup = true;
     }
 
     @Transactional
-    private final Role createRoleIfNotFound(final String name) {
+    Role createRoleIfNotFound(final String name) {
         Role role = roleService.findByName(name);
         if (role == null) {
             role = new Role(name);
@@ -80,9 +73,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    private final void createUserIfNotFound(final String email, String name,
-                                            String surname, String username,
-                                            String password, List<Role> userRoles) {
+    void createUserIfNotFound(final String email, String name,
+                              String surname, String username,
+                              String password, List<Role> userRoles) {
         User user = userService.findByEmail(email);
         if (user == null) {
             user = new User();
