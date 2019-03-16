@@ -2,7 +2,7 @@ package com.kemal.spring.web.controllers.viewControllers.adminControllers;
 
 import com.kemal.spring.domain.Role;
 import com.kemal.spring.service.RoleService;
-import com.kemal.spring.web.dto.UserDto;
+import com.kemal.spring.web.dto.RoleDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,8 +54,7 @@ public class RolesController {
         boolean hasErrors = false;
 
         if (roleNameAlreadyExists) {
-            bindingResult.rejectValue("name", "roleNameAlreadyExists",
-                    "There is already a role registered with the name provided.");
+            bindingResult.rejectValue("name", "roleNameAlreadyExists");
             hasErrors = true;
         }
 
@@ -74,7 +73,7 @@ public class RolesController {
 
     @GetMapping("/roles/newRole")
     public String getAddNewRoleForm(Model model) {
-        model.addAttribute("newUser", new UserDto());
+        model.addAttribute("newRole", new RoleDto());
         return "adminPage/role/newRole";
     }
 
@@ -87,8 +86,7 @@ public class RolesController {
         String formWithErrors = "adminPage/role/newRole";
 
         if (roleNameAlreadyExists != null) {
-            bindingResult.rejectValue("name", "usernameAlreadyExists", "" +
-                    "There is already a role registered with the name provided.");
+            bindingResult.rejectValue("name", "roleNameAlreadyExists");
             hasErrors = true;
         }
 

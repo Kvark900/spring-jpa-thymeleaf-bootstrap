@@ -40,14 +40,12 @@ public class RegisterController {
 
         if (emailExists != null) {
             modelAndView.setViewName("website/register");
-            bindingResult.rejectValue("email", "alreadyRegisteredEmail",
-                    "There is already a user registered with the email provided.");
+            bindingResult.rejectValue("email", "emailAlreadyExists");
         }
 
         if (userNameExists!= null) {
             modelAndView.setViewName("website/register");
-            bindingResult.rejectValue("username", "alreadyRegisteredUsername",
-                    "There is already a user registered with the username provided.");
+            bindingResult.rejectValue("username", "usernameAlreadyExists");
         }
 
         if (bindingResult.hasErrors()) {

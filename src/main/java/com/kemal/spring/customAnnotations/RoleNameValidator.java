@@ -7,7 +7,7 @@ import javax.validation.ConstraintValidatorContext;
  * Created by Keno&Kemo on 08.12.2017..
  */
 public class RoleNameValidator implements ConstraintValidator<ValidRoleName, String> {
-    String validRoleNamePrefix = "ROLE_";
+    private static final String VALID_ROLE_NAME_PREFIX = "ROLE_";
 
     @Override
     public void initialize(ValidRoleName validRoleName) {
@@ -15,7 +15,7 @@ public class RoleNameValidator implements ConstraintValidator<ValidRoleName, Str
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return s.length() >= 5 && s.substring(0, 5).equals(validRoleNamePrefix);
+        return s.length() >= 5 && s.substring(0, 5).equals(VALID_ROLE_NAME_PREFIX);
     }
 
 }

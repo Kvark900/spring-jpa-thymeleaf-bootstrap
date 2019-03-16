@@ -7,8 +7,8 @@ import com.kemal.spring.service.UserDtoService;
 import com.kemal.spring.service.UserService;
 import com.kemal.spring.service.UserUpdateDtoService;
 import com.kemal.spring.service.searching.UserFinder;
-import com.kemal.spring.service.searching.UserSearchParameters;
 import com.kemal.spring.service.searching.UserSearchErrorResponse;
+import com.kemal.spring.service.searching.UserSearchParameters;
 import com.kemal.spring.service.searching.UserSearchResult;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
@@ -30,8 +30,6 @@ import java.util.Optional;
 /**
  * Created by Keno&Kemo on 20.11.2017..
  */
-
-
 @Controller
 @RequestMapping("/adminPage")
 public class UsersController {
@@ -120,12 +118,12 @@ public class UsersController {
         boolean hasErrors = false;
 
         if (emailAlreadyExists != null) {
-            bindingResult.rejectValue("email", "emailAlreadyExists", "There is already a user registered with the email provided.");
+            bindingResult.rejectValue("email", "emailAlreadyExists");
             hasErrors = true;
         }
 
         if (usernameAlreadyExists != null) {
-            bindingResult.rejectValue("username", "usernameAlreadyExists", "There is already a user registered with the username provided.");
+            bindingResult.rejectValue("username", "usernameAlreadyExists");
             hasErrors = true;
         }
 
@@ -146,29 +144,24 @@ public class UsersController {
 
     @GetMapping("/users/newUser")
     public String getAddNewUserForm(Model model) {
-        UserDto newUser = new UserDto();
-        model.addAttribute("newUser", newUser);
+        model.addAttribute("newUser", new UserDto());
         return "adminPage/user/newUser";
     }
 
     @PostMapping("/users/newUser")
-    public String saveNewUser(Model model, @ModelAttribute("newUser") @Valid final UserDto newUser,
-                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
+    public String saveNewUser(@ModelAttribute("newUser") @Valid final UserDto newUser, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         User emailAlreadyExists = userService.findByEmail(newUser.getEmail());
         User usernameAlreadyExists = userService.findByUsername(newUser.getUsername());
         boolean hasErrors = false;
         String formWithErrors = "adminPage/user/newUser";
 
         if (emailAlreadyExists != null) {
-            bindingResult.rejectValue("email", "emailAlreadyExists",
-                    "There is already a user registered with the email provided.");
+            bindingResult.rejectValue("email", "emailAlreadyExists");
             hasErrors = true;
         }
 
         if (usernameAlreadyExists != null) {
-            bindingResult.rejectValue("username", "usernameAlreadyExists",
-                    "There is already a user registered with the username provided.");
+            bindingResult.rejectValue("username", "usernameAlreadyExists");
             hasErrors = true;
         }
 
