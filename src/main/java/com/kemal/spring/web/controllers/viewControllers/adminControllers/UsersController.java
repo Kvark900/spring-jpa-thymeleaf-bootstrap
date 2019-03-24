@@ -41,9 +41,8 @@ public class UsersController {
     private UserSearchErrorResponse userSearchErrorResponse;
 
     public UsersController(UserService userService, RoleService roleService,
-                           UserUpdateDtoService userUpdateDtoService,
-                           UserDtoService userDtoService, UserFinder userFinder, UserSearchErrorResponse
-                                   userSearchErrorResponse) {
+                           UserUpdateDtoService userUpdateDtoService, UserDtoService userDtoService,
+                           UserFinder userFinder, UserSearchErrorResponse userSearchErrorResponse) {
         this.userService = userService;
         this.roleService = roleService;
         this.userUpdateDtoService = userUpdateDtoService;
