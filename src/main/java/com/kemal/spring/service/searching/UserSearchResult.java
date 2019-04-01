@@ -10,6 +10,6 @@ import org.springframework.data.domain.Page;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserSearchResult {
-    private Page<UserDto> userDtoPage;
+    private Page<UserDto> userPage;
     private boolean numberFormatException;
 }

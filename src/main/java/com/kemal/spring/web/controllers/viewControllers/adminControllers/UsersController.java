@@ -57,15 +57,14 @@ public class UsersController {
     @GetMapping("/users")
     public ModelAndView getUsers (ModelAndView modelAndView, UserSearchParameters userSearchParameters) {
         int selectedPageSize = userSearchParameters.getPageSize().orElse(InitialPagingSizes.INITIAL_PAGE_SIZE);
-        int selectedPage = (userSearchParameters.getPage().orElse(0) < 1) ?
-                            InitialPagingSizes.INITIAL_PAGE : userSearchParameters.getPage().get() - 1;
+        int selectedPage = (userSearchParameters.getPage().orElse(0) < 1) ? InitialPagingSizes.INITIAL_PAGE : (userSearchParameters.getPage().get() - 1);
 
         PageRequest pageRequest = PageRequest.of(selectedPage, selectedPageSize, new Sort(Sort.Direction.ASC, "id"));
         UserSearchResult userSearchResult = new UserSearchResult();
 
         //Empty search parameters
         if (!userSearchParameters.getPropertyValue().isPresent() || userSearchParameters.getPropertyValue().get().isEmpty())
-            userSearchResult.setUserDtoPage(userDtoService.findAllPageable(pageRequest));
+            userSearchResult.setUserPage(userDtoService.findAllPageable(pageRequest));
 
         //Search queries
         else {
@@ -74,18 +73,20 @@ public class UsersController {
             if (userSearchResult.isNumberFormatException())
                 return userSearchErrorResponse.respondToNumberFormatException(userSearchResult, modelAndView);
 
-            if (userSearchResult.getUserDtoPage().getTotalElements() == 0){
+            if (userSearchResult.getUserPage().getTotalElements() == 0){
                 modelAndView = userSearchErrorResponse.respondToEmptySearchResult(modelAndView, pageRequest);
-                userSearchResult.setUserDtoPage(userDtoService.findAllPageable(pageRequest));
+                userSearchResult.setUserPage(userDtoService.findAllPageable(pageRequest));
             }
             modelAndView.addObject("usersProperty", userSearchParameters.getUsersProperty().get());
             modelAndView.addObject("propertyValue", userSearchParameters.getPropertyValue().get());
         }
 
-        Pager pager = new Pager(userSearchResult.getUserDtoPage().getTotalPages(), userSearchResult.getUserDtoPage()
-                .getNumber(), InitialPagingSizes.BUTTONS_TO_SHOW, userSearchResult.getUserDtoPage().getTotalElements());
+        Pager pager = new Pager(userSearchResult.getUserPage().getTotalPages(),
+                                userSearchResult.getUserPage().getNumber(),
+                                InitialPagingSizes.BUTTONS_TO_SHOW,
+                                userSearchResult.getUserPage().getTotalElements());
         modelAndView.addObject("pager", pager);
-        modelAndView.addObject("users", userSearchResult.getUserDtoPage());
+        modelAndView.addObject("users", userSearchResult.getUserPage());
         modelAndView.addObject("selectedPageSize", selectedPageSize);
         modelAndView.addObject("pageSizes", InitialPagingSizes.PAGE_SIZES);
         modelAndView.setViewName("adminPage/user/users");
@@ -105,7 +106,7 @@ public class UsersController {
     }
 
     @PostMapping("/users/{id}")
-    public String updateUser(Model model, @PathVariable Long id, @ModelAttribute("oldUser") @Valid final UserUpdateDto userUpdateDto,
+    public String updateUser(Model model, @PathVariable Long id, @ModelAttribute("oldUser") @Valid UserUpdateDto userUpdateDto,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         String formWithErrors = "adminPage/user/editUser";
@@ -148,7 +149,7 @@ public class UsersController {
     }
 
     @PostMapping("/users/newUser")
-    public String saveNewUser(@ModelAttribute("newUser") @Valid final UserDto newUser, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String saveNewUser(@ModelAttribute("newUser") @Valid UserDto newUser, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         User emailAlreadyExists = userService.findByEmail(newUser.getEmail());
         User usernameAlreadyExists = userService.findByUsername(newUser.getUsername());
         boolean hasErrors = false;

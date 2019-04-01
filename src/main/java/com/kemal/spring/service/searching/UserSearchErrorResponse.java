@@ -17,13 +17,12 @@ public class UserSearchErrorResponse {
     }
 
     public ModelAndView respondToNumberFormatException(UserSearchResult userSearchResult, ModelAndView modelAndView) {
-        Pager pager = new Pager(userSearchResult.getUserDtoPage().getTotalPages(),
-                userSearchResult.getUserDtoPage().getNumber(), InitialPagingSizes.BUTTONS_TO_SHOW,
-                userSearchResult.getUserDtoPage().getTotalElements());
+        Pager pager = new Pager(userSearchResult.getUserPage().getTotalPages(), userSearchResult.getUserPage().getNumber(),
+                                InitialPagingSizes.BUTTONS_TO_SHOW, userSearchResult.getUserPage().getTotalElements());
 
         modelAndView.addObject("numberFormatException", true);
         modelAndView.addObject("pager", pager);
-        modelAndView.addObject("users", userSearchResult.getUserDtoPage());
+        modelAndView.addObject("users", userSearchResult.getUserPage());
         modelAndView.setViewName("adminPage/user/users");
         return modelAndView;
     }
