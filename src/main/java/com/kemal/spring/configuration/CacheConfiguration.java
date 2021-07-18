@@ -14,9 +14,17 @@ public class CacheConfiguration {
     @Bean
     public CacheManager cacheManager() {
         return new ConcurrentMapCacheManager(
-                "cache.allUsersPageable", "cache.allUsers",
-                "cache.allUsersEagerly", "cache.userByEmail", "cache.userById", "cache.allRoles",
-                "cache.roleByName", "cache.roleById", "cache.byNameContaining", "cache.bySurnameContaining",
-                "cache.byUsernameContaining", "cache.byEmailContaining");
+                "cache.allUsersPageable",
+                "cache.allUsers",
+                "cache.allUsersEagerly",
+                "cache.userByEmail",
+                "cache.userById",
+                "cache.allRoles",
+                "cache.roleByName",
+                "cache.roleById",
+                "cache.byNameContaining",
+                "cache.bySurnameContaining",
+                "cache.byUsernameContaining",
+                "cache.byEmailContaining");
     }
 }

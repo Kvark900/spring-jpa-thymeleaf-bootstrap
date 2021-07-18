@@ -5,6 +5,7 @@ import com.kemal.spring.domain.User;
 import com.kemal.spring.domain.UserRepository;
 import com.kemal.spring.web.dto.UserDto;
 import com.kemal.spring.web.dto.UserUpdateDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static java.util.Collections.emptyList;
+
 /**
  * Created by Keno&Kemo on 18.10.2017..
  */
@@ -24,14 +27,15 @@ import java.util.*;
 @Service
 public class UserService {
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private UserRepository userRepository;
-    private RoleService roleService;
-    private CacheManager cacheManager;
+    @Autowired
+    private  BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    private final RoleService roleService;
+    private final CacheManager cacheManager;
 
-    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository, RoleService
-            roleService, CacheManager cacheManager) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    public UserService(UserRepository userRepository,
+                       RoleService roleService,
+                       CacheManager cacheManager) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.cacheManager = cacheManager;
@@ -49,27 +53,27 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    @Cacheable (value = "cache.userByEmail", key = "#email", unless="#result == null")
+    @Cacheable(value = "cache.userByEmail", key = "#email", unless = "#result == null")
     public User findByEmail(String email) {
         return userRepository.findByEmailEagerly(email);
     }
 
-    @Cacheable (value = "cache.userById", key = "#id", unless="#result == null")
+    @Cacheable(value = "cache.userById", key = "#id", unless = "#result == null")
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
 
-    public Page<User> findByIdPageable(Long id, Pageable pageRequest){
+    public Page<User> findByIdPageable(Long id, Pageable pageRequest) {
         Optional<User> user = userRepository.findById(id);
-        List<User> users = user.isPresent() ? Collections.singletonList(user.get()) : Collections.emptyList();
+        List<User> users = user.map(Collections::singletonList).orElse(emptyList());
         return new PageImpl<>(users, pageRequest, users.size());
     }
 
-    public User findByEmailAndIdNot (String email, Long id){
+    public User findByEmailAndIdNot(String email, Long id) {
         return userRepository.findByEmailAndIdNot(email, id);
     }
 
-    public User findByUsernameAndIdNot(String username, Long id){
+    public User findByUsernameAndIdNot(String username, Long id) {
         return userRepository.findByUsernameAndIdNot(username, id);
     }
 
@@ -78,7 +82,7 @@ public class UserService {
     }
 
     //region Find eagerly
-    public User findByIdEagerly (Long id){
+    public User findByIdEagerly(Long id) {
         return userRepository.findByIdEagerly(id);
     }
 
@@ -89,22 +93,22 @@ public class UserService {
     //endregion
 
     //region Find by containing
-    @Cacheable (value = "cache.byNameContaining")
-    public Page<User> findByNameContaining (String name, Pageable pageable){
+    @Cacheable(value = "cache.byNameContaining")
+    public Page<User> findByNameContaining(String name, Pageable pageable) {
         return userRepository.findByNameContainingOrderByIdAsc(name, pageable);
     }
 
-    @Cacheable (value = "cache.bySurnameContaining")
+    @Cacheable(value = "cache.bySurnameContaining")
     public Page<User> findBySurnameContaining(String surname, Pageable pageable) {
         return userRepository.findBySurnameContainingOrderByIdAsc(surname, pageable);
     }
 
-    @Cacheable (value = "cache.byUsernameContaining")
+    @Cacheable(value = "cache.byUsernameContaining")
     public Page<User> findByUsernameContaining(String username, Pageable pageable) {
         return userRepository.findByUsernameContainingOrderByIdAsc(username, pageable);
     }
 
-    @Cacheable (value = "cache.byEmailContaining")
+    @Cacheable(value = "cache.byEmailContaining")
     public Page<User> findByEmailContaining(String email, Pageable pageable) {
         return userRepository.findByEmailContainingOrderByIdAsc(email, pageable);
     }
@@ -115,16 +119,30 @@ public class UserService {
 
 
     @Transactional
-    @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById",
-                    "cache.allUsersEagerly", "cache.byNameContaining", "cache.bySurnameContaining",
-                    "cache.byUsernameContaining", "cache.byEmailContaining"}, allEntries = true)
+    @CacheEvict(value = {"cache.allUsersPageable",
+            "cache.allUsers",
+            "cache.userByEmail",
+            "cache.userById",
+            "cache.allUsersEagerly",
+            "cache.byNameContaining",
+            "cache.bySurnameContaining",
+            "cache.byUsernameContaining",
+            "cache.byEmailContaining"},
+            allEntries = true)
     public void save(User user) {
         userRepository.save(user);
     }
 
-    @CacheEvict(value = {"cache.allUsersPageable", "cache.allUsers", "cache.userByEmail", "cache.userById",
-            "cache.allUsersEagerly", "cache.byNameContaining", "cache.bySurnameContaining",
-            "cache.byUsernameContaining", "cache.byEmailContaining"}, allEntries = true)
+    @CacheEvict(value = {"cache.allUsersPageable",
+            "cache.allUsers",
+            "cache.userByEmail",
+            "cache.userById",
+            "cache.allUsersEagerly",
+            "cache.byNameContaining",
+            "cache.bySurnameContaining",
+            "cache.byUsernameContaining",
+            "cache.byEmailContaining"},
+            allEntries = true)
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
@@ -153,18 +171,14 @@ public class UserService {
     public List<Role> getAssignedRolesList(UserUpdateDto userUpdateDto) {
         Map<Long, Role> assignedRoleMap = new HashMap<>();
         List<Role> roles = userUpdateDto.getRoles();
-        for (Role role : roles) {
-            assignedRoleMap.put(role.getId(), role);
-        }
+        for (Role role : roles) assignedRoleMap.put(role.getId(), role);
 
         List<Role> userRoles = new ArrayList<>();
         List<Role> allRoles = roleService.findAll();
+
         for (Role role : allRoles) {
-            if (assignedRoleMap.containsKey(role.getId())) {
-                userRoles.add(role);
-            } else {
-                userRoles.add(null);
-            }
+            if (assignedRoleMap.containsKey(role.getId())) userRoles.add(role);
+            else userRoles.add(null);
         }
         return userRoles;
     }

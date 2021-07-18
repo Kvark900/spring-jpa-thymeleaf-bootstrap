@@ -27,22 +27,32 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import static com.kemal.spring.web.paging.InitialPagingSizes.*;
+import static org.springframework.data.domain.PageRequest.of;
+import static org.springframework.data.domain.Sort.Direction.ASC;
+
 /**
  * Created by Keno&Kemo on 20.11.2017..
  */
 @Controller
 @RequestMapping("/adminPage")
 public class UsersController {
-    private UserService userService;
-    private RoleService roleService;
-    private UserUpdateDtoService userUpdateDtoService;
-    private UserDtoService userDtoService;
-    private UserFinder userFinder;
-    private UserSearchErrorResponse userSearchErrorResponse;
+    public static final String EDIT_USER_FORM = "adminPage/user/editUser";
+    public static final String REDIRECT_ADMIN_PAGE_USERS = "redirect:/adminPage/users";
 
-    public UsersController(UserService userService, RoleService roleService,
-                           UserUpdateDtoService userUpdateDtoService, UserDtoService userDtoService,
-                           UserFinder userFinder, UserSearchErrorResponse userSearchErrorResponse) {
+    private final UserService userService;
+    private final RoleService roleService;
+    private final UserUpdateDtoService userUpdateDtoService;
+    private final UserDtoService userDtoService;
+    private final UserFinder userFinder;
+    private final UserSearchErrorResponse userSearchErrorResponse;
+
+    public UsersController(UserService userService,
+                           RoleService roleService,
+                           UserUpdateDtoService userUpdateDtoService,
+                           UserDtoService userDtoService,
+                           UserFinder userFinder,
+                           UserSearchErrorResponse userSearchErrorResponse) {
         this.userService = userService;
         this.roleService = roleService;
         this.userUpdateDtoService = userUpdateDtoService;
@@ -51,44 +61,42 @@ public class UsersController {
         this.userSearchErrorResponse = userSearchErrorResponse;
     }
 
-    /*
-     * Get all users or search users if there are searching parameters
+    /**
+     * Get all users or search users if searching parameters exist
      */
     @GetMapping("/users")
-    public ModelAndView getUsers (ModelAndView modelAndView, UserSearchParameters userSearchParameters) {
-        int selectedPageSize = userSearchParameters.getPageSize().orElse(InitialPagingSizes.INITIAL_PAGE_SIZE);
-        int selectedPage = (userSearchParameters.getPage().orElse(0) < 1) ? InitialPagingSizes.INITIAL_PAGE : (userSearchParameters.getPage().get() - 1);
+    public ModelAndView getUsers (ModelAndView modelAndView, UserSearchParameters searchParams) {
+        int selectedPageSize = searchParams.getPageSize().orElse(INITIAL_PAGE_SIZE);
+        int selectedPage = (searchParams.getPage().orElse(0) < 1) ? INITIAL_PAGE : (searchParams.getPage().get() - 1);
 
-        PageRequest pageRequest = PageRequest.of(selectedPage, selectedPageSize, new Sort(Sort.Direction.ASC, "id"));
+        PageRequest pageRequest = of(selectedPage, selectedPageSize, Sort.by(ASC, "id"));
         UserSearchResult userSearchResult = new UserSearchResult();
 
-        //Empty search parameters
-        if (!userSearchParameters.getPropertyValue().isPresent() || userSearchParameters.getPropertyValue().get().isEmpty())
+        if (searchParams.getPropertyValue().isEmpty() || searchParams.getPropertyValue().get().isEmpty())
             userSearchResult.setUserPage(userDtoService.findAllPageable(pageRequest));
 
-        //Search queries
         else {
-            userSearchResult = userFinder.searchUsersByProperty(pageRequest, userSearchParameters);
+            userSearchResult = userFinder.searchUsersByProperty(pageRequest, searchParams);
 
             if (userSearchResult.isNumberFormatException())
                 return userSearchErrorResponse.respondToNumberFormatException(userSearchResult, modelAndView);
 
-            if (userSearchResult.getUserPage().getTotalElements() == 0){
+            if (userSearchResult.getUserPage().getTotalElements() == 0) {
                 modelAndView = userSearchErrorResponse.respondToEmptySearchResult(modelAndView, pageRequest);
                 userSearchResult.setUserPage(userDtoService.findAllPageable(pageRequest));
             }
-            modelAndView.addObject("usersProperty", userSearchParameters.getUsersProperty().get());
-            modelAndView.addObject("propertyValue", userSearchParameters.getPropertyValue().get());
+            modelAndView.addObject("usersProperty", searchParams.getUsersProperty().get());
+            modelAndView.addObject("propertyValue", searchParams.getPropertyValue().get());
         }
 
         Pager pager = new Pager(userSearchResult.getUserPage().getTotalPages(),
                                 userSearchResult.getUserPage().getNumber(),
-                                InitialPagingSizes.BUTTONS_TO_SHOW,
+                                BUTTONS_TO_SHOW,
                                 userSearchResult.getUserPage().getTotalElements());
         modelAndView.addObject("pager", pager);
         modelAndView.addObject("users", userSearchResult.getUserPage());
         modelAndView.addObject("selectedPageSize", selectedPageSize);
-        modelAndView.addObject("pageSizes", InitialPagingSizes.PAGE_SIZES);
+        modelAndView.addObject("pageSizes", PAGE_SIZES);
         modelAndView.setViewName("adminPage/user/users");
         return modelAndView;
     }
@@ -102,44 +110,34 @@ public class UsersController {
 
         model.addAttribute("userUpdateDto", userUpdateDto);
         model.addAttribute("allRoles", allRoles);
-        return "adminPage/user/editUser";
+        return EDIT_USER_FORM;
     }
 
     @PostMapping("/users/{id}")
-    public String updateUser(Model model, @PathVariable Long id, @ModelAttribute("oldUser") @Valid UserUpdateDto userUpdateDto,
-                             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String updateUser(Model model,
+                             @PathVariable Long id,
+                             @ModelAttribute("oldUser") @Valid UserUpdateDto userUpdateDto,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) {
 
-        String formWithErrors = "adminPage/user/editUser";
         Optional<User> persistedUser = userService.findById(id);
         List<Role> allRoles = roleService.findAll();
 
-        User emailAlreadyExists = userService.findByEmailAndIdNot(userUpdateDto.getEmail(), id);
-        User usernameAlreadyExists = userService.findByUsernameAndIdNot(userUpdateDto.getUsername(), id);
-        boolean hasErrors = false;
+        boolean emailAlreadyExists = userService.findByEmailAndIdNot(userUpdateDto.getEmail(), id) != null;
+        boolean usernameAlreadyExists = userService.findByUsernameAndIdNot(userUpdateDto.getUsername(), id) != null;
+        boolean validationFailed = emailAlreadyExists || usernameAlreadyExists || bindingResult.hasErrors();
 
-        if (emailAlreadyExists != null) {
-            bindingResult.rejectValue("email", "emailAlreadyExists");
-            hasErrors = true;
-        }
-
-        if (usernameAlreadyExists != null) {
-            bindingResult.rejectValue("username", "usernameAlreadyExists");
-            hasErrors = true;
-        }
-
-        if (bindingResult.hasErrors()) hasErrors = true;
-
-        if (hasErrors) {
+        if (emailAlreadyExists) bindingResult.rejectValue("email", "emailAlreadyExists");
+        if (usernameAlreadyExists) bindingResult.rejectValue("username", "usernameAlreadyExists");
+        if (validationFailed) {
             model.addAttribute("userUpdateDto", userUpdateDto);
             model.addAttribute("rolesList", allRoles);
             model.addAttribute("org.springframework.validation.BindingResult.userUpdateDto", bindingResult);
-            return formWithErrors;
+            return EDIT_USER_FORM;
         }
-        else {
-            userService.save(userService.getUpdatedUser(persistedUser.get(), userUpdateDto));
-            redirectAttributes.addFlashAttribute("userHasBeenUpdated", true);
-            return "redirect:/adminPage/users";
-        }
+        userService.save(userService.getUpdatedUser(persistedUser.get(), userUpdateDto));
+        redirectAttributes.addFlashAttribute("userHasBeenUpdated", true);
+        return REDIRECT_ADMIN_PAGE_USERS;
     }
 
     @GetMapping("/users/newUser")
@@ -149,34 +147,23 @@ public class UsersController {
     }
 
     @PostMapping("/users/newUser")
-    public String saveNewUser(@ModelAttribute("newUser") @Valid UserDto newUser, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        User emailAlreadyExists = userService.findByEmail(newUser.getEmail());
-        User usernameAlreadyExists = userService.findByUsername(newUser.getUsername());
-        boolean hasErrors = false;
+    public String saveNewUser(@ModelAttribute("newUser") @Valid UserDto newUser,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) {
+        boolean emailAlreadyExists = userService.findByEmail(newUser.getEmail()) != null;
+        boolean usernameAlreadyExists = userService.findByUsername(newUser.getUsername()) != null;
+        boolean validationFailed = emailAlreadyExists || usernameAlreadyExists || bindingResult.hasErrors();
         String formWithErrors = "adminPage/user/newUser";
 
-        if (emailAlreadyExists != null) {
-            bindingResult.rejectValue("email", "emailAlreadyExists");
-            hasErrors = true;
-        }
+        if (emailAlreadyExists) bindingResult.rejectValue("email", "emailAlreadyExists");
+        if (usernameAlreadyExists) bindingResult.rejectValue("username", "usernameAlreadyExists");
+        if (validationFailed) return formWithErrors;
 
-        if (usernameAlreadyExists != null) {
-            bindingResult.rejectValue("username", "usernameAlreadyExists");
-            hasErrors = true;
-        }
+        User user = userService.createNewAccount(newUser);
+        user.setEnabled(true);
 
-        if (bindingResult.hasErrors()) hasErrors = true;
-
-        if (hasErrors) return formWithErrors;
-
-        else {
-            User user = userService.createNewAccount(newUser);
-            user.setEnabled(true);
-
-            userService.save(user);
-            redirectAttributes.addFlashAttribute("userHasBeenSaved", true);
-            return "redirect:/adminPage/users";
-        }
+        userService.save(user);
+        redirectAttributes.addFlashAttribute("userHasBeenSaved", true);
+        return REDIRECT_ADMIN_PAGE_USERS;
     }
-
 }

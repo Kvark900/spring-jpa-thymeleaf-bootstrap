@@ -20,7 +20,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/adminPage")
 public class RolesController {
-    private RoleService roleService;
+    public static final String REDIRECT_ADMIN_PAGE_ROLES = "redirect:/adminPage/roles";
+    public static final String ADMIN_PAGE_ROLE_EDIT_ROLE = "adminPage/role/editRole";
+    private final RoleService roleService;
 
     public RolesController(RoleService roleService) {
         this.roleService = roleService;
@@ -36,7 +38,7 @@ public class RolesController {
     @GetMapping("/roles/{id}")
     public ModelAndView getEditRoleForm(@PathVariable Long id) {
         Optional<Role> role = roleService.findById(id);
-        ModelAndView modelAndView = new ModelAndView("adminPage/role/editRole");
+        ModelAndView modelAndView = new ModelAndView(ADMIN_PAGE_ROLE_EDIT_ROLE);
         modelAndView.addObject("role", role.get());
         return modelAndView;
     }
@@ -44,31 +46,24 @@ public class RolesController {
     @PostMapping("/roles/{id}")
     public String updateRole(Model model, @PathVariable Long id,
                              @ModelAttribute("oldRole") @Valid final Role role,
-                             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
-        String formWithErrors = "adminPage/role/editRole";
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) {
         Optional<Role> persistedRole = roleService.findById(id);
         List<Role> allRoles = roleService.findAll();
 
         boolean roleNameAlreadyExists = roleService.checkIfRoleNameIsTaken(allRoles, role, persistedRole.get());
-        boolean hasErrors = false;
+        boolean hasErrors = roleNameAlreadyExists || bindingResult.hasErrors();
 
-        if (roleNameAlreadyExists) {
-            bindingResult.rejectValue("name", "roleNameAlreadyExists");
-            hasErrors = true;
-        }
-
-        if (bindingResult.hasErrors()) hasErrors = true;
+        if (roleNameAlreadyExists) bindingResult.rejectValue("name", "roleNameAlreadyExists");
 
         if (hasErrors) {
             model.addAttribute("role", role);
             model.addAttribute("org.springframework.validation.BindingResult.role", bindingResult);
-            return formWithErrors;
+            return ADMIN_PAGE_ROLE_EDIT_ROLE;
         }
         roleService.save(role);
         redirectAttributes.addFlashAttribute("roleHasBeenUpdated", true);
-        return "redirect:/adminPage/roles";
-
+        return REDIRECT_ADMIN_PAGE_ROLES;
     }
 
     @GetMapping("/roles/newRole")
@@ -79,23 +74,17 @@ public class RolesController {
 
     @PostMapping("/roles/newRole")
     public String saveNewRole(@ModelAttribute("newRole") @Valid final Role newRole,
-                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
-        Role roleNameAlreadyExists = roleService.findByName(newRole.getName());
-        boolean hasErrors = false;
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) {
+        boolean roleNameAlreadyExists = roleService.findByName(newRole.getName()) != null;
+        boolean hasErrors = roleNameAlreadyExists || bindingResult.hasErrors();
         String formWithErrors = "adminPage/role/newRole";
 
-        if (roleNameAlreadyExists != null) {
-            bindingResult.rejectValue("name", "roleNameAlreadyExists");
-            hasErrors = true;
-        }
-
-        if (bindingResult.hasErrors()) hasErrors = true;
-
+        if (roleNameAlreadyExists) bindingResult.rejectValue("name", "roleNameAlreadyExists");
         if (hasErrors) return formWithErrors;
 
         roleService.save(newRole);
         redirectAttributes.addFlashAttribute("roleHasBeenSaved", true);
-        return "redirect:/adminPage/roles";
+        return REDIRECT_ADMIN_PAGE_ROLES;
     }
 }

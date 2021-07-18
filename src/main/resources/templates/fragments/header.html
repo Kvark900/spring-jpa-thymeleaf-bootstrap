@@ -33,7 +33,7 @@
             </ul>
 
 
-            <ul class="navbar-nav ml-auto" id="users-nav-item" sec:authorize="${isAuthenticated()}">
+            <ul class="navbar-nav ml-auto" id="users-nav-item" sec:authorize="isAuthenticated()">
 
                 <!--region For ROLE_USER display shoppingg cart icon-->
                 <!--======================================================================================-->
@@ -96,7 +96,7 @@
 
             <!--region Login and Register menu items-->
             <!--==========================================================================================-->
-            <ul class="navbar-nav ml-auto" sec:authorize="${!isAuthenticated()}">
+            <ul class="navbar-nav ml-auto" sec:authorize="!isAuthenticated()">
                 <li class="nav-item d-flex flex-row">
                     <i class="align-self-center fa fa-user-o " aria-hidden="true" style="color: white;"></i>
                     <a class="nav-link mr-3" th:href="@{/login}" href="/login">Log In</a>

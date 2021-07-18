@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Service
 public class UserSearchErrorResponse {
 
-    private UserDtoService userDtoService;
+    private final UserDtoService userDtoService;
 
     public UserSearchErrorResponse(UserDtoService userDtoService) {
         this.userDtoService = userDtoService;
